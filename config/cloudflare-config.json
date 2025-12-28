@@ -1,0 +1,99 @@
+{
+  "name": "BlackMoss & Herbs CDN Configuration",
+  "description": "Cloudflare CDN and caching rules",
+  "rules": [
+    {
+      "name": "Cache Static Assets",
+      "priority": 1,
+      "match": {
+        "url": "*/_next/static/*"
+      },
+      "actions": {
+        "cache_level": "cache_everything",
+        "edge_cache_ttl": 31536000,
+        "browser_cache_ttl": 31536000
+      }
+    },
+    {
+      "name": "Cache Images",
+      "priority": 2,
+      "match": {
+        "url": "*/images/*"
+      },
+      "actions": {
+        "cache_level": "cache_everything",
+        "edge_cache_ttl": 86400,
+        "browser_cache_ttl": 86400
+      }
+    },
+    {
+      "name": "Cache API Responses",
+      "priority": 3,
+      "match": {
+        "url": "*/api/products/*"
+      },
+      "actions": {
+        "cache_level": "bypass",
+        "edge_cache_ttl": 300
+      }
+    },
+    {
+      "name": "Bypass Auth Routes",
+      "priority": 4,
+      "match": {
+        "url": "*/api/auth/*"
+      },
+      "actions": {
+        "cache_level": "bypass"
+      }
+    }
+  ],
+  "page_rules": [
+    {
+      "targets": [
+        {
+          "target": "url",
+          "constraint": {
+            "operator": "matches",
+            "value": "*blackmossandherbs.com/_next/static/*"
+          }
+        }
+      ],
+      "actions": [
+        {
+          "id": "cache_level",
+          "value": "cache_everything"
+        },
+        {
+          "id": "edge_cache_ttl",
+          "value": 31536000
+        }
+      ],
+      "priority": 1,
+      "status": "active"
+    }
+  ],
+  "waf_rules": [
+    {
+      "name": "Block SQL Injection",
+      "action": "block",
+      "expression": "(union.*select|select.*from|insert.*into|delete.*from|drop.*table)"
+    },
+    {
+      "name": "Block XSS",
+      "action": "block",
+      "expression": "(<script|javascript:|onerror=|onload=)"
+    },
+    {
+      "name": "Rate Limit API",
+      "action": "challenge",
+      "expression": "(http.request.uri.path matches \"^/api/\") and (rate(100, 60))"
+    }
+  ],
+  "firewall_rules": [
+    {
+      "action": "challenge",
+      "expression": "(ip.geoip.country eq \"CN\" or ip.geoip.country eq \"RU\") and (http.request.uri.path matches \"^/admin/\")"
+    }
+  ]
+}

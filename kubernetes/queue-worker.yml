@@ -1,0 +1,68 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: blackmoss-queue-worker
+  namespace: blackmoss-production
+  labels:
+    app: blackmoss-queue-worker
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: blackmoss-queue-worker
+  template:
+    metadata:
+      labels:
+        app: blackmoss-queue-worker
+    spec:
+      containers:
+      - name: worker
+        image: blackmoss/queue-worker:latest
+        imagePullPolicy: Always
+        env:
+        - name: DATABASE_URL
+          valueFrom:
+            secretKeyRef:
+              name: blackmoss-secrets
+              key: database-url
+        - name: REDIS_QUEUE_URL
+          valueFrom:
+            secretKeyRef:
+              name: blackmoss-secrets
+              key: redis-queue-url
+        - name: NODE_ENV
+          value: "production"
+        resources:
+          requests:
+            memory: "256Mi"
+            cpu: "250m"
+          limits:
+            memory: "512Mi"
+            cpu: "500m"
+        volumeMounts:
+        - name: tmp
+          mountPath: /tmp
+      volumes:
+      - name: tmp
+        emptyDir: {}
+
+---
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: blackmoss-queue-worker-hpa
+  namespace: blackmoss-production
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: blackmoss-queue-worker
+  minReplicas: 2
+  maxReplicas: 5
+  metrics:
+  - type: Resource
+    resource:
+      name: cpu
+      target:
+        type: Utilization
+        averageUtilization: 60

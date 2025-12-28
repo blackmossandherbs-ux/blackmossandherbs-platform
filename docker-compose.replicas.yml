@@ -1,0 +1,116 @@
+version: "3.8"
+
+# Database Read Replicas Configuration
+# Extends docker-compose.scale.yml
+
+services:
+  # Primary Database (from docker-compose.scale.yml)
+  postgres:
+    # ... existing config ...
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: blackmoss_herbs
+      POSTGRES_REPLICATION_USER: replicator
+      POSTGRES_REPLICATION_PASSWORD: replicator_password
+    command:
+      - "postgres"
+      - "-c"
+      - "wal_level=replica"
+      - "-c"
+      - "max_wal_senders=3"
+      - "-c"
+      - "max_replication_slots=3"
+      - "-c"
+      - "hot_standby=on"
+      - "-c"
+      - "hot_standby_feedback=on"
+
+  # Read Replica 1
+  postgres-replica-1:
+    image: postgres:16-alpine
+    container_name: blackmoss_postgres_replica_1
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_MASTER_SERVICE_HOST: postgres
+      POSTGRES_MASTER_SERVICE_PORT: 5432
+      POSTGRES_REPLICATION_USER: replicator
+      POSTGRES_REPLICATION_PASSWORD: replicator_password
+      POSTGRES_REPLICATION_DB: blackmoss_herbs
+    volumes:
+      - postgres_replica_1_data:/var/lib/postgresql/data
+      - ./scripts/setup-replica.sh:/docker-entrypoint-initdb.d/setup-replica.sh:ro
+    depends_on:
+      postgres:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - blackmoss_network
+    command:
+      - "postgres"
+      - "-c"
+      - "hot_standby=on"
+
+  # Read Replica 2 (optional, for high availability)
+  postgres-replica-2:
+    image: postgres:16-alpine
+    container_name: blackmoss_postgres_replica_2
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_MASTER_SERVICE_HOST: postgres
+      POSTGRES_MASTER_SERVICE_PORT: 5432
+      POSTGRES_REPLICATION_USER: replicator
+      POSTGRES_REPLICATION_PASSWORD: replicator_password
+      POSTGRES_REPLICATION_DB: blackmoss_herbs
+    volumes:
+      - postgres_replica_2_data:/var/lib/postgresql/data
+      - ./scripts/setup-replica.sh:/docker-entrypoint-initdb.d/setup-replica.sh:ro
+    depends_on:
+      postgres:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - blackmoss_network
+    command:
+      - "postgres"
+      - "-c"
+      - "hot_standby=on"
+
+  # PgBouncer for Read Replicas
+  pgbouncer-replica:
+    image: pgbouncer/pgbouncer:latest
+    container_name: blackmoss_pgbouncer_replica
+    environment:
+      DATABASES_HOST: postgres-replica-1
+      DATABASES_PORT: 5432
+      DATABASES_USER: postgres
+      DATABASES_PASSWORD: postgres
+      DATABASES_DBNAME: blackmoss_herbs
+      PGBOUNCER_POOL_MODE: transaction
+      PGBOUNCER_MAX_CLIENT_CONN: 1000
+      PGBOUNCER_DEFAULT_POOL_SIZE: 25
+    ports:
+      - "6433:6432"
+    depends_on:
+      postgres-replica-1:
+        condition: service_healthy
+    networks:
+      - blackmoss_network
+
+volumes:
+  postgres_replica_1_data:
+  postgres_replica_2_data:
+
+networks:
+  blackmoss_network:
+    external: true
