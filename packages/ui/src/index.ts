@@ -13,3 +13,4 @@ export * from "./tooltip";
 export * from "./checkbox";
 export * from "./select";
 export * from "./alert-dialog";
+export * from "./accordion";

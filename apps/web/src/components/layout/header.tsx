@@ -24,6 +24,14 @@ export function Header() {
           <Link href="/videos" className="text-sm hover:underline">
             Videos
           </Link>
+          <Link href="/consultations" className="text-sm hover:underline">
+            Consultations
+          </Link>
+          {session && (
+            <Link href="/library" className="text-sm hover:underline">
+              Library
+            </Link>
+          )}
           {session ? (
             <>
               {session.user.role === UserRole.ADMIN || session.user.role === UserRole.STAFF ? (
@@ -33,6 +41,11 @@ export function Header() {
                   </Button>
                 </Link>
               ) : null}
+              <Link href="/membership">
+                <Button variant="ghost" size="sm">
+                  Membership
+                </Button>
+              </Link>
               <Link href="/account">
                 <Button variant="ghost" size="sm">
                   Account

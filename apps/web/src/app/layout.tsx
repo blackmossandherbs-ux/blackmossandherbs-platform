@@ -4,6 +4,7 @@ import "./globals.css";
 import { Providers } from "./providers";
 import { Toaster } from "@blackmoss/ui";
 import { Header } from "@/components/layout/header";
+import { AIChatWidget } from "@/components/ai/chat-widget";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -25,6 +26,7 @@ export default function RootLayout({
         <Providers>
           <Header />
           {children}
+          <AIChatWidget />
           <Toaster />
         </Providers>
       </body>
