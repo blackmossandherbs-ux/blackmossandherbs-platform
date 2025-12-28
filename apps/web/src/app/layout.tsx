@@ -5,6 +5,7 @@ import { Providers } from "./providers";
 import { Toaster } from "@blackmoss/ui";
 import { Header } from "@/components/layout/header";
 import { AIChatWidget } from "@/components/ai/chat-widget";
+import { GoogleAnalytics } from "@/components/analytics/google-analytics";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -22,6 +23,14 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" suppressHydrationWarning>
+      <head>
+        <link rel="manifest" href="/manifest.json" />
+        <meta name="theme-color" content="#22c55e" />
+        <meta name="apple-mobile-web-app-capable" content="yes" />
+        <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+        <meta name="apple-mobile-web-app-title" content="BlackMoss" />
+        <GoogleAnalytics />
+      </head>
       <body className={inter.className}>
         <Providers>
           <Header />

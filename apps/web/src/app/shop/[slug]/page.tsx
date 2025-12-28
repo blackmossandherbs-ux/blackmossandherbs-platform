@@ -8,6 +8,33 @@ import { ProductFAQ } from "@/components/shop/product-faq";
 import { ImageGallery } from "@/components/premium/image-gallery";
 import { OptimizedImage } from "@/components/premium/optimized-image";
 
+export async function generateMetadata({ params }: { params: { slug: string } }) {
+  const product = await prisma.product.findUnique({
+    where: { slug: params.slug },
+    include: { variants: { take: 1 } },
+  });
+
+  if (!product) {
+    return {
+      title: "Product Not Found",
+    };
+  }
+
+  const price = Number(product.variants[0]?.price || product.basePrice);
+
+  return generateSEO({
+    title: product.name,
+    description: product.shortDescription || product.description,
+    image: product.featuredImage || undefined,
+    url: `/shop/${product.slug}`,
+    type: "product",
+    price: {
+      amount: price,
+      currency: "USD",
+    },
+  });
+}
+
 export default async function ProductPage({ params }: { params: { slug: string } }) {
   const product = await prisma.product.findUnique({
     where: { slug: params.slug },
@@ -47,8 +74,28 @@ export default async function ProductPage({ params }: { params: { slug: string }
     ? [product.featuredImage, ...product.images]
     : product.images;
 
+  const price = Number(defaultVariant?.price || product.basePrice);
+  const structuredData = generateStructuredData({
+    type: "Product",
+    data: {
+      name: product.name,
+      description: product.shortDescription || product.description,
+      image: product.featuredImage ? [product.featuredImage] : [],
+      offers: {
+        "@type": "Offer",
+        price: price,
+        priceCurrency: "USD",
+        availability: product.status === "ACTIVE" ? "https://schema.org/InStock" : "https://schema.org/OutOfStock",
+      },
+    },
+  });
+
   return (
     <div className="min-h-screen">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
+      />
       <div className="container-premium py-12">
         <div className="grid gap-12 md:grid-cols-2">
           {/* Product Images */}
