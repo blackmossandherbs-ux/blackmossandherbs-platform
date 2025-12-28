@@ -86,6 +86,7 @@ model Product {
   images      String[]
   category    String
   tags        String[]
+  benefits    String[]      @default([])
   stock       Int           @default(0)
   type        ProductType
   featured    Boolean       @default(false)
