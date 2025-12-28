@@ -1,0 +1,2 @@
+# This directory contains the Prisma schema
+# The schema is copied from packages/db/prisma/schema.prisma during setup

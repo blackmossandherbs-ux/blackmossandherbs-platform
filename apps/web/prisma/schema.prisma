@@ -1,0 +1,6 @@
+// This schema file references the shared schema in packages/db
+// Prisma will generate the client in the web app's node_modules
+// The actual schema is maintained in packages/db/prisma/schema.prisma
+
+// For development, we'll copy the schema from packages/db
+// In production, ensure both are in sync

@@ -1,0 +1,72 @@
+# Dependencies
+node_modules
+.pnp
+.pnp.js
+
+# Testing
+coverage
+*.log
+
+# Next.js
+.next/
+out/
+build
+dist
+
+# Production
+*.local
+.env*.local
+
+# Debug
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Local env files
+.env
+.env*.local
+
+# Vercel
+.vercel
+
+# Turbo
+.turbo
+
+# TypeScript
+*.tsbuildinfo
+next-env.d.ts
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Database
+*.db
+*.db-journal
+
+# Docker
+.dockerignore
+
+# Prisma
+prisma/migrations/*.sql
+
+# Uploads (local dev)
+uploads/
+public/uploads/
+
+# Logs
+logs/
+*.log
+
+# Backups
+backups/
+*.backup
+*.sql.gz
