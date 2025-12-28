@@ -1,0 +1,40 @@
+.
+├── DEPLOYMENT.md
+├── LAUNCH_CHECKLIST.md
+├── README.md
+├── next-env.d.ts
+├── next.config.js
+├── package-lock.json
+├── package.json
+├── postcss.config.js
+├── prisma
+│   └── schema.prisma
+├── project_structure.txt
+├── src
+│   ├── app
+│   │   ├── admin
+│   │   ├── blog
+│   │   ├── cart
+│   │   ├── consultations
+│   │   ├── dashboard
+│   │   ├── globals.css
+│   │   ├── layout.tsx
+│   │   ├── library
+│   │   ├── page.tsx
+│   │   ├── shop
+│   │   ├── subscriptions
+│   │   └── videos
+│   ├── components
+│   │   ├── Button.tsx
+│   │   ├── Footer.tsx
+│   │   ├── Header.tsx
+│   │   └── ProductCard.tsx
+│   └── lib
+│       ├── prisma.ts
+│       ├── stripe.ts
+│       └── utils.ts
+├── start.sh
+├── tailwind.config.js
+└── tsconfig.json
+
+15 directories, 23 files

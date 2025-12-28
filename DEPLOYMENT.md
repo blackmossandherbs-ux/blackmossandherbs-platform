@@ -1,316 +1,407 @@
-# 🚀 Deployment Guide - Black Moss & Herbs Platform
+# Self-Hosted Server Deployment Guide
 
-This guide will help you deploy the Black Moss & Herbs platform to production.
+## 🏠 Deploy to Your Own Server
+
+This guide shows you how to deploy Black Moss & Herbs to your own server (VPS, dedicated server, etc.) without any expensive third-party services.
 
 ## Prerequisites
 
-- [ ] GitHub account
-- [ ] Domain name (optional but recommended)
-- [ ] PostgreSQL database (Supabase, Railway, or Neon recommended)
-- [ ] Stripe account
-- [ ] Vercel account (or alternative hosting)
+- Linux server (Ubuntu 20.04+ recommended)
+- Root or sudo access
+- Domain name pointed to your server
+- At least 2GB RAM, 20GB storage
 
-## Step 1: Database Setup
+## Option 1: Docker Deployment (Recommended)
 
-### Option A: Supabase (Recommended - Free Tier Available)
-
-1. Go to [supabase.com](https://supabase.com) and create an account
-2. Create a new project
-3. Go to Settings → Database
-4. Copy the connection string (URI format)
-5. Replace `[YOUR-PASSWORD]` with your database password
-6. Save this for later as `DATABASE_URL`
-
-### Option B: Railway
-
-1. Go to [railway.app](https://railway.app)
-2. Create a new project
-3. Add PostgreSQL database
-4. Copy the connection string from the database settings
-5. Save as `DATABASE_URL`
-
-### Option C: Neon
-
-1. Go to [neon.tech](https://neon.tech)
-2. Create a new project
-3. Copy the connection string
-4. Save as `DATABASE_URL`
-
-## Step 2: Stripe Setup
-
-1. **Create Stripe Account**
-   - Go to [stripe.com](https://stripe.com)
-   - Sign up and complete verification
-
-2. **Get API Keys**
-   - Go to Developers → API keys
-   - Copy "Publishable key" → Save as `NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY`
-   - Copy "Secret key" → Save as `STRIPE_SECRET_KEY`
-
-3. **Create Products (Optional)**
-   - Go to Products → Add product
-   - Create subscription plans matching your pricing
-
-4. **Set up Webhooks** (After deployment)
-   - Go to Developers → Webhooks
-   - Add endpoint: `https://yourdomain.com/api/webhooks/stripe`
-   - Select events:
-     - `checkout.session.completed`
-     - `customer.subscription.created`
-     - `customer.subscription.updated`
-     - `customer.subscription.deleted`
-   - Copy webhook signing secret → Save as `STRIPE_WEBHOOK_SECRET`
-
-## Step 3: Deploy to Vercel
-
-### Quick Deploy
-
-1. **Push to GitHub**
-   ```bash
-   git add .
-   git commit -m "Initial commit"
-   git push origin main
-   ```
-
-2. **Import to Vercel**
-   - Go to [vercel.com](https://vercel.com)
-   - Click "New Project"
-   - Import your GitHub repository
-   - Vercel will auto-detect Next.js
-
-3. **Add Environment Variables**
-   
-   In Vercel project settings → Environment Variables, add:
-
-   ```env
-   # Database
-   DATABASE_URL=postgresql://user:password@host:5432/database
-   
-   # NextAuth
-   NEXTAUTH_URL=https://yourdomain.vercel.app
-   NEXTAUTH_SECRET=generate-with-openssl-rand-base64-32
-   
-   # Stripe
-   NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY=pk_live_...
-   STRIPE_SECRET_KEY=sk_live_...
-   STRIPE_WEBHOOK_SECRET=whsec_...
-   
-   # App
-   NEXT_PUBLIC_APP_URL=https://yourdomain.vercel.app
-   ```
-
-4. **Generate NextAuth Secret**
-   ```bash
-   openssl rand -base64 32
-   ```
-
-5. **Deploy**
-   - Click "Deploy"
-   - Wait for build to complete
-   - Your site will be live at `https://your-project.vercel.app`
-
-## Step 4: Database Migration
-
-After deployment, run database migrations:
-
-1. **Using Vercel CLI** (Recommended)
-   ```bash
-   npm i -g vercel
-   vercel login
-   vercel env pull .env.local
-   npx prisma generate
-   npx prisma db push
-   ```
-
-2. **Or use Prisma Data Platform**
-   - Go to [cloud.prisma.io](https://cloud.prisma.io)
-   - Connect your database
-   - Run migrations from the dashboard
-
-## Step 5: Custom Domain (Optional)
-
-1. **In Vercel**
-   - Go to Project Settings → Domains
-   - Add your custom domain
-   - Follow DNS configuration instructions
-
-2. **Update Environment Variables**
-   - Change `NEXTAUTH_URL` to your custom domain
-   - Change `NEXT_PUBLIC_APP_URL` to your custom domain
-   - Redeploy
-
-3. **Update Stripe Webhook**
-   - Change webhook URL to use custom domain
-   - Update `STRIPE_WEBHOOK_SECRET` if needed
-
-## Step 6: Post-Deployment Checklist
-
-- [ ] Test homepage loads correctly
-- [ ] Verify all pages are accessible
-- [ ] Test product browsing
-- [ ] Test cart functionality
-- [ ] Verify Stripe checkout (use test mode first)
-- [ ] Test subscription signup
-- [ ] Verify webhook events are received
-- [ ] Test user registration/login
-- [ ] Check mobile responsiveness
-- [ ] Run Lighthouse audit
-- [ ] Set up monitoring (Vercel Analytics)
-
-## Alternative Deployment Options
-
-### Netlify
+### Step 1: Install Docker on Server
 
 ```bash
-# Install Netlify CLI
-npm i -g netlify-cli
+# SSH into your server
+ssh user@your-server-ip
 
-# Deploy
-netlify deploy --prod
+# Install Docker
+curl -fsSL https://get.docker.com -o get-docker.sh
+sudo sh get-docker.sh
+
+# Install Docker Compose
+sudo curl -L "https://github.com/docker/compose/releases/latest/download/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+sudo chmod +x /usr/local/bin/docker-compose
 ```
 
-### Railway
+### Step 2: Clone Repository on Server
 
-1. Connect GitHub repository
-2. Add environment variables
-3. Deploy automatically on push
+```bash
+cd /var/www
+sudo git clone https://github.com/richhabits/blackmossandherbs-platform.git
+cd blackmossandherbs-platform
+```
 
-### DigitalOcean App Platform
+### Step 3: Configure Environment
 
-1. Create new app from GitHub
-2. Configure environment variables
-3. Set build command: `npm run build`
-4. Set run command: `npm start`
+```bash
+# Copy environment template
+cp .env.example .env
 
-## Production Optimization
+# Edit with your credentials
+nano .env
+```
 
-### 1. Enable Caching
+Add your configuration:
+```env
+DATABASE_URL="postgresql://user:password@postgres:5432/blackmossandherbs"
+NEXTAUTH_URL="https://yourdomain.com"
+NEXTAUTH_SECRET="your-secret-here"
+NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY="pk_live_..."
+STRIPE_SECRET_KEY="sk_live_..."
+STRIPE_WEBHOOK_SECRET="whsec_..."
+NEXT_PUBLIC_APP_URL="https://yourdomain.com"
+```
 
-Add to `next.config.js`:
-```javascript
-async headers() {
-  return [
-    {
-      source: '/:path*',
-      headers: [
-        {
-          key: 'Cache-Control',
-          value: 'public, max-age=31536000, immutable',
-        },
-      ],
-    },
-  ]
+### Step 4: Deploy with Docker
+
+```bash
+# Build and start containers
+sudo docker-compose up -d
+
+# Check status
+sudo docker-compose ps
+
+# View logs
+sudo docker-compose logs -f
+```
+
+Your site will be running on port 3000. Use Nginx as reverse proxy (see below).
+
+## Option 2: PM2 Deployment (Node.js Process Manager)
+
+### Step 1: Install Node.js and PM2
+
+```bash
+# Install Node.js 18+
+curl -fsSL https://deb.nodesource.com/setup_18.x | sudo -E bash -
+sudo apt-get install -y nodejs
+
+# Install PM2 globally
+sudo npm install -g pm2
+```
+
+### Step 2: Clone and Setup
+
+```bash
+cd /var/www
+sudo git clone https://github.com/richhabits/blackmossandherbs-platform.git
+cd blackmossandherbs-platform
+
+# Install dependencies
+npm install
+
+# Copy and configure environment
+cp .env.example .env
+nano .env
+
+# Build for production
+npm run build
+```
+
+### Step 3: Start with PM2
+
+```bash
+# Start application
+pm2 start npm --name "blackmossandherbs" -- start
+
+# Save PM2 configuration
+pm2 save
+
+# Setup PM2 to start on boot
+pm2 startup
+# Follow the command it gives you
+
+# Monitor
+pm2 status
+pm2 logs blackmossandherbs
+```
+
+## Nginx Configuration
+
+### Install Nginx
+
+```bash
+sudo apt update
+sudo apt install nginx
+```
+
+### Configure Nginx
+
+Create config file:
+```bash
+sudo nano /etc/nginx/sites-available/blackmossandherbs
+```
+
+Add this configuration:
+```nginx
+server {
+    listen 80;
+    server_name yourdomain.com www.yourdomain.com;
+
+    location / {
+        proxy_pass http://localhost:3000;
+        proxy_http_version 1.1;
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection 'upgrade';
+        proxy_set_header Host $host;
+        proxy_cache_bypass $http_upgrade;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+    }
 }
 ```
 
-### 2. Image Optimization
-
-Images are automatically optimized by Next.js Image component.
-
-### 3. Database Connection Pooling
-
-For production, use connection pooling:
-```env
-DATABASE_URL="postgresql://user:password@host:5432/database?pgbouncer=true"
+Enable site:
+```bash
+sudo ln -s /etc/nginx/sites-available/blackmossandherbs /etc/nginx/sites-enabled/
+sudo nginx -t
+sudo systemctl restart nginx
 ```
 
-### 4. Monitoring
+## SSL Certificate (Free with Let's Encrypt)
 
-Set up monitoring with:
-- Vercel Analytics
-- Sentry for error tracking
-- LogRocket for session replay
+```bash
+# Install Certbot
+sudo apt install certbot python3-certbot-nginx
 
-## Security Checklist
+# Get certificate
+sudo certbot --nginx -d yourdomain.com -d www.yourdomain.com
 
-- [ ] Use environment variables for all secrets
-- [ ] Enable HTTPS (automatic with Vercel)
-- [ ] Set up CORS properly
-- [ ] Implement rate limiting
-- [ ] Use Stripe in live mode (not test mode)
-- [ ] Set up CSP headers
-- [ ] Enable 2FA on all accounts
-- [ ] Regular security audits
+# Auto-renewal is set up automatically
+# Test renewal
+sudo certbot renew --dry-run
+```
+
+## Database Setup (Self-Hosted PostgreSQL)
+
+### Install PostgreSQL
+
+```bash
+sudo apt install postgresql postgresql-contrib
+
+# Start PostgreSQL
+sudo systemctl start postgresql
+sudo systemctl enable postgresql
+```
+
+### Create Database
+
+```bash
+# Switch to postgres user
+sudo -u postgres psql
+
+# In PostgreSQL prompt:
+CREATE DATABASE blackmossandherbs;
+CREATE USER dbuser WITH PASSWORD 'your-secure-password';
+GRANT ALL PRIVILEGES ON DATABASE blackmossandherbs TO dbuser;
+\q
+```
+
+### Run Migrations
+
+```bash
+cd /var/www/blackmossandherbs-platform
+npx prisma generate
+npx prisma db push
+```
+
+## Deployment Script
+
+Use the provided deploy script:
+
+```bash
+# Make executable
+chmod +x deploy.sh
+
+# Deploy
+./deploy.sh
+```
+
+## Monitoring & Maintenance
+
+### Check Application Status
+
+```bash
+# PM2
+pm2 status
+pm2 logs blackmossandherbs
+
+# Docker
+sudo docker-compose ps
+sudo docker-compose logs -f app
+```
+
+### Restart Application
+
+```bash
+# PM2
+pm2 restart blackmossandherbs
+
+# Docker
+sudo docker-compose restart app
+```
+
+### Update Application
+
+```bash
+cd /var/www/blackmossandherbs-platform
+git pull origin main
+npm install
+npm run build
+
+# PM2
+pm2 restart blackmossandherbs
+
+# Docker
+sudo docker-compose up -d --build
+```
 
 ## Backup Strategy
 
-1. **Database Backups**
-   - Enable automatic backups in your database provider
-   - Test restore process monthly
+### Database Backup
 
-2. **Code Backups**
-   - GitHub serves as code backup
-   - Tag releases: `git tag v1.0.0`
+```bash
+# Create backup script
+sudo nano /usr/local/bin/backup-db.sh
+```
 
-## Scaling Considerations
+Add:
+```bash
+#!/bin/bash
+BACKUP_DIR="/var/backups/postgres"
+DATE=$(date +%Y%m%d_%H%M%S)
+mkdir -p $BACKUP_DIR
+sudo -u postgres pg_dump blackmossandherbs > $BACKUP_DIR/backup_$DATE.sql
+# Keep only last 7 days
+find $BACKUP_DIR -type f -mtime +7 -delete
+```
 
-### When to Scale
+```bash
+chmod +x /usr/local/bin/backup-db.sh
 
-- Site receives >10k visitors/day
-- Database queries slow down
-- Checkout process lags
+# Add to crontab (daily at 2 AM)
+sudo crontab -e
+# Add: 0 2 * * * /usr/local/bin/backup-db.sh
+```
 
-### How to Scale
+### Code Backup
 
-1. **Database**: Upgrade to larger instance
-2. **Hosting**: Vercel scales automatically
-3. **CDN**: Use Vercel Edge Network
-4. **Caching**: Implement Redis for sessions
+Your code is backed up in GitHub. Pull latest:
+```bash
+git pull origin main
+```
+
+## Firewall Configuration
+
+```bash
+# Install UFW
+sudo apt install ufw
+
+# Allow SSH, HTTP, HTTPS
+sudo ufw allow 22
+sudo ufw allow 80
+sudo ufw allow 443
+
+# Enable firewall
+sudo ufw enable
+```
+
+## Performance Optimization
+
+### Enable Gzip in Nginx
+
+Add to nginx config:
+```nginx
+gzip on;
+gzip_vary on;
+gzip_min_length 1024;
+gzip_types text/plain text/css text/xml text/javascript application/x-javascript application/xml+rss application/json;
+```
+
+### PM2 Cluster Mode
+
+```bash
+# Use all CPU cores
+pm2 start npm --name "blackmossandherbs" -i max -- start
+```
 
 ## Troubleshooting
 
-### Build Fails
+### Application Won't Start
 
 ```bash
-# Clear cache and rebuild
-rm -rf .next
-npm run build
+# Check logs
+pm2 logs blackmossandherbs
+# or
+sudo docker-compose logs app
+
+# Check if port 3000 is in use
+sudo lsof -i :3000
+
+# Check environment variables
+cat .env
 ```
 
 ### Database Connection Issues
 
-- Verify DATABASE_URL is correct
-- Check database is accessible from Vercel
-- Ensure IP whitelist includes Vercel IPs
+```bash
+# Check PostgreSQL is running
+sudo systemctl status postgresql
 
-### Stripe Webhooks Not Working
+# Test connection
+psql -U dbuser -d blackmossandherbs -h localhost
+```
 
-- Verify webhook URL is correct
-- Check webhook secret matches
-- Test with Stripe CLI locally first
+### Nginx Issues
 
-## Support
+```bash
+# Check nginx status
+sudo systemctl status nginx
 
-For deployment issues:
-- Vercel: [vercel.com/support](https://vercel.com/support)
-- Stripe: [support.stripe.com](https://support.stripe.com)
-- Database: Check your provider's docs
+# Test configuration
+sudo nginx -t
+
+# Check error logs
+sudo tail -f /var/log/nginx/error.log
+```
+
+## Cost Breakdown (Self-Hosted)
+
+- **Server**: $5-20/month (DigitalOcean, Linode, Vultr)
+- **Domain**: $10-15/year
+- **SSL**: FREE (Let's Encrypt)
+- **Database**: Included (self-hosted)
+- **Total**: ~$5-20/month
+
+Compare to Vercel Pro: $20/month + usage fees
+
+## Server Providers (Budget-Friendly)
+
+1. **DigitalOcean** - $6/month droplet
+2. **Linode** - $5/month
+3. **Vultr** - $5/month
+4. **Hetzner** - €4.5/month (Europe)
+5. **Contabo** - €5/month
+
+All include enough resources for this platform.
 
 ## Next Steps
 
-After successful deployment:
-
-1. **Add Content**
-   - Upload product images
-   - Create blog posts
-   - Add video content
-
-2. **Configure Email**
-   - Set up transactional emails
-   - Configure order confirmations
-   - Set up newsletter
-
-3. **Marketing**
-   - Set up Google Analytics
-   - Configure SEO metadata
-   - Submit sitemap to search engines
-
-4. **Legal**
-   - Add privacy policy
-   - Add terms of service
-   - Add shipping policy
-   - Add return policy
+1. ✅ Choose deployment method (Docker or PM2)
+2. ✅ Set up server and install dependencies
+3. ✅ Configure environment variables
+4. ✅ Set up database
+5. ✅ Configure Nginx
+6. ✅ Get SSL certificate
+7. ✅ Deploy application
+8. ✅ Set up monitoring and backups
 
 ---
 
-🎉 **Congratulations!** Your Black Moss & Herbs platform is now live!
+**Your platform is now running on your own server with full control and minimal cost!** 🎉
