@@ -1,5 +1,8 @@
 # Black Moss & Herbs Platform
 
+> **© 2024 HECTIC. All Rights Reserved.**  
+> Developed by HECTIC - Premium Herbal Wellness Solutions
+
 A comprehensive global herbal wellness platform featuring eCommerce, subscriptions, digital products, content management, consultations, and admin/CRM capabilities.
 
 ## 🌿 Features
