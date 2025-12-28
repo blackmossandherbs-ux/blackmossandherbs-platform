@@ -1,0 +1,21 @@
+{
+  "name": "@blackmoss/queue",
+  "version": "1.0.0",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsx watch src/worker.ts",
+    "worker": "node dist/worker.js"
+  },
+  "dependencies": {
+    "@blackmoss/db": "workspace:*",
+    "bullmq": "^5.15.0",
+    "ioredis": "^5.3.2"
+  },
+  "devDependencies": {
+    "@types/node": "^20.11.5",
+    "tsx": "^4.7.1",
+    "typescript": "^5.3.3"
+  }
+}
