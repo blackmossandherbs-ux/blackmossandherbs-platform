@@ -1,8 +1,5 @@
 import { prisma } from "@/lib/db";
-import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@blackmoss/ui";
-import Link from "next/link";
-import Image from "next/image";
-import { Button } from "@blackmoss/ui";
+import { ProductShowcase } from "@/components/premium/product-showcase";
 import { formatCurrency } from "@blackmoss/utils";
 
 export default async function ShopPage() {
@@ -28,55 +25,40 @@ export default async function ShopPage() {
   });
 
   return (
-    <div className="container mx-auto p-6">
-      <h1 className="text-4xl font-bold mb-8">Shop</h1>
-      <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-        {products.map((product) => {
-          const price = product.variants[0]?.price || product.basePrice;
-          const comparePrice = product.variants[0]?.compareAtPrice || product.compareAtPrice;
-
-          return (
-            <Link key={product.id} href={`/shop/${product.slug}`}>
-              <Card className="hover:shadow-lg transition-shadow">
-                {product.featuredImage && (
-                  <div className="relative w-full h-48 mb-4">
-                    <Image
-                      src={product.featuredImage}
-                      alt={product.name}
-                      fill
-                      className="object-cover rounded-t-lg"
-                    />
-                  </div>
-                )}
-                <CardHeader>
-                  <CardTitle className="text-lg">{product.name}</CardTitle>
-                  <CardDescription className="line-clamp-2">
-                    {product.shortDescription || product.description}
-                  </CardDescription>
-                </CardHeader>
-                <CardContent>
-                  <div className="flex items-center gap-2 mb-4">
-                    <span className="text-2xl font-bold">
-                      {formatCurrency(Number(price))}
-                    </span>
-                    {comparePrice && (
-                      <span className="text-sm text-muted-foreground line-through">
-                        {formatCurrency(Number(comparePrice))}
-                      </span>
-                    )}
-                  </div>
-                  <Button className="w-full">View Product</Button>
-                </CardContent>
-              </Card>
-            </Link>
-          );
-        })}
-      </div>
-      {products.length === 0 && (
-        <div className="text-center py-12">
-          <p className="text-muted-foreground">No products available yet.</p>
+    <div className="min-h-screen">
+      {/* Hero Section */}
+      <section className="relative h-[40vh] min-h-[400px] flex items-center justify-center overflow-hidden">
+        <div className="absolute inset-0 bg-gradient-to-br from-primary/20 via-primary/10 to-background" />
+        <div className="relative z-10 container-premium text-center">
+          <h1 className="text-5xl md:text-6xl font-bold mb-4">
+            <span className="text-gradient">Premium Herbal Shop</span>
+          </h1>
+          <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
+            Discover our curated collection of premium herbal products
+          </p>
         </div>
-      )}
+      </section>
+
+      {/* Products Grid */}
+      <section className="section-premium">
+        <div className="container-premium">
+          {products.length > 0 ? (
+            <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+              {products.map((product, index) => (
+                <ProductShowcase
+                  key={product.id}
+                  product={product}
+                  priority={index < 4}
+                />
+              ))}
+            </div>
+          ) : (
+            <div className="text-center py-20">
+              <p className="text-xl text-muted-foreground">No products available yet.</p>
+            </div>
+          )}
+        </div>
+      </section>
     </div>
   );
 }

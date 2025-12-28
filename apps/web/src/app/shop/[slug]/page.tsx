@@ -1,11 +1,12 @@
 import { prisma } from "@/lib/db";
 import { notFound } from "next/navigation";
-import Image from "next/image";
 import { Button } from "@blackmoss/ui";
 import { formatCurrency } from "@blackmoss/utils";
 import { AddToCartButton } from "@/components/shop/add-to-cart-button";
 import { ProductReviews } from "@/components/shop/product-reviews";
 import { ProductFAQ } from "@/components/shop/product-faq";
+import { ImageGallery } from "@/components/premium/image-gallery";
+import { OptimizedImage } from "@/components/premium/optimized-image";
 
 export default async function ProductPage({ params }: { params: { slug: string } }) {
   const product = await prisma.product.findUnique({
@@ -42,45 +43,39 @@ export default async function ProductPage({ params }: { params: { slug: string }
       ? product.reviews.reduce((sum, r) => sum + r.rating, 0) / product.reviews.length
       : 0;
 
-  return (
-    <div className="container mx-auto p-6">
-      <div className="grid gap-8 md:grid-cols-2">
-        {/* Product Images */}
-        <div>
-          {product.featuredImage && (
-            <div className="relative w-full h-96 mb-4">
-              <Image
-                src={product.featuredImage}
-                alt={product.name}
-                fill
-                className="object-cover rounded-lg"
-              />
-            </div>
-          )}
-          {product.images.length > 0 && (
-            <div className="grid grid-cols-4 gap-2">
-              {product.images.slice(0, 4).map((img, idx) => (
-                <div key={idx} className="relative w-full h-24">
-                  <Image src={img} alt={`${product.name} ${idx + 1}`} fill className="object-cover rounded" />
-                </div>
-              ))}
-            </div>
-          )}
-        </div>
+  const allImages = product.featuredImage
+    ? [product.featuredImage, ...product.images]
+    : product.images;
 
-        {/* Product Info */}
-        <div>
-          <h1 className="text-4xl font-bold mb-4">{product.name}</h1>
-          <div className="flex items-center gap-4 mb-4">
-            <span className="text-3xl font-bold">
-              {formatCurrency(Number(defaultVariant?.price || product.basePrice))}
-            </span>
-            {product.compareAtPrice && (
-              <span className="text-xl text-muted-foreground line-through">
-                {formatCurrency(Number(product.compareAtPrice))}
-              </span>
+  return (
+    <div className="min-h-screen">
+      <div className="container-premium py-12">
+        <div className="grid gap-12 md:grid-cols-2">
+          {/* Product Images */}
+          <div className="space-y-4">
+            {allImages.length > 0 ? (
+              <ImageGallery images={allImages} alt={product.name} />
+            ) : (
+              <div className="relative aspect-square rounded-xl bg-gradient-to-br from-primary/20 to-primary/5 flex items-center justify-center">
+                <span className="text-6xl">🌿</span>
+              </div>
             )}
           </div>
+
+          {/* Product Info */}
+          <div className="space-y-6">
+            <div>
+              <h1 className="text-4xl md:text-5xl font-bold mb-4">{product.name}</h1>
+              <div className="flex items-center gap-4 mb-6">
+                <span className="text-4xl font-bold text-gradient">
+                  {formatCurrency(Number(defaultVariant?.price || product.basePrice))}
+                </span>
+                {product.compareAtPrice && (
+                  <span className="text-2xl text-muted-foreground line-through">
+                    {formatCurrency(Number(product.compareAtPrice))}
+                  </span>
+                )}
+              </div>
 
           {averageRating > 0 && (
             <div className="mb-4">
