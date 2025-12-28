@@ -1,16 +1,58 @@
 {
-  "name": "BlackMoss & Herbs - Premium Herbal Wellness",
+  "name": "BlackMoss & Herbs - Premium Herbal Wellness Platform",
   "short_name": "BlackMoss",
-  "description": "Premium herbal products, expert consultations, and wellness resources",
+  "description": "Discover premium herbal products, expert consultations, and comprehensive wellness resources. Transform your wellness journey with nature's healing power.",
   "start_url": "/",
+  "scope": "/",
   "display": "standalone",
+  "orientation": "portrait-primary",
   "background_color": "#ffffff",
   "theme_color": "#22c55e",
-  "orientation": "portrait-primary",
+  "dir": "ltr",
+  "lang": "en-US",
+  "categories": ["health", "lifestyle", "shopping", "medical"],
+  "iarc_rating_id": "",
+  "prefer_related_applications": false,
   "icons": [
+    {
+      "src": "/icons/icon-72x72.png",
+      "sizes": "72x72",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/icons/icon-96x96.png",
+      "sizes": "96x96",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/icons/icon-128x128.png",
+      "sizes": "128x128",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/icons/icon-144x144.png",
+      "sizes": "144x144",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/icons/icon-152x152.png",
+      "sizes": "152x152",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
     {
       "src": "/icons/icon-192x192.png",
       "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/icons/icon-384x384.png",
+      "sizes": "384x384",
       "type": "image/png",
       "purpose": "any maskable"
     },
@@ -21,28 +63,87 @@
       "purpose": "any maskable"
     }
   ],
-  "categories": ["health", "lifestyle", "shopping"],
   "screenshots": [
     {
       "src": "/screenshots/desktop-1.png",
       "sizes": "1280x720",
-      "type": "image/png"
+      "type": "image/png",
+      "form_factor": "wide",
+      "label": "BlackMoss & Herbs Homepage"
+    },
+    {
+      "src": "/screenshots/mobile-1.png",
+      "sizes": "750x1334",
+      "type": "image/png",
+      "form_factor": "narrow",
+      "label": "Mobile Shop View"
     }
   ],
   "shortcuts": [
     {
       "name": "Shop",
       "short_name": "Shop",
-      "description": "Browse our products",
+      "description": "Browse premium herbal products",
       "url": "/shop",
-      "icons": [{ "src": "/icons/shop.png", "sizes": "96x96" }]
+      "icons": [
+        {
+          "src": "/icons/shop-96x96.png",
+          "sizes": "96x96"
+        }
+      ]
     },
     {
       "name": "Consultations",
       "short_name": "Consult",
-      "description": "Book a consultation",
+      "description": "Book a wellness consultation",
       "url": "/consultations",
-      "icons": [{ "src": "/icons/consult.png", "sizes": "96x96" }]
+      "icons": [
+        {
+          "src": "/icons/consult-96x96.png",
+          "sizes": "96x96"
+        }
+      ]
+    },
+    {
+      "name": "Blog",
+      "short_name": "Blog",
+      "description": "Read wellness articles",
+      "url": "/blog",
+      "icons": [
+        {
+          "src": "/icons/blog-96x96.png",
+          "sizes": "96x96"
+        }
+      ]
+    },
+    {
+      "name": "My Library",
+      "short_name": "Library",
+      "description": "Access your digital products",
+      "url": "/library",
+      "icons": [
+        {
+          "src": "/icons/library-96x96.png",
+          "sizes": "96x96"
+        }
+      ]
+    }
+  ],
+  "related_applications": [],
+  "share_target": {
+    "action": "/share",
+    "method": "POST",
+    "enctype": "multipart/form-data",
+    "params": {
+      "title": "title",
+      "text": "text",
+      "url": "url"
+    }
+  },
+  "protocol_handlers": [
+    {
+      "protocol": "web+blackmoss",
+      "url": "/?protocol=%s"
     }
   ]
 }

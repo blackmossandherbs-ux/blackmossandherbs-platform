@@ -1,0 +1,48 @@
+# Robots.txt for BlackMoss & Herbs
+# https://blackmossandherbs.com/robots.txt
+
+User-agent: *
+Allow: /
+
+# Disallow admin and API routes
+Disallow: /admin/
+Disallow: /api/
+Disallow: /account/
+Disallow: /membership/
+Disallow: /_next/
+Disallow: /auth/
+
+# Allow important pages
+Allow: /shop
+Allow: /blog
+Allow: /videos
+Allow: /consultations
+
+# Sitemap
+Sitemap: https://blackmossandherbs.com/api/sitemap
+
+# Crawl delay (optional, adjust based on server capacity)
+Crawl-delay: 1
+
+# Specific bot rules
+User-agent: Googlebot
+Allow: /
+Crawl-delay: 0
+
+User-agent: Bingbot
+Allow: /
+Crawl-delay: 1
+
+User-agent: Slurp
+Allow: /
+Crawl-delay: 2
+
+# Block bad bots
+User-agent: AhrefsBot
+Crawl-delay: 10
+
+User-agent: SemrushBot
+Crawl-delay: 10
+
+User-agent: MJ12bot
+Crawl-delay: 10
