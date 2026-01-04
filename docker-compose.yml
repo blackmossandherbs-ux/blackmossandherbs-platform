@@ -33,7 +33,7 @@ services:
       - STRIPE_WEBHOOK_SECRET=${STRIPE_WEBHOOK_SECRET}
       - NEXT_PUBLIC_APP_URL=${NEXT_PUBLIC_APP_URL:-http://localhost:3000}
     ports:
-      - "3000:3000"
+      - "3005:3000"
     depends_on:
       - postgres
     networks:
@@ -59,6 +59,7 @@ services:
 
 volumes:
   postgres_data:
+
 
 networks:
   app-network:
