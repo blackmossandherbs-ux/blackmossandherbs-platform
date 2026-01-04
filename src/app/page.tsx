@@ -75,9 +75,7 @@ export default function HomePage() {
                                     icon: Leaf,
                                     title: 'Premium Quality',
                                     description: 'Sourced from trusted suppliers and rigorously tested for purity',
-                                    image: 'https://images.unsplash.com/photo-1540324155974-7523202daa3f?auto=format&fit=crop&q=80'
                                 },
-                                // ... etc
                                 {
                                     icon: Heart,
                                     title: 'Holistic Approach',
@@ -94,14 +92,14 @@ export default function HomePage() {
                                     description: 'Professional consultations from certified herbalists',
                                 },
                             ].map((feature, index) => (
-                                <div key={index} className="card p-8 text-center group hover:scale-105">
-                                    <div className="w-16 h-16 bg-primary-100 rounded-full flex items-center justify-center mx-auto mb-4 group-hover:bg-primary-600 transition-colors">
-                                        <feature.icon className="w-8 h-8 text-primary-600 group-hover:text-white transition-colors" />
+                                <div key={index} className="bg-white border border-stone-200 rounded-lg p-6 text-center hover:border-green-500 transition-colors">
+                                    <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                                        <feature.icon className="w-8 h-8 text-green-600" />
                                     </div>
-                                    <h3 className="text-xl font-serif font-bold text-earth-900 mb-2">
+                                    <h3 className="text-xl font-serif font-bold text-stone-900 mb-2">
                                         {feature.title}
                                     </h3>
-                                    <p className="text-earth-600">{feature.description}</p>
+                                    <p className="text-stone-600">{feature.description}</p>
                                 </div>
                             ))}
                         </div>
