@@ -4,6 +4,18 @@
 
 This guide shows you how to deploy Black Moss & Herbs to your own server (VPS, dedicated server, etc.) without any expensive third-party services.
 
+## ⚠️ Multi-Site Server Note
+
+If your server hosts **multiple websites** (like server 213.199.45.126), each site must use a unique port:
+
+| Site | Port |
+|------|------|
+| Site A (e.g., other project) | 3000 |
+| **Black Moss & Herbs** | **3005** |
+| Site C | 3010 |
+
+**Black Moss & Herbs uses port 3005** to avoid conflicts. See `config/blackmoss.nginx.conf` for the proper nginx configuration.
+
 ## Prerequisites
 
 - Linux server (Ubuntu 20.04+ recommended)
@@ -70,7 +82,7 @@ sudo docker-compose ps
 sudo docker-compose logs -f
 ```
 
-Your site will be running on port 3000. Use Nginx as reverse proxy (see below).
+Your site will be running on port 3005 (mapped from container port 3000). Use Nginx as reverse proxy (see below).
 
 ## Option 2: PM2 Deployment (Node.js Process Manager)
 
@@ -137,14 +149,14 @@ Create config file:
 sudo nano /etc/nginx/sites-available/blackmossandherbs
 ```
 
-Add this configuration:
+Add this configuration (note: port 3005 for Black Moss & Herbs):
 ```nginx
 server {
     listen 80;
     server_name yourdomain.com www.yourdomain.com;
 
     location / {
-        proxy_pass http://localhost:3000;
+        proxy_pass http://localhost:3005;
         proxy_http_version 1.1;
         proxy_set_header Upgrade $http_upgrade;
         proxy_set_header Connection 'upgrade';
@@ -155,6 +167,13 @@ server {
         proxy_set_header X-Forwarded-Proto $scheme;
     }
 }
+```
+
+For blackmossandherbs.com specifically, use the pre-configured file:
+```bash
+cp config/blackmoss.nginx.conf /etc/nginx/sites-available/blackmoss.conf
+ln -sf /etc/nginx/sites-available/blackmoss.conf /etc/nginx/sites-enabled/
+nginx -t && systemctl reload nginx
 ```
 
 Enable site:
@@ -341,8 +360,8 @@ pm2 logs blackmossandherbs
 # or
 sudo docker-compose logs app
 
-# Check if port 3000 is in use
-sudo lsof -i :3000
+# Check if port 3005 is in use (Black Moss & Herbs uses 3005)
+sudo lsof -i :3005
 
 # Check environment variables
 cat .env

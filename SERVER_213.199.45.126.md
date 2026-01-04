@@ -1,6 +1,33 @@
 # Server Deployment Guide for 213.199.45.126
 
-## Quick Deploy
+## ⚠️ IMPORTANT: Multi-Site Server Configuration
+
+This server hosts **multiple websites**. Each site runs on its own port:
+
+| Site | Port | Status |
+|------|------|--------|
+| DJ Danny Hectic B | 3000 | Running |
+| **Black Moss & Herbs** | **3005** | This site |
+
+**DO NOT use port 3000** - it will conflict with other sites!
+
+---
+
+## Quick Deploy (Recommended)
+
+```bash
+./quick-deploy.sh
+```
+
+This will:
+1. Connect to your server
+2. Pull latest code
+3. Build and restart the app on **port 3005**
+4. Configure nginx for blackmossandherbs.com
+
+---
+
+## Full Setup (First Time)
 
 ```bash
 ./deploy-to-server.sh
@@ -99,6 +126,17 @@ docker-compose ps
 docker-compose logs -f
 ```
 
+### Check What's Running on Each Port
+
+```bash
+# See all sites/ports
+ss -tlnp | grep -E '(:3000|:3005|:80|:443)'
+
+# Check which site is on which port
+curl -s http://127.0.0.1:3000 | grep '<title>'  # DJ Danny Hectic B
+curl -s http://127.0.0.1:3005 | grep '<title>'  # Black Moss & Herbs
+```
+
 ### Restart Application
 
 **PM2:**
@@ -111,12 +149,45 @@ pm2 restart blackmossandherbs
 docker-compose restart
 ```
 
+### Fix Wrong Site Showing
+
+If blackmossandherbs.com shows the wrong site, the nginx config is pointing to the wrong port:
+
+```bash
+# Check nginx config
+cat /etc/nginx/sites-available/blackmoss.conf | grep proxy_pass
+
+# Should show: proxy_pass http://127.0.0.1:3005;
+# If it shows port 3000, update it!
+
+# Re-apply correct config
+cd /var/www/blackmossandherbs-platform
+cp config/blackmoss.nginx.conf /etc/nginx/sites-available/blackmoss.conf
+ln -sf /etc/nginx/sites-available/blackmoss.conf /etc/nginx/sites-enabled/
+nginx -t && systemctl reload nginx
+```
+
+### Setup SSL (HTTPS)
+
+```bash
+certbot --nginx -d blackmossandherbs.com -d www.blackmossandherbs.com
+```
+
 ## Server Info
 
 - **IP**: 213.199.45.126
 - **App Directory**: /var/www/blackmossandherbs-platform
-- **Port**: 3000 (application)
-- **Database**: PostgreSQL on localhost:5432
+- **Port**: 3005 (Black Moss & Herbs - DO NOT USE 3000!)
+- **Database**: PostgreSQL on localhost:5432 (or 5435 for Docker)
+- **Other Sites**: Port 3000 = DJ Danny Hectic B
+
+## Nginx Configuration
+
+The nginx config for this site is at:
+- Source: `config/blackmoss.nginx.conf`
+- Server: `/etc/nginx/sites-available/blackmoss.conf`
+
+Make sure it points to port 3005, not 3000!
 
 ## Support
 

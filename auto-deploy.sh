@@ -61,7 +61,7 @@ echo "🔥 Configuring firewall..."
 ufw allow 22
 ufw allow 80
 ufw allow 443
-ufw allow 3000
+ufw allow 3005
 echo "y" | ufw enable
 
 echo "📗 Installing Node.js 18..."
@@ -127,20 +127,20 @@ npm run db:seed || echo "Seeding skipped (optional)"
 echo "🏗️ Building application..."
 npm run build
 
-echo "🚀 Starting application with PM2..."
+echo "🚀 Starting application with PM2 on port 3005..."
 pm2 delete blackmossandherbs 2>/dev/null || true
-pm2 start npm --name "blackmossandherbs" -- start
+PORT=3005 pm2 start npm --name "blackmossandherbs" -- start
 pm2 save
 pm2 startup | tail -n 1 | bash
 
-echo "🌐 Configuring Nginx..."
+echo "🌐 Configuring Nginx (port 3005 to avoid conflicts with other sites)..."
 cat > /etc/nginx/sites-available/blackmossandherbs << 'NGINXEOF'
 server {
     listen 80;
     server_name $DOMAIN;
 
     location / {
-        proxy_pass http://localhost:3000;
+        proxy_pass http://localhost:3005;
         proxy_http_version 1.1;
         proxy_set_header Upgrade \$http_upgrade;
         proxy_set_header Connection 'upgrade';

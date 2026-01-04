@@ -115,16 +115,16 @@ elif [ "$DEPLOY_METHOD" == "2" ]; then
     # Stop existing PM2 process if running
     pm2 delete blackmossandherbs 2>/dev/null || true
     
-    # Start with PM2
-    echo -e "${GREEN}Starting application with PM2...${NC}"
-    pm2 start npm --name "blackmossandherbs" -- start
+    # Start with PM2 on port 3005 (to avoid conflicts with other sites)
+    echo -e "${GREEN}Starting application with PM2 on port 3005...${NC}"
+    PORT=3005 pm2 start npm --name "blackmossandherbs" -- start
     pm2 save
     
     # Setup PM2 startup
     pm2 startup
     
     echo -e "${GREEN}✅ Deployment complete!${NC}"
-    echo -e "Your app is running on port 3000"
+    echo -e "Your app is running on port 3005"
     echo -e "Check status: ${YELLOW}pm2 status${NC}"
     echo -e "View logs: ${YELLOW}pm2 logs blackmossandherbs${NC}"
     
