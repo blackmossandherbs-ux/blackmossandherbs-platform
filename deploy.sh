@@ -64,11 +64,11 @@ if [ "$DEPLOY_METHOD" == "1" ]; then
     
     # Run migrations
     echo -e "${GREEN}Running database migrations...${NC}"
-    docker-compose exec app npx prisma generate
-    docker-compose exec app npx prisma db push
+    docker-compose exec blackmoss-app-service npx prisma generate
+    docker-compose exec blackmoss-app-service npx prisma db push
     
     echo -e "${GREEN}✅ Deployment complete!${NC}"
-    echo -e "Your app is running on port 3000"
+    echo -e "Your app is running on port 3005 (mapped to container port 3000)"
     echo -e "Check status: ${YELLOW}docker-compose ps${NC}"
     echo -e "View logs: ${YELLOW}docker-compose logs -f${NC}"
     

@@ -41,11 +41,10 @@ chmod +x setup-ssl.sh
 ### 4. Configure Nginx
 
 ```bash
-# Copy nginx config
-cp nginx.conf /etc/nginx/nginx.conf
-
-# Update domain in config
-nano /etc/nginx/nginx.conf
+# IMPORTANT: do NOT overwrite /etc/nginx/nginx.conf on a multi-site server.
+# Install a per-site config instead.
+cp config/blackmoss.nginx.conf /etc/nginx/sites-available/blackmossandherbs
+ln -sf /etc/nginx/sites-available/blackmossandherbs /etc/nginx/sites-enabled/blackmossandherbs
 
 # Test and restart
 nginx -t

@@ -70,8 +70,10 @@ chmod +x setup-ssl.sh
 ### 7. Configure Nginx
 
 ```bash
-cp nginx.conf /etc/nginx/nginx.conf
-nano /etc/nginx/nginx.conf  # Update domain
+# IMPORTANT: do NOT overwrite /etc/nginx/nginx.conf on a multi-site server.
+# Install a per-site config instead.
+cp config/blackmoss.nginx.conf /etc/nginx/sites-available/blackmossandherbs
+ln -sf /etc/nginx/sites-available/blackmossandherbs /etc/nginx/sites-enabled/blackmossandherbs
 nginx -t
 systemctl restart nginx
 ```
@@ -79,7 +81,8 @@ systemctl restart nginx
 ## Access Your Site
 
 After deployment:
-- **Direct**: http://213.199.45.126:3000
+- **Direct (PM2)**: http://213.199.45.126:3000
+- **Direct (Docker)**: http://213.199.45.126:3005
 - **With Nginx**: http://yourdomain.com (after DNS setup)
 - **With SSL**: https://yourdomain.com (after SSL setup)
 
@@ -115,7 +118,7 @@ docker-compose restart
 
 - **IP**: 213.199.45.126
 - **App Directory**: /var/www/blackmossandherbs-platform
-- **Port**: 3000 (application)
+- **Port**: 3000 (PM2) / 3005 (Docker host port mapped to container 3000)
 - **Database**: PostgreSQL on localhost:5432
 
 ## Support

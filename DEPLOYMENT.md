@@ -70,7 +70,7 @@ sudo docker-compose ps
 sudo docker-compose logs -f
 ```
 
-Your site will be running on port 3000. Use Nginx as reverse proxy (see below).
+Your site will be running on port **3005** (Docker host port mapped to container port 3000). Use Nginx as reverse proxy (see below).
 
 ## Option 2: PM2 Deployment (Node.js Process Manager)
 
@@ -144,7 +144,9 @@ server {
     server_name yourdomain.com www.yourdomain.com;
 
     location / {
-        proxy_pass http://localhost:3000;
+        # Docker deploy uses host port 3005 -> container 3000 (see docker-compose.yml)
+        # If you deploy via PM2 instead, change this to http://localhost:3000
+        proxy_pass http://localhost:3005;
         proxy_http_version 1.1;
         proxy_set_header Upgrade $http_upgrade;
         proxy_set_header Connection 'upgrade';
