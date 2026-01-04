@@ -3,8 +3,9 @@ import { Facebook, Instagram, Twitter, Youtube, Mail } from 'lucide-react'
 
 export default function Footer() {
     return (
-        <footer className="bg-earth-900 text-earth-100 mt-20">
-            <div className="container py-12">
+        <footer className="bg-earth-950 border-t border-earth-800 mt-20 relative overflow-hidden">
+            <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent pointer-events-none" />
+            <div className="container py-12 relative z-10">
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
                     {/* About */}
                     <div>

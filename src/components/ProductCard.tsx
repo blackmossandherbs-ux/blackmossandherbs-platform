@@ -31,17 +31,27 @@ export default function ProductCard({
     return (
         <div className="card group">
             <Link href={`/shop/${slug}`}>
-                <div className="relative h-64 bg-gradient-to-br from-primary-100 to-secondary-100 overflow-hidden">
-                    {/* Placeholder for product image */}
-                    <div className="absolute inset-0 flex items-center justify-center bg-earth-100">
-                        <span className="text-6xl">🌿</span>
-                    </div>
+                <div className="relative h-64 bg-earth-900 overflow-hidden">
+                    {images && images.length > 0 ? (
+                        <img
+                            src={images[0]}
+                            alt={name}
+                            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                        />
+                    ) : (
+                        <div className="absolute inset-0 flex items-center justify-center bg-earth-800 text-earth-600">
+                            <span className="text-4xl opacity-50">🌿</span>
+                        </div>
+                    )}
+
+                    {/* Branding Overlay */}
+                    <div className="absolute inset-0 bg-gradient-to-t from-earth-950/80 to-transparent opacity-60" />
 
                     {/* Badges */}
-                    <div className="absolute top-4 left-4 flex flex-col gap-2">
-                        {featured && <span className="badge-primary">Featured</span>}
+                    <div className="absolute top-4 left-4 flex flex-col gap-2 z-10">
+                        {featured && <span className="badge-primary shadow-lg border border-primary-500/30">Featured</span>}
                         {discount > 0 && (
-                            <span className="badge bg-red-100 text-red-800">
+                            <span className="badge bg-secondary-500 text-black font-bold shadow-lg">
                                 Save {discount}%
                             </span>
                         )}
