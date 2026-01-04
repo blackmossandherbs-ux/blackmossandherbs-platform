@@ -2,23 +2,30 @@
 @tailwind components;
 @tailwind utilities;
 
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Playfair+Display:wght@400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Playfair+Display:ital,wght@0,400;0,700;1,400;1,700&display=swap');
 
 @layer base {
   :root {
-    --color-primary: 22 163 74;
-    --color-secondary: 234 179 8;
-    --color-earth: 184 151 112;
-    --radius: 0.5rem;
+    --color-primary: 21 128 61;
+    /* Green-700 / Forest Green */
+    --color-secondary: 202 138 4;
+    /* Amber-600 / Gold */
+    --color-earth-950: 12 10 9;
+    /* Jet Black/Brown */
+    --color-earth-900: 28 25 23;
+    /* Deep Coffee */
+    --radius: 1rem;
   }
 
   * {
-    @apply border-earth-200;
+    @apply border-stone-800/40;
   }
 
   body {
-    @apply bg-earth-950 text-earth-50 font-sans relative;
-    background-image: url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Ctext x='50' y='50' font-family='serif' font-size='10' fill='%232f5233' fill-opacity='0.1' text-anchor='middle' transform='rotate(-45 50 50)'%3ESea Moss & Herbs%3C/text%3E%3C/svg%3E");
+    @apply bg-[#0c0a09] text-stone-200 font-sans selection:bg-green-600/30 selection:text-green-100 overflow-x-hidden;
+    background-image:
+      radial-gradient(circle at 0% 0%, rgba(21, 128, 61, 0.08) 0%, transparent 40%),
+      radial-gradient(circle at 100% 100%, rgba(202, 138, 4, 0.08) 0%, transparent 40%);
   }
 
   h1,
@@ -27,82 +34,88 @@
   h4,
   h5,
   h6 {
-    @apply font-serif text-secondary-400;
+    @apply font-serif tracking-tight text-stone-50;
   }
 }
 
 @layer components {
   .container {
-    @apply max-w-7xl mx-auto px-4 sm:px-6 lg:px-8;
+    @apply max-w-7xl mx-auto px-6 lg:px-12;
   }
 
-  .btn {
-    @apply inline-flex items-center justify-center px-6 py-3 rounded-lg font-medium transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2;
+  /* Frosted Glass - apothecary style */
+  .organic-glass {
+    @apply bg-stone-900/60 backdrop-blur-2xl border border-white/5 shadow-[0_8px_32px_rgba(0, 0, 0, 0.5)];
   }
 
-  .btn-primary {
-    @apply btn bg-primary-600 text-white hover:bg-primary-700 focus:ring-primary-500;
+  .premium-card {
+    @apply bg-stone-900/40 backdrop-blur-md border border-white/10 rounded-2xl transition-all duration-700 hover:border-green-600/40 hover:bg-stone-900/60 hover:-translate-y-2;
   }
 
-  .btn-secondary {
-    @apply btn bg-secondary-600 text-white hover:bg-secondary-700 focus:ring-secondary-500;
+  .btn-organic {
+    @apply relative overflow-hidden px-8 py-4 rounded-xl font-bold transition-all duration-500 active:scale-95 flex items-center justify-center gap-2;
   }
 
-  .btn-outline {
-    @apply btn border-2 border-primary-600 text-primary-600 hover:bg-primary-50 focus:ring-primary-500;
+  .btn-organic-primary {
+    @apply btn-organic bg-green-700 text-stone-50 shadow-[0_10px_20px_-5px_rgba(21, 128, 61, 0.4)] hover:shadow-[0_20px_40px_-10px_rgba(21, 128, 61, 0.6)] hover:bg-green-600;
   }
 
-  .card {
-    @apply bg-white rounded-xl shadow-md overflow-hidden transition-all duration-300 hover:shadow-xl;
+  .btn-organic-gold {
+    @apply btn-organic bg-amber-600 text-stone-950 shadow-[0_10px_20px_-5px_rgba(202, 138, 4, 0.4)] hover:shadow-[0_20px_40px_-10px_rgba(202, 138, 4, 0.6)] hover:bg-amber-500;
   }
 
-  .input {
-    @apply w-full px-4 py-2 border border-earth-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-all;
+  .btn-organic-outline {
+    @apply btn-organic border border-stone-700 bg-stone-900/50 text-stone-100 backdrop-blur-sm hover:bg-stone-800 hover:border-stone-600;
   }
 
-  .label {
-    @apply block text-sm font-medium text-earth-700 mb-2;
+  .section-heading {
+    @apply text-4xl md:text-6xl font-serif font-bold mb-6 text-stone-50 leading-tight;
   }
 
-  .badge {
-    @apply inline-flex items-center px-3 py-1 rounded-full text-xs font-medium;
-  }
-
-  .badge-primary {
-    @apply badge bg-primary-100 text-primary-800;
-  }
-
-  .badge-secondary {
-    @apply badge bg-secondary-100 text-secondary-800;
-  }
-
-  .section-title {
-    @apply text-4xl md:text-5xl font-bold text-earth-900 mb-4;
-  }
-
-  .section-subtitle {
-    @apply text-lg md:text-xl text-earth-600 max-w-2xl;
+  .sub-heading {
+    @apply text-lg md:text-xl text-stone-400 max-w-2xl font-light;
   }
 }
 
 @layer utilities {
-  .text-balance {
-    text-wrap: balance;
+  .animate-float-slow {
+    animation: float-slow 10s ease-in-out infinite;
   }
 
-  .glass {
-    @apply bg-white/80 backdrop-blur-md;
+  @keyframes float-slow {
+
+    0%,
+    100% {
+      transform: translateY(0) rotate(0);
+    }
+
+    33% {
+      transform: translateY(-15px) rotate(1deg);
+    }
+
+    66% {
+      transform: translateY(-5px) rotate(-1deg);
+    }
   }
 
-  .gradient-primary {
-    @apply bg-gradient-to-r from-primary-600 to-primary-700;
+  .gradient-moss {
+    @apply bg-gradient-to-br from-green-800 to-stone-950;
   }
 
-  .gradient-secondary {
-    @apply bg-gradient-to-r from-secondary-500 to-secondary-600;
+  .gold-glow {
+    @apply shadow-[0_0_30px_rgba(202, 138, 4, 0.2)];
   }
+}
 
-  .gradient-earth {
-    @apply bg-gradient-to-r from-earth-600 to-earth-700;
-  }
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+::-webkit-scrollbar-track {
+  @apply bg-stone-950;
+}
+
+::-webkit-scrollbar-thumb {
+  @apply bg-green-950 border-2 border-stone-950 rounded-full hover:bg-green-900 transition-colors;
 }

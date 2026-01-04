@@ -1,3 +1,7 @@
+/**
+ * HECTIC Intellectual Property - Copyright 2024
+ * Black Moss & Herbs Platform - Subscription Tiers
+ */
 import { Metadata } from 'next'
 import { Check, Zap } from 'lucide-react'
 import Button from '@/components/Button'

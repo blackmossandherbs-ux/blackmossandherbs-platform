@@ -2,7 +2,7 @@ version: '3.8'
 
 services:
   # PostgreSQL Database
-  postgres:
+  blackmoss-db-service:
     image: postgres:15-alpine
     container_name: blackmoss-db
     restart: always
@@ -11,21 +11,21 @@ services:
       POSTGRES_PASSWORD: ${DB_PASSWORD:-changeme}
       POSTGRES_DB: ${DB_NAME:-blackmossandherbs}
     volumes:
-      - postgres_data:/var/lib/postgresql/data
+      - blackmoss-db-volume:/var/lib/postgresql/data
     ports:
       - "5435:5432"
     networks:
-      - app-network
+      - blackmoss-network
 
   # Next.js Application
-  app:
+  blackmoss-app-service:
     build:
       context: .
       dockerfile: Dockerfile
     container_name: blackmoss-app
     restart: always
     environment:
-      - DATABASE_URL=postgresql://${DB_USER:-dbuser}:${DB_PASSWORD:-changeme}@postgres:5432/${DB_NAME:-blackmossandherbs}
+      - DATABASE_URL=postgresql://${DB_USER:-dbuser}:${DB_PASSWORD:-changeme}@blackmoss-db-service:5432/${DB_NAME:-blackmossandherbs}
       - NEXTAUTH_URL=${NEXTAUTH_URL:-http://localhost:3000}
       - NEXTAUTH_SECRET=${NEXTAUTH_SECRET}
       - NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY=${NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY}
@@ -35,16 +35,16 @@ services:
     ports:
       - "3005:3000"
     depends_on:
-      - postgres
+      - blackmoss-db-service
     networks:
-      - app-network
+      - blackmoss-network
     volumes:
       - ./prisma:/app/prisma
 
 volumes:
-  postgres_data:
+  blackmoss-db-volume:
 
 
 networks:
-  app-network:
+  blackmoss-network:
     driver: bridge

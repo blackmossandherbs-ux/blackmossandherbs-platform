@@ -8,8 +8,8 @@ COPY package*.json ./
 COPY prisma ./prisma/
 
 # Install dependencies
-# Install dependencies including dev for build
-RUN npm ci
+RUN apk add --no-cache openssl
+RUN npm install --legacy-peer-deps
 
 # Copy source code
 COPY . .
@@ -28,6 +28,9 @@ WORKDIR /app
 # Set environment to production
 ENV NODE_ENV=production
 
+# Install OpenSSL for Prisma
+RUN apk add --no-cache openssl
+
 # Create non-root user
 RUN addgroup --system --gid 1001 nodejs
 RUN adduser --system --uid 1001 nextjs
@@ -38,6 +41,9 @@ COPY --from=builder /app/.next/standalone ./
 COPY --from=builder /app/.next/static ./.next/static
 COPY --from=builder /app/prisma ./prisma
 COPY --from=builder /app/node_modules/.prisma ./node_modules/.prisma
+COPY --from=builder /app/node_modules/@prisma ./node_modules/@prisma
+COPY --from=builder /app/node_modules/bcryptjs ./node_modules/bcryptjs
+COPY --from=builder /app/node_modules/@next-auth ./node_modules/@next-auth
 
 # Set correct permissions
 RUN chown -R nextjs:nodejs /app

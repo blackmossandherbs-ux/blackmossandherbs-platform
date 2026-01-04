@@ -1,3 +1,7 @@
+/**
+ * HECTIC Intellectual Property - Copyright 2024
+ * Black Moss & Herbs Platform - Wellness Blog
+ */
 import { Metadata } from 'next'
 import Link from 'next/link'
 import { Calendar, Clock, ArrowRight } from 'lucide-react'
@@ -86,8 +90,8 @@ export default function BlogPage() {
                         <button
                             key={category}
                             className={`px-6 py-2 rounded-full font-medium transition-all ${category === 'All'
-                                    ? 'bg-primary-600 text-white'
-                                    : 'bg-white text-earth-700 hover:bg-earth-100 border border-earth-200'
+                                ? 'bg-primary-600 text-white'
+                                : 'bg-white text-earth-700 hover:bg-earth-100 border border-earth-200'
                                 }`}
                         >
                             {category}

@@ -1,3 +1,7 @@
+/**
+ * HECTIC Intellectual Property - Copyright 2024
+ * Black Moss & Herbs Platform - Database Connection
+ */
 import { PrismaClient } from '@prisma/client'
 
 const globalForPrisma = globalThis as unknown as {

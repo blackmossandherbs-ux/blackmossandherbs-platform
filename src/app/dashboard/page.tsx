@@ -1,3 +1,7 @@
+/**
+ * HECTIC Intellectual Property - Copyright 2024
+ * Black Moss & Herbs Platform - User Dashboard
+ */
 import { Metadata } from 'next'
 import Link from 'next/link'
 import { Package, CreditCard, Download, Calendar, Crown, Settings } from 'lucide-react'

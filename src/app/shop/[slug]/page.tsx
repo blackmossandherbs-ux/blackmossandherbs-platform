@@ -1,3 +1,7 @@
+/**
+ * HECTIC Intellectual Property - Copyright 2024
+ * Black Moss & Herbs Platform - Product Detail View
+ */
 import { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 import { ShoppingCart, Heart, Share2, Star, Check } from 'lucide-react'
@@ -101,8 +105,8 @@ export default function ProductPage({ params }: { params: { slug: string } }) {
                                     <Star
                                         key={i}
                                         className={`w-5 h-5 ${i < Math.floor(product.rating)
-                                                ? 'text-secondary-500 fill-secondary-500'
-                                                : 'text-earth-300'
+                                            ? 'text-secondary-500 fill-secondary-500'
+                                            : 'text-earth-300'
                                             }`}
                                     />
                                 ))}

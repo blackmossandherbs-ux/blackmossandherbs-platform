@@ -1,3 +1,7 @@
+/**
+ * HECTIC Intellectual Property - Copyright 2024
+ * Black Moss & Herbs Platform - Shopping Cart
+ */
 import { Metadata } from 'next'
 import Link from 'next/link'
 import { Trash2, Plus, Minus, ArrowRight } from 'lucide-react'

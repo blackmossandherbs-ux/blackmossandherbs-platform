@@ -1,8 +1,12 @@
+/**
+ * HECTIC Intellectual Property - Copyright 2024
+ */
 import type { Metadata } from 'next'
 import { Inter, Playfair_Display } from 'next/font/google'
 import './globals.css'
 import Header from '@/components/Header'
 import Footer from '@/components/Footer'
+import AIChatWidget from '@/components/AIChatWidget'
 
 const inter = Inter({
     subsets: ['latin'],
@@ -14,6 +18,10 @@ const playfair = Playfair_Display({
     variable: '--font-playfair',
 })
 
+/**
+ * HECTIC Intellectual Property - Copyright 2024
+ * Black Moss & Herbs Platform - Compliance Layer
+ */
 export const metadata: Metadata = {
     title: 'Black Moss & Herbs - Global Herbal Wellness Platform',
     description: 'Premium herbal wellness products, subscriptions, digital resources, and holistic health consultations. Your trusted source for natural healing.',
@@ -33,6 +41,7 @@ export default function RootLayout({
                     {children}
                 </main>
                 <Footer />
+                <AIChatWidget />
             </body>
         </html>
     )

@@ -1,95 +1,24 @@
+/**
+ * HECTIC Intellectual Property - Copyright 2024
+ * Black Moss & Herbs Platform - Shop Catalog
+ */
 import { Metadata } from 'next'
 import ProductCard from '@/components/ProductCard'
 import { Filter } from 'lucide-react'
+
+export const dynamic = 'force-dynamic'
 
 export const metadata: Metadata = {
     title: 'Shop - Black Moss & Herbs',
     description: 'Browse our premium selection of herbal wellness products, supplements, and natural remedies.',
 }
 
-// Mock data - will be replaced with database queries
-const products = [
-    {
-        id: '1',
-        name: 'Sea Moss Gold Gel',
-        slug: 'sea-moss-gold-gel',
-        price: 34.99,
-        compareAtPrice: 44.99,
-        images: ['/images/sea_moss_gold.png'],
-        category: 'Supplements',
-        featured: true,
-    },
-    {
-        id: '2',
-        name: 'Elderberry Syrup',
-        slug: 'elderberry-syrup',
-        price: 24.99,
-        images: ['/images/elderberry.png'],
-        category: 'Immune Support',
-        featured: true,
-    },
-    {
-        id: '3',
-        name: 'Herbal Tea Blend',
-        slug: 'herbal-tea-blend',
-        price: 18.99,
-        compareAtPrice: 22.99,
-        images: [],
-        category: 'Teas',
-    },
-    {
-        id: '4',
-        name: 'Turmeric Capsules',
-        slug: 'turmeric-capsules',
-        price: 29.99,
-        images: ['/images/burdock_root.png'],
-        category: 'Supplements',
-    },
-    {
-        id: '5',
-        name: 'Ashwagandha Root',
-        slug: 'ashwagandha-root',
-        price: 26.99,
-        images: [],
-        category: 'Adaptogens',
-    },
-    {
-        id: '6',
-        name: 'Moringa Powder',
-        slug: 'moringa-powder',
-        price: 22.99,
-        images: [],
-        category: 'Superfoods',
-    },
-    {
-        id: '7',
-        name: 'Burdock Root Tea',
-        slug: 'burdock-root-tea',
-        price: 16.99,
-        images: ['/images/dandelion_root.png', '/images/burdock_root.png'],
-        category: 'Teas',
-    },
-    {
-        id: '8',
-        name: 'Seamoss Capsules',
-        slug: 'seamoss-capsules',
-        price: 32.99,
-        images: [],
-        category: 'Supplements',
-        featured: true,
-    },
-]
+import { ProductService } from '@/services/ProductService'
 
-const categories = [
-    'All Products',
-    'Supplements',
-    'Teas',
-    'Immune Support',
-    'Adaptogens',
-    'Superfoods',
-]
-
-export default function ShopPage() {
+export default async function ShopPage() {
+    const products = await ProductService.getProducts();
+    const categories = await ProductService.getCategories();
+    const availableCategories = ['All Products', ...categories];
     return (
         <div className="py-12">
             <div className="container">
@@ -114,7 +43,7 @@ export default function ShopPage() {
                             <div className="mb-6">
                                 <h3 className="font-semibold text-earth-900 mb-3">Categories</h3>
                                 <div className="space-y-2">
-                                    {categories.map((category) => (
+                                    {availableCategories.map((category) => (
                                         <label key={category} className="flex items-center cursor-pointer group">
                                             <input
                                                 type="checkbox"
@@ -195,7 +124,17 @@ export default function ShopPage() {
 
                         <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
                             {products.map((product) => (
-                                <ProductCard key={product.id} {...product} />
+                                <ProductCard
+                                    key={product.id}
+                                    id={product.id}
+                                    name={product.name}
+                                    slug={product.slug}
+                                    price={product.price}
+                                    compareAtPrice={product.compareAtPrice ?? undefined}
+                                    images={product.images}
+                                    category={product.category}
+                                    featured={product.featured}
+                                />
                             ))}
                         </div>
                     </div>

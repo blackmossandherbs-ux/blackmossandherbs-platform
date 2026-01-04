@@ -1,92 +1,92 @@
 import Link from 'next/link'
-import { formatPrice } from '@/lib/utils'
 import { ShoppingCart } from 'lucide-react'
 import Button from './Button'
 
 interface ProductCardProps {
-    id: string
     name: string
     slug: string
     price: number
     compareAtPrice?: number
-    images: string[]
-    category: string
+    images?: string[]
+    category?: string
     featured?: boolean
+    discount?: number
 }
 
 export default function ProductCard({
-    id,
     name,
     slug,
     price,
     compareAtPrice,
     images,
     category,
-    featured = false,
+    featured,
+    discount = 0
 }: ProductCardProps) {
-    const discount = compareAtPrice
-        ? Math.round(((compareAtPrice - price) / compareAtPrice) * 100)
-        : 0
+    const formatPrice = (cents: number) => `$${(cents / 100).toFixed(2)}`
 
     return (
-        <div className="card group">
+        <div className="bg-white border border-stone-200 rounded-lg overflow-hidden hover:border-green-500 transition-colors group">
             <Link href={`/shop/${slug}`}>
-                <div className="relative h-64 bg-earth-900 overflow-hidden">
+                <div className="relative h-80 overflow-hidden bg-stone-100">
                     {images && images.length > 0 ? (
                         <img
                             src={images[0]}
                             alt={name}
-                            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                            className="w-full h-full object-cover"
                         />
                     ) : (
-                        <div className="absolute inset-0 flex items-center justify-center bg-earth-800 text-earth-600">
-                            <span className="text-4xl opacity-50">🌿</span>
+                        <div className="absolute inset-0 flex items-center justify-center bg-stone-100 text-stone-400">
+                            No Image
                         </div>
                     )}
 
-                    {/* Branding Overlay */}
-                    <div className="absolute inset-0 bg-gradient-to-t from-earth-950/80 to-transparent opacity-60" />
-
                     {/* Badges */}
-                    <div className="absolute top-4 left-4 flex flex-col gap-2 z-10">
-                        {featured && <span className="badge-primary shadow-lg border border-primary-500/30">Featured</span>}
-                        {discount > 0 && (
-                            <span className="badge bg-secondary-500 text-black font-bold shadow-lg">
-                                Save {discount}%
-                            </span>
-                        )}
-                    </div>
+                    {(featured || discount > 0) && (
+                        <div className="absolute top-4 left-4 flex flex-col gap-2">
+                            {featured && (
+                                <span className="px-3 py-1 bg-amber-500 text-white text-xs font-bold uppercase rounded-full">
+                                    Featured
+                                </span>
+                            )}
+                            {discount > 0 && (
+                                <span className="px-3 py-1 bg-green-600 text-white text-xs font-bold uppercase rounded-full">
+                                    -{discount}%
+                                </span>
+                            )}
+                        </div>
+                    )}
                 </div>
             </Link>
 
             <div className="p-6">
-                <div className="mb-2">
-                    <span className="text-xs text-earth-500 uppercase tracking-wide">
+                {category && (
+                    <span className="text-xs text-green-600 font-semibold uppercase">
                         {category}
                     </span>
-                </div>
+                )}
 
                 <Link href={`/shop/${slug}`}>
-                    <h3 className="font-serif text-xl font-bold text-earth-900 mb-2 group-hover:text-primary-600 transition-colors line-clamp-2">
+                    <h3 className="font-serif text-xl font-bold text-stone-900 mt-2 mb-3 group-hover:text-green-600 transition-colors line-clamp-1">
                         {name}
                     </h3>
                 </Link>
 
-                <div className="flex items-center gap-2 mb-4">
-                    <span className="text-2xl font-bold text-primary-600">
-                        {formatPrice(price)}
-                    </span>
-                    {compareAtPrice && (
-                        <span className="text-sm text-earth-400 line-through">
-                            {formatPrice(compareAtPrice)}
+                <div className="flex items-center justify-between mt-4">
+                    <div className="flex items-center gap-2">
+                        <span className="text-2xl font-bold text-stone-900">
+                            {formatPrice(price)}
                         </span>
-                    )}
+                        {compareAtPrice && (
+                            <span className="text-sm text-stone-500 line-through">
+                                {formatPrice(compareAtPrice)}
+                            </span>
+                        )}
+                    </div>
+                    <Button size="sm">
+                        <ShoppingCart className="w-4 h-4" />
+                    </Button>
                 </div>
-
-                <Button className="w-full" size="sm">
-                    <ShoppingCart className="w-4 h-4 mr-2" />
-                    Add to Cart
-                </Button>
             </div>
         </div>
     )
