@@ -24,29 +24,16 @@ echo "Installing Certbot..."
 apt update
 apt install -y certbot python3-certbot-nginx
 
-# Stop nginx temporarily
-systemctl stop nginx
-
-# Get certificate
+# Get certificate using Nginx plugin (automatically updates config)
 if [ "$WWW_DOMAIN" == "y" ]; then
-    certbot certonly --standalone -d $DOMAIN -d www.$DOMAIN
+    certbot --nginx -d $DOMAIN -d www.$DOMAIN
 else
-    certbot certonly --standalone -d $DOMAIN
+    certbot --nginx -d $DOMAIN
 fi
-
-# Start nginx
-systemctl start nginx
-
-# Test auto-renewal
-echo "Testing auto-renewal..."
-certbot renew --dry-run
 
 echo ""
 echo "✅ SSL certificate installed successfully!"
 echo ""
-echo "Certificate location: /etc/letsencrypt/live/$DOMAIN/"
 echo "Auto-renewal is configured"
 echo ""
-echo "Update your Nginx config to use:"
-echo "  ssl_certificate /etc/letsencrypt/live/$DOMAIN/fullchain.pem;"
-echo "  ssl_certificate_key /etc/letsencrypt/live/$DOMAIN/privkey.pem;"
+echo "Verify your site at https://$DOMAIN"

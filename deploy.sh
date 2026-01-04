@@ -68,7 +68,7 @@ if [ "$DEPLOY_METHOD" == "1" ]; then
     docker-compose exec app npx prisma db push
     
     echo -e "${GREEN}✅ Deployment complete!${NC}"
-    echo -e "Your app is running on port 3000"
+    echo -e "Your app is running on port 3005"
     echo -e "Check status: ${YELLOW}docker-compose ps${NC}"
     echo -e "View logs: ${YELLOW}docker-compose logs -f${NC}"
     
@@ -117,20 +117,40 @@ elif [ "$DEPLOY_METHOD" == "2" ]; then
     
     # Start with PM2
     echo -e "${GREEN}Starting application with PM2...${NC}"
-    pm2 start npm --name "blackmossandherbs" -- start
+    PORT=3005 pm2 start npm --name "blackmossandherbs" -- start
     pm2 save
     
     # Setup PM2 startup
     pm2 startup
     
     echo -e "${GREEN}✅ Deployment complete!${NC}"
-    echo -e "Your app is running on port 3000"
+    echo -e "Your app is running on port 3005"
     echo -e "Check status: ${YELLOW}pm2 status${NC}"
     echo -e "View logs: ${YELLOW}pm2 logs blackmossandherbs${NC}"
     
 else
     echo -e "${RED}Invalid choice${NC}"
     exit 1
+fi
+
+echo ""
+echo -e "${YELLOW}Configuring Nginx...${NC}"
+read -p "Update Nginx configuration? (y/n): " UPDATE_NGINX
+if [ "$UPDATE_NGINX" == "y" ]; then
+    echo "Copying Nginx configuration..."
+    cp config/blackmoss.nginx.conf /etc/nginx/sites-available/blackmossandherbs
+    ln -sf /etc/nginx/sites-available/blackmossandherbs /etc/nginx/sites-enabled/
+    
+    # Copy catch-all if it doesn't exist or update it
+    cp config/catchall.nginx.conf /etc/nginx/sites-available/catchall
+    ln -sf /etc/nginx/sites-available/catchall /etc/nginx/sites-enabled/000-catchall
+    
+    echo "Testing Nginx configuration..."
+    nginx -t
+    
+    echo "Reloading Nginx..."
+    systemctl reload nginx
+    echo -e "${GREEN}✅ Nginx configured!${NC}"
 fi
 
 echo ""
