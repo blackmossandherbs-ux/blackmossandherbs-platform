@@ -16,11 +16,17 @@ node_modules
 # Misc
 .DS_Store
 *.pem
+*.log
+*.tmp
+*.bak
+*.swp
+*~
 
 # Debug
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+pnpm-debug.log*
 
 # Local env files
 .env
@@ -35,3 +41,14 @@ next-env.d.ts
 
 # Prisma
 prisma/migrations
+
+# Editor
+.vscode/settings.json
+.idea/
+
+# Logs
+logs/
+*.log
+
+# OS
+Thumbs.db

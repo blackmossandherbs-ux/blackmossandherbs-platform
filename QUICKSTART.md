@@ -41,16 +41,16 @@ chmod +x setup-ssl.sh
 ### 4. Configure Nginx
 
 ```bash
-# Copy nginx config
-cp nginx.conf /etc/nginx/nginx.conf
-
-# Update domain in config
-nano /etc/nginx/nginx.conf
+# For blackmossandherbs.com (uses port 3005)
+cp config/blackmoss.nginx.conf /etc/nginx/sites-available/blackmoss.conf
+ln -sf /etc/nginx/sites-available/blackmoss.conf /etc/nginx/sites-enabled/
 
 # Test and restart
 nginx -t
 systemctl restart nginx
 ```
+
+> **⚠️ Multi-Site Note**: This app runs on **port 3005** to avoid conflicts with other sites. The nginx config in `config/blackmoss.nginx.conf` is pre-configured for this.
 
 ## Done! 🎉
 

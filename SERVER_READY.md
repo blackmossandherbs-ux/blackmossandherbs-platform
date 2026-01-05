@@ -51,6 +51,8 @@ nano .env  # Add your credentials
 
 **DONE! Site is live! 🎉**
 
+> **⚠️ Multi-Site Servers**: If your server hosts multiple sites, this app uses **port 3005**. See `SERVER_213.199.45.126.md` for details.
+
 ---
 
 ## 📦 What's Included

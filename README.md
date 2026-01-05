@@ -120,7 +120,18 @@ npm start
 
 ## 🚢 Deployment Options
 
-### Vercel (Recommended)
+### Self-Hosted Server (Recommended for Cost Savings)
+
+See **[DEPLOYMENT.md](./DEPLOYMENT.md)** for complete self-hosted deployment guide.
+
+Quick deploy to your server:
+```bash
+./quick-deploy.sh
+```
+
+> **⚠️ Multi-Site Servers**: This app uses **port 3005** to avoid conflicts with other sites. See `SERVER_213.199.45.126.md` for details.
+
+### Vercel
 
 1. Push your code to GitHub
 2. Import project in Vercel
