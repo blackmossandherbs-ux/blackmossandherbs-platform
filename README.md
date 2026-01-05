@@ -1,256 +1,388 @@
-# Black Moss & Herbs Platform
+# 🌿 Black Moss & Herbs - Herbal Wellness Platform
 
-> **© 2024 HECTIC. All Rights Reserved.**  
-> Developed by HECTIC - Premium Herbal Wellness Solutions
+A full-featured eCommerce platform for herbal products, subscriptions, consultations, and wellness content.
 
-A comprehensive global herbal wellness platform featuring eCommerce, subscriptions, digital products, content management, consultations, and admin/CRM capabilities.
-
-## 🌿 Features
-
-- **eCommerce Store**: Full-featured product catalog with cart and checkout
-- **Subscription Plans**: Recurring billing with multiple tier options
-- **Digital Library**: eBooks, guides, and downloadable resources
-- **Content Hub**: Blog articles and video tutorials
-- **Consultations**: Book appointments with certified herbalists
-- **User Dashboard**: Order tracking, subscriptions, and account management
-- **Admin Panel**: Comprehensive store management and analytics
-- **Responsive Design**: Beautiful, mobile-first interface
-
-## 🚀 Tech Stack
-
-- **Framework**: Next.js 14 with App Router
-- **Language**: TypeScript
-- **Styling**: Tailwind CSS
-- **Database**: PostgreSQL with Prisma ORM
-- **Authentication**: NextAuth.js
-- **Payments**: Stripe
-- **Deployment**: Production-ready
-
-## 📦 Installation
-
-1. **Clone the repository**
-   ```bash
-   git clone https://github.com/richhabits/blackmossandherbs-platform.git
-   cd blackmossandherbs-platform
-   ```
-
-2. **Install dependencies**
-   ```bash
-   npm install
-   ```
-
-3. **Set up environment variables**
-   ```bash
-   cp .env.example .env
-   ```
-   
-   Edit `.env` and add your configuration:
-   - Database URL (PostgreSQL)
-   - NextAuth secret and URL
-   - Stripe API keys
-   - Email service credentials (optional)
-
-4. **Set up the database**
-   ```bash
-   npx prisma generate
-   npx prisma db push
-   ```
-
-5. **Run the development server**
-   ```bash
-   npm run dev
-   ```
-
-6. **Open your browser**
-   Navigate to [http://localhost:3000](http://localhost:3000)
-
-## 🗄️ Database Setup
-
-### Local Development (PostgreSQL)
-
-1. Install PostgreSQL on your machine
-2. Create a new database:
-   ```sql
-   CREATE DATABASE blackmossandherbs;
-   ```
-3. Update your `.env` file with the connection string:
-   ```
-   DATABASE_URL="postgresql://username:password@localhost:5432/blackmossandherbs"
-   ```
-
-### Production Database
-
-For production, we recommend:
-- **Supabase** (Free tier available)
-- **Railway** (PostgreSQL hosting)
-- **Neon** (Serverless PostgreSQL)
-- **AWS RDS** (Enterprise)
-
-## 💳 Stripe Setup
-
-1. Create a Stripe account at [stripe.com](https://stripe.com)
-2. Get your API keys from the Stripe Dashboard
-3. Add to `.env`:
-   ```
-   NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY=pk_test_...
-   STRIPE_SECRET_KEY=sk_test_...
-   ```
-4. Set up webhook endpoint for subscriptions:
-   - URL: `https://yourdomain.com/api/webhooks/stripe`
-   - Events: `checkout.session.completed`, `customer.subscription.*`
-
-## 🔐 Authentication Setup
-
-1. Generate a NextAuth secret:
-   ```bash
-   openssl rand -base64 32
-   ```
-2. Add to `.env`:
-   ```
-   NEXTAUTH_SECRET=your-generated-secret
-   NEXTAUTH_URL=http://localhost:3000
-   ```
-
-## 🏗️ Building for Production
+## 🚀 Quick Deploy (Server)
 
 ```bash
-npm run build
-npm start
+ssh root@213.199.45.126
+cd /var/www/blackmossandherbs-platform
+./deploy-now.sh
 ```
 
-## 🚢 Deployment Options
+That's it! Site will be live at http://blackmossandherbs.com
 
-### Vercel (Recommended)
+---
 
-1. Push your code to GitHub
-2. Import project in Vercel
-3. Add environment variables
-4. Deploy!
+## 📦 What's Included
 
-### Other Platforms
+- **eCommerce:** Product catalog with Stripe checkout
+- **Subscriptions:** 3-tier membership plans
+- **Digital Library:** Premium content for members
+- **Blog & Videos:** Wellness content
+- **Consultations:** Booking system
+- **Admin Dashboard:** Order management, analytics
+- **Mobile Responsive:** Works on all devices
 
-- **Netlify**: Full Next.js support
-- **Railway**: Easy deployment with database
-- **DigitalOcean App Platform**: Scalable hosting
-- **AWS Amplify**: Enterprise solution
+---
+
+## 🔒 Multi-Project Server Setup
+
+This project is configured to run alongside other projects without conflicts.
+
+**Black Moss & Herbs:**
+- App Port: `3005`
+- DB Port: `5435`
+- Containers: `blackmossherbs-app`, `blackmossherbs-db`
+- Domain: `blackmossandherbs.com`
+
+**Other projects get their own ports:** 3006, 3007, etc.
+
+See [PROJECT_ISOLATION.md](PROJECT_ISOLATION.md) for details.
+
+---
+
+## 🛠️ Management Tools
+
+### Server Manager (Interactive Menu)
+
+```bash
+./server-manager.sh
+```
+
+Options:
+- Deploy/Start/Stop/Restart
+- View logs
+- Check status
+- Manage multiple projects
+- Configure Nginx
+
+### Quick Commands
+
+```bash
+# Deploy
+./deploy-now.sh
+
+# Start
+docker-compose up -d
+
+# Stop
+docker-compose down
+
+# Restart
+docker-compose restart
+
+# Logs
+docker-compose logs -f
+
+# Status
+docker ps --filter "name=blackmossherbs"
+```
+
+---
+
+## ⚙️ Configuration
+
+### Environment Variables
+
+Copy `.env.example` to `.env` and configure:
+
+```env
+# Database
+DATABASE_URL="postgresql://user:pass@blackmossherbs-db:5432/blackmossherbs"
+
+# Auth
+NEXTAUTH_URL="https://blackmossandherbs.com"
+NEXTAUTH_SECRET="generate-with-openssl-rand-base64-32"
+
+# Stripe
+NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY="pk_live_..."
+STRIPE_SECRET_KEY="sk_live_..."
+STRIPE_WEBHOOK_SECRET="whsec_..."
+
+# App
+NEXT_PUBLIC_APP_URL="https://blackmossandherbs.com"
+```
+
+### SSL Certificate (HTTPS)
+
+```bash
+apt install certbot python3-certbot-nginx
+certbot --nginx -d blackmossandherbs.com -d www.blackmossandherbs.com
+```
+
+---
 
 ## 📁 Project Structure
 
 ```
-blackmossandherbs-platform/
-├── prisma/
-│   └── schema.prisma          # Database schema
+/
 ├── src/
-│   ├── app/                   # Next.js app directory
-│   │   ├── admin/            # Admin pages
-│   │   ├── blog/             # Blog pages
-│   │   ├── cart/             # Shopping cart
-│   │   ├── consultations/    # Consultation booking
-│   │   ├── dashboard/        # User dashboard
-│   │   ├── library/          # Digital library
-│   │   ├── shop/             # Product pages
-│   │   ├── subscriptions/    # Subscription plans
-│   │   ├── videos/           # Video hub
-│   │   ├── layout.tsx        # Root layout
-│   │   ├── page.tsx          # Homepage
-│   │   └── globals.css       # Global styles
-│   ├── components/           # Reusable components
-│   │   ├── Button.tsx
-│   │   ├── Footer.tsx
-│   │   ├── Header.tsx
-│   │   └── ProductCard.tsx
-│   └── lib/                  # Utilities
-│       ├── prisma.ts         # Database client
-│       ├── stripe.ts         # Stripe client
-│       └── utils.ts          # Helper functions
-├── .env.example              # Environment template
-├── next.config.js            # Next.js config
-├── tailwind.config.js        # Tailwind config
-└── package.json              # Dependencies
+│   ├── app/              # Next.js 13+ App Router
+│   ├── components/       # React components
+│   ├── lib/              # Utilities & configs
+│   ├── services/         # Business logic
+│   └── types/            # TypeScript types
+├── prisma/
+│   ├── schema.prisma     # Database schema
+│   └── seed.js           # Sample data
+├── config/
+│   └── blackmoss.nginx.conf  # Nginx config
+├── docker-compose.yml    # Container definitions
+├── deploy-now.sh         # Quick deployment
+├── server-manager.sh     # Server management tool
+└── README.md             # This file
 ```
-
-## 🎨 Customization
-
-### Colors
-
-Edit `tailwind.config.js` to customize the color palette:
-- `primary`: Main brand color (green)
-- `secondary`: Accent color (yellow)
-- `earth`: Neutral tones
-
-### Content
-
-- Products: Update mock data in shop pages or connect to database
-- Blog posts: Add content through admin panel or database
-- Videos: Integrate with video hosting service
-
-## 🔧 Development
-
-### Available Scripts
-
-- `npm run dev` - Start development server
-- `npm run build` - Build for production
-- `npm start` - Start production server
-- `npm run lint` - Run ESLint
-- `npm run db:generate` - Generate Prisma client
-- `npm run db:push` - Push schema to database
-- `npm run db:studio` - Open Prisma Studio
-
-## 📝 Environment Variables
-
-Required variables:
-
-```env
-# Database
-DATABASE_URL="postgresql://..."
-
-# NextAuth
-NEXTAUTH_URL="http://localhost:3000"
-NEXTAUTH_SECRET="your-secret"
-
-# Stripe
-NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY="pk_..."
-STRIPE_SECRET_KEY="sk_..."
-STRIPE_WEBHOOK_SECRET="whsec_..."
-
-# App
-NEXT_PUBLIC_APP_URL="http://localhost:3000"
-```
-
-## 🐛 Troubleshooting
-
-### Database Connection Issues
-- Verify PostgreSQL is running
-- Check connection string format
-- Ensure database exists
-
-### Build Errors
-- Clear `.next` folder: `rm -rf .next`
-- Reinstall dependencies: `rm -rf node_modules && npm install`
-- Check Node.js version (requires 18+)
-
-### Stripe Webhooks
-- Use Stripe CLI for local testing
-- Verify webhook secret matches
-- Check endpoint URL is accessible
-
-## 📄 License
-
-This project is licensed under the MIT License.
-
-## 🤝 Support
-
-For support, email support@blackmossandherbs.com or visit our website.
-
-## 🌟 Features Coming Soon
-
-- [ ] Real-time chat support
-- [ ] Mobile app (React Native)
-- [ ] Advanced analytics dashboard
-- [ ] Multi-language support
-- [ ] Loyalty rewards program
-- [ ] AI-powered product recommendations
 
 ---
 
-Built with ❤️ for natural wellness
+## 🚢 Deployment Options
+
+### Option 1: Docker (Recommended)
+
+```bash
+docker-compose up -d
+```
+
+### Option 2: PM2
+
+```bash
+npm install
+npm run build
+pm2 start ecosystem.config.js
+pm2 save
+```
+
+### Option 3: Managed Deployment
+
+```bash
+./deploy-now.sh          # Simple deployment
+./server-manager.sh      # Full management menu
+```
+
+---
+
+## 📖 Documentation
+
+- **[DEPLOYMENT.md](DEPLOYMENT.md)** - Complete deployment guide
+- **[PROJECT_ISOLATION.md](PROJECT_ISOLATION.md)** - Multi-project server setup
+- **[QUICKSTART.md](QUICKSTART.md)** - Fast deployment reference
+- **[SERVER_READY.md](SERVER_READY.md)** - Feature overview
+- **[LAUNCH_CHECKLIST.md](LAUNCH_CHECKLIST.md)** - Pre-launch tasks
+
+---
+
+## 🔧 Development
+
+```bash
+# Install dependencies
+npm install
+
+# Setup database
+npx prisma generate
+npx prisma db push
+
+# Seed sample data
+npm run db:seed
+
+# Run development server
+npm run dev
+
+# Build for production
+npm run build
+
+# Start production server
+npm start
+```
+
+---
+
+## 🌐 Server Information
+
+**Production Server:**
+- IP: `213.199.45.126`
+- Domain: `blackmossandherbs.com`
+- App Port: `3005`
+- Database Port: `5435`
+
+**Tech Stack:**
+- Next.js 14
+- TypeScript
+- Prisma + PostgreSQL
+- Tailwind CSS
+- Stripe
+- NextAuth.js
+- Docker
+
+---
+
+## 🔍 Troubleshooting
+
+### App won't start
+
+```bash
+# Check logs
+docker-compose logs -f
+
+# Check if port is in use
+netstat -tlnp | grep 3005
+
+# Restart
+docker-compose restart
+```
+
+### Database connection error
+
+```bash
+# Check database container
+docker ps | grep postgres
+
+# Restart database
+docker-compose restart blackmossherbs-db
+```
+
+### Nginx issues
+
+```bash
+# Test config
+nginx -t
+
+# Check error log
+tail -f /var/log/nginx/error.log
+
+# Restart nginx
+systemctl restart nginx
+```
+
+### Wrong site showing
+
+This means another project is active. Use the server manager:
+
+```bash
+./server-manager.sh
+# Select: "8. Stop OTHER Projects"
+```
+
+Or manually:
+
+```bash
+# See all projects
+docker ps
+
+# Stop others, keep Black Moss
+docker ps --format "{{.Names}}" | grep -v blackmoss | xargs docker stop
+```
+
+---
+
+## 🎯 Common Tasks
+
+### Update the site
+
+```bash
+cd /var/www/blackmossandherbs-platform
+git pull
+./deploy-now.sh
+```
+
+### View real-time logs
+
+```bash
+docker-compose logs -f
+```
+
+### Backup database
+
+```bash
+docker exec blackmossherbs-db pg_dump -U blackmoss_user blackmossherbs > backup.sql
+```
+
+### Restore database
+
+```bash
+docker exec -i blackmossherbs-db psql -U blackmoss_user blackmossherbs < backup.sql
+```
+
+---
+
+## 🔐 Security
+
+- All passwords in `.env` file (not in git)
+- SSL/HTTPS configured via Certbot
+- Security headers in Nginx config
+- Input validation via Prisma
+- Authentication via NextAuth.js
+- Stripe PCI compliance
+
+---
+
+## 📊 Monitoring
+
+```bash
+# Container stats
+docker stats
+
+# Disk usage
+df -h
+
+# Memory usage
+free -h
+
+# Application logs
+docker-compose logs --tail=100
+
+# Nginx access log
+tail -f /var/log/nginx/access.log
+```
+
+---
+
+## 🆘 Support
+
+### Quick Fixes
+
+1. **Site down?** Run `./deploy-now.sh`
+2. **Wrong site showing?** Run `./server-manager.sh` → option 8
+3. **Database issues?** Run `docker-compose restart blackmossherbs-db`
+4. **Nginx errors?** Run `nginx -t`
+
+### Getting Help
+
+Check logs and gather info:
+
+```bash
+# System status
+./server-manager.sh  # Option 10: Full System Status
+
+# Container logs
+docker-compose logs --tail=100
+
+# Nginx logs
+tail -50 /var/log/nginx/error.log
+
+# Port usage
+netstat -tlnp | grep -E ":(3005|5435|80|443)"
+```
+
+---
+
+## 📝 License
+
+See [LICENSE](LICENSE) file.
+
+---
+
+## 🎉 Ready to Deploy?
+
+```bash
+ssh root@213.199.45.126
+cd /var/www/blackmossandherbs-platform
+./deploy-now.sh
+```
+
+**Your site will be live in ~1 minute!** 🚀
+
+---
+
+**For detailed setup instructions, see [DEPLOYMENT.md](DEPLOYMENT.md)**  
+**For multi-project management, see [PROJECT_ISOLATION.md](PROJECT_ISOLATION.md)**
