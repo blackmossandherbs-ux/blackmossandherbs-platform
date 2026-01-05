@@ -1,37 +1,135 @@
+# ==========================================
+# BLACK MOSS & HERBS - .gitignore
+# ==========================================
+
 # Dependencies
-node_modules
+node_modules/
 /.pnp
 .pnp.js
+.yarn/
+.npm/
 
 # Testing
 /coverage
+.nyc_output
+*.lcov
+test-results/
+playwright-report/
 
 # Next.js
 /.next/
 /out/
+.next/
+next-env.d.ts
 
-# Production
+# Production builds
 /build
+/dist
 
-# Misc
+# Environment variables (NEVER commit)
+.env
+.env*.local
+.env.production
+.env.development
+
+# IDE and editors
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.project
+.classpath
+.settings/
+*.sublime-project
+*.sublime-workspace
+
+# OS files
 .DS_Store
-*.pem
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+Desktop.ini
 
-# Debug
+# Logs
+logs/
+*.log
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
 
-# Local env files
-.env
-.env*.local
-
-# Vercel
-.vercel
+# Debug
+.vscode-test
 
 # TypeScript
 *.tsbuildinfo
-next-env.d.ts
+.tsbuildinfo
 
-# Prisma
-prisma/migrations
+# Certificates and keys (NEVER commit)
+*.pem
+*.key
+*.cert
+*.crt
+*.p12
+*.pfx
+
+# Database
+prisma/migrations/
+*.db
+*.sqlite
+*.sqlite3
+
+# Backups
+*.bak
+*.backup
+*.sql.gz
+/backups/
+
+# Docker
+.docker/
+docker-compose.override.yml
+
+# Temporary files
+tmp/
+temp/
+.cache/
+.tmp/
+
+# Package manager lock files (keep only one)
+# Uncomment the ones you don't use:
+# yarn.lock
+# pnpm-lock.yaml
+
+# Build artifacts
+*.tgz
+
+# Deployment
+.vercel
+.netlify
+
+# Monitoring and APM
+newrelic_agent.log
+.elasticbeanstalk/
+
+# Local configuration
+.local/
+
+# Generated files
+/generated/
+
+# Coverage reports
+htmlcov/
+.coverage
+.coverage.*
+
+# Documentation builds
+/docs/_build/
+site/
+
+# Prisma Studio
+.prisma/
