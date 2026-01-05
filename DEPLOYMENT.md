@@ -16,19 +16,23 @@ This guide shows you how to deploy Black Moss & Herbs to your own server (VPS, d
 The repository includes scripts to automate nearly the entire process.
 
 1.  **SSH into your server:**
+
     ```bash
     ssh root@your-server-ip
     ```
 
 2.  **Download and run the setup script:**
+
     ```bash
     wget https://raw.githubusercontent.com/richhabits/blackmossandherbs-platform/main/setup-server.sh
     chmod +x setup-server.sh
     ./setup-server.sh
     ```
-    *This will install Node.js, PostgreSQL, Nginx, Docker, and PM2.*
+
+    _This will install Node.js, PostgreSQL, Nginx, Docker, and PM2._
 
 3.  **Clone the repository:**
+
     ```bash
     cd /var/www
     git clone https://github.com/richhabits/blackmossandherbs-platform.git
@@ -36,23 +40,27 @@ The repository includes scripts to automate nearly the entire process.
     ```
 
 4.  **Configure Environment:**
+
     ```bash
     cp .env.example .env
     nano .env
     ```
-    *Fill in your database credentials, Stripe keys, and NextAuth secret.*
+
+    _Fill in your database credentials, Stripe keys, and NextAuth secret._
 
 5.  **Deploy:**
+
     ```bash
     ./deploy.sh
     ```
-    *Follow the prompts to choose Docker or PM2. This script also configures Nginx.*
+
+    _Follow the prompts to choose Docker or PM2. This script also configures Nginx._
 
 6.  **Setup SSL:**
     ```bash
     ./setup-ssl.sh
     ```
-    *This secures your site with free Let's Encrypt certificates.*
+    _This secures your site with free Let's Encrypt certificates._
 
 ---
 
@@ -63,6 +71,7 @@ If you prefer manual control or need to debug, follow these steps.
 ### Option 1: Docker Deployment (Recommended)
 
 1.  **Start Containers:**
+
     ```bash
     docker-compose up -d --build
     ```
@@ -78,11 +87,13 @@ The application runs on port **3005** by default in this configuration.
 ### Option 2: PM2 Deployment
 
 1.  **Install Dependencies:**
+
     ```bash
     npm install
     ```
 
 2.  **Build:**
+
     ```bash
     npx prisma generate
     npx prisma db push
@@ -107,6 +118,7 @@ We use Nginx as a reverse proxy to handle traffic and SSL.
     Located at `config/catchall.nginx.conf`. It ensures that traffic to unknown domains pointing to your IP is dropped, preventing "site confusion".
 
 To apply these manually:
+
 ```bash
 cp config/blackmoss.nginx.conf /etc/nginx/sites-available/blackmossandherbs
 ln -s /etc/nginx/sites-available/blackmossandherbs /etc/nginx/sites-enabled/
@@ -121,21 +133,22 @@ systemctl reload nginx
 
 ### Common Commands
 
-*   **View Logs:**
-    *   Docker: `docker-compose logs -f`
-    *   PM2: `pm2 logs blackmossandherbs`
-*   **Restart:**
-    *   Docker: `docker-compose restart`
-    *   PM2: `pm2 restart blackmossandherbs`
-*   **Update Code:**
-    ```bash
-    git pull origin main
-    ./deploy.sh
-    ```
+- **View Logs:**
+  - Docker: `docker-compose logs -f`
+  - PM2: `pm2 logs blackmossandherbs`
+- **Restart:**
+  - Docker: `docker-compose restart`
+  - PM2: `pm2 restart blackmossandherbs`
+- **Update Code:**
+  ```bash
+  git pull origin main
+  ./deploy.sh
+  ```
 
 ### Backup
 
 **Database Backup Script:**
+
 ```bash
 #!/bin/bash
 BACKUP_DIR="/var/backups/postgres"

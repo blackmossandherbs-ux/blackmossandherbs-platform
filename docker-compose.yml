@@ -13,7 +13,7 @@ services:
     volumes:
       - blackmoss-db-volume:/var/lib/postgresql/data
     ports:
-      - "5435:5432"
+      - '5435:5432'
     networks:
       - blackmoss-network
 
@@ -33,7 +33,7 @@ services:
       - STRIPE_WEBHOOK_SECRET=${STRIPE_WEBHOOK_SECRET}
       - NEXT_PUBLIC_APP_URL=${NEXT_PUBLIC_APP_URL:-http://localhost:3000}
     ports:
-      - "3005:3000"
+      - '3005:3000'
     depends_on:
       - blackmoss-db-service
     networks:
@@ -43,7 +43,6 @@ services:
 
 volumes:
   blackmoss-db-volume:
-
 
 networks:
   blackmoss-network:

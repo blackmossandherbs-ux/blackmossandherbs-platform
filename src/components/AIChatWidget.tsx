@@ -1,220 +1,261 @@
-
 /**
  * HECTIC Intellectual Property - Copyright 2024
  * Black Moss & Herbs Platform - Alchemist AI Persona
  */
-"use client";
+'use client';
 
 import { useState, useRef, useEffect } from 'react';
 import Link from 'next/link';
 import { Sparkles, X, Send, Bot, User, Stethoscope } from 'lucide-react';
-import { sanitizeWellnessContent, getGlobalDisclaimer, enforceAlchemistBoundary } from '@/lib/compliance';
+import {
+  sanitizeWellnessContent,
+  getGlobalDisclaimer,
+  enforceAlchemistBoundary,
+} from '@/lib/compliance';
 
 type GuideId = 'alchemist' | 'herbalist' | 'clinical';
 
 interface Guide {
-    id: GuideId;
-    name: string;
-    description: string;
-    icon: any;
-    initialMessage: string;
+  id: GuideId;
+  name: string;
+  description: string;
+  icon: any;
+  initialMessage: string;
 }
 
 const GUIDES: Guide[] = [
-    {
-        id: 'alchemist',
-        name: 'The Alchemist',
-        description: 'Scientific Herbalism',
-        icon: Bot,
-        initialMessage: "Peace. I am HECTIC's digital consciousness, functioning as The Alchemist. I provide biological perspectives and traditional herbal frameworks. One specific insight is available per inquiry; deeper alignment requires a subscription or consultation. How can I assist you today?"
-    },
-    {
-        id: 'herbalist',
-        name: 'The Herbalist',
-        description: 'Grounded Wisdom',
-        icon: User,
-        initialMessage: "Welcome. I am the Herbalist. I focus on rhythmic wellness, hormonal balance, and tissue recovery. I offer one grounded framework for free; personalized protocols require a consultation. What are you looking to nourish?"
-    },
-    {
-        id: 'clinical',
-        name: 'The Clinical Lens',
-        description: 'Evidence-Neutral',
-        icon: Stethoscope,
-        initialMessage: "Greetings. I provide a faith-neutral, biological perspective on herbal support. I can outline one framework today; specific safety screenings and protocols are reserved for consultations. What is your biological inquiry?"
-    }
+  {
+    id: 'alchemist',
+    name: 'The Alchemist',
+    description: 'Scientific Herbalism',
+    icon: Bot,
+    initialMessage:
+      "Peace. I am HECTIC's digital consciousness, functioning as The Alchemist. I provide biological perspectives and traditional herbal frameworks. One specific insight is available per inquiry; deeper alignment requires a subscription or consultation. How can I assist you today?",
+  },
+  {
+    id: 'herbalist',
+    name: 'The Herbalist',
+    description: 'Grounded Wisdom',
+    icon: User,
+    initialMessage:
+      'Welcome. I am the Herbalist. I focus on rhythmic wellness, hormonal balance, and tissue recovery. I offer one grounded framework for free; personalized protocols require a consultation. What are you looking to nourish?',
+  },
+  {
+    id: 'clinical',
+    name: 'The Clinical Lens',
+    description: 'Evidence-Neutral',
+    icon: Stethoscope,
+    initialMessage:
+      'Greetings. I provide a faith-neutral, biological perspective on herbal support. I can outline one framework today; specific safety screenings and protocols are reserved for consultations. What is your biological inquiry?',
+  },
 ];
 
 export default function AIChatWidget() {
-    const [isOpen, setIsOpen] = useState(false);
-    const [view, setView] = useState<'selection' | 'chat'>('selection');
-    const [selectedGuide, setSelectedGuide] = useState<Guide>(GUIDES[0]);
-    const [messages, setMessages] = useState<any[]>([]);
-    const [hasUsedFreeGift, setHasUsedFreeGift] = useState(false);
-    const [userMessageCount, setUserMessageCount] = useState(0);
-    const [input, setInput] = useState('');
-    const scrollRef = useRef<HTMLDivElement>(null);
+  const [isOpen, setIsOpen] = useState(false);
+  const [view, setView] = useState<'selection' | 'chat'>('selection');
+  const [selectedGuide, setSelectedGuide] = useState<Guide>(GUIDES[0]);
+  const [messages, setMessages] = useState<any[]>([]);
+  const [hasUsedFreeGift, setHasUsedFreeGift] = useState(false);
+  const [userMessageCount, setUserMessageCount] = useState(0);
+  const [input, setInput] = useState('');
+  const scrollRef = useRef<HTMLDivElement>(null);
 
-    const handleSelectGuide = (guide: Guide) => {
-        setSelectedGuide(guide);
-        setMessages([{ role: 'assistant', content: guide.initialMessage }]);
-        setView('chat');
-    };
+  const handleSelectGuide = (guide: Guide) => {
+    setSelectedGuide(guide);
+    setMessages([{ role: 'assistant', content: guide.initialMessage }]);
+    setView('chat');
+  };
 
-    useEffect(() => {
-        if (scrollRef.current) {
-            scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
+  useEffect(() => {
+    if (scrollRef.current) {
+      scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
+    }
+  }, [messages]);
+
+  const handleSend = async () => {
+    if (!input.trim()) return;
+
+    const userMsg = input;
+    const newMessages = [...messages, { role: 'user', content: userMsg }];
+    setMessages(newMessages);
+    setInput('');
+
+    const currentCount = userMessageCount + 1;
+    setUserMessageCount(currentCount);
+
+    setTimeout(() => {
+      let response = '';
+      const lower = userMsg.toLowerCase();
+      const isHealthInquiry =
+        enforceAlchemistBoundary(userMsg) ||
+        lower.includes('pain') ||
+        lower.includes('condition') ||
+        lower.includes('chronic');
+
+      if (!hasUsedFreeGift) {
+        // Shared Core: Acknowledge -> Insight -> Clarify -> Convert -> Disclaimer
+        let insight = '';
+        if (lower.includes('sea moss')) {
+          insight =
+            'Sea Moss is traditionally recognized for its high mineral density, particularly iodine and potassium. From a biological perspective, it supports thyroid function and mucosal health.';
+        } else if (lower.includes('iron') || lower.includes('blood')) {
+          insight =
+            'Iron is central to cellular oxygenation. In traditional herbal frameworks, we focus on plant-based biological iron to support blood quality without synthetic oxidative stress.';
+        } else {
+          insight =
+            "Biological wellness depends on a mineral-rich, alkaline environment. Protocols focus on reintroducing organic minerals to support the body's natural state.";
         }
-    }, [messages]);
 
-    const handleSend = async () => {
-        if (!input.trim()) return;
+        response = `${selectedGuide.name} Perspective:\n\n${insight}\n\nClarification: How long have you felt this way, and are you currently on any protocols? I can provide the framework, but personalized guidance requires a Private Consultation.`;
+        setHasUsedFreeGift(true);
+      } else {
+        response =
+          'I have provided your initial insight. My time and expertise are reserved for members and consulting clients. To receive a personalized protocol, please book a consultation.';
+      }
 
-        const userMsg = input;
-        const newMessages = [...messages, { role: 'user', content: userMsg }];
-        setMessages(newMessages);
-        setInput('');
+      let finalResponse = sanitizeWellnessContent(response);
+      if (isHealthInquiry) {
+        finalResponse += '\n\n' + getGlobalDisclaimer();
+      }
 
-        const currentCount = userMessageCount + 1;
-        setUserMessageCount(currentCount);
+      setMessages((prev) => [...prev, { role: 'assistant', content: finalResponse }]);
+    }, 1200);
+  };
 
-        setTimeout(() => {
-            let response = "";
-            const lower = userMsg.toLowerCase();
-            const isHealthInquiry = enforceAlchemistBoundary(userMsg) || lower.includes('pain') || lower.includes('condition') || lower.includes('chronic');
+  return (
+    <div className="fixed bottom-6 right-6 z-50 flex flex-col items-end">
+      {/* Chat Window */}
+      {isOpen && (
+        <div className="mb-4 w-80 md:w-96 bg-earth-900 border border-earth-700 rounded-2xl shadow-2xl overflow-hidden flex flex-col animate-in slide-in-from-bottom-5 fade-in duration-300">
+          {/* Header */}
+          <div className="bg-earth-950 p-4 flex justify-between items-center border-b border-earth-800">
+            <div className="flex items-center gap-2">
+              <button
+                onClick={() => setView('selection')}
+                className={`${view === 'chat' ? 'opacity-100' : 'opacity-0 pointer-events-none'} transition-opacity p-1 hover:bg-earth-800 rounded-lg text-earth-400`}
+              >
+                ←
+              </button>
+              <div className="p-2 bg-primary-900/50 rounded-full text-primary-400">
+                <selectedGuide.icon size={20} />
+              </div>
+              <div>
+                <h3 className="font-serif text-secondary-400 font-bold">{selectedGuide.name}</h3>
+                <p className="text-xs text-earth-400">{selectedGuide.description}</p>
+              </div>
+            </div>
+            <button
+              onClick={() => setIsOpen(false)}
+              className="text-earth-400 hover:text-white transition-colors"
+            >
+              <X size={20} />
+            </button>
+          </div>
 
-            if (!hasUsedFreeGift) {
-                // Shared Core: Acknowledge -> Insight -> Clarify -> Convert -> Disclaimer
-                let insight = "";
-                if (lower.includes('sea moss')) {
-                    insight = "Sea Moss is traditionally recognized for its high mineral density, particularly iodine and potassium. From a biological perspective, it supports thyroid function and mucosal health.";
-                } else if (lower.includes('iron') || lower.includes('blood')) {
-                    insight = "Iron is central to cellular oxygenation. In traditional herbal frameworks, we focus on plant-based biological iron to support blood quality without synthetic oxidative stress.";
-                } else {
-                    insight = "Biological wellness depends on a mineral-rich, alkaline environment. Protocols focus on reintroducing organic minerals to support the body's natural state.";
-                }
-
-                response = `${selectedGuide.name} Perspective:\n\n${insight}\n\nClarification: How long have you felt this way, and are you currently on any protocols? I can provide the framework, but personalized guidance requires a Private Consultation.`;
-                setHasUsedFreeGift(true);
-            } else {
-                response = "I have provided your initial insight. My time and expertise are reserved for members and consulting clients. To receive a personalized protocol, please book a consultation.";
-            }
-
-            let finalResponse = sanitizeWellnessContent(response);
-            if (isHealthInquiry) {
-                finalResponse += "\n\n" + getGlobalDisclaimer();
-            }
-
-            setMessages(prev => [...prev, { role: 'assistant', content: finalResponse }]);
-        }, 1200);
-    };
-
-    return (
-        <div className="fixed bottom-6 right-6 z-50 flex flex-col items-end">
-            {/* Chat Window */}
-            {isOpen && (
-                <div className="mb-4 w-80 md:w-96 bg-earth-900 border border-earth-700 rounded-2xl shadow-2xl overflow-hidden flex flex-col animate-in slide-in-from-bottom-5 fade-in duration-300">
-                    {/* Header */}
-                    <div className="bg-earth-950 p-4 flex justify-between items-center border-b border-earth-800">
-                        <div className="flex items-center gap-2">
-                            <button
-                                onClick={() => setView('selection')}
-                                className={`${view === 'chat' ? 'opacity-100' : 'opacity-0 pointer-events-none'} transition-opacity p-1 hover:bg-earth-800 rounded-lg text-earth-400`}
+          <div className="flex-1 flex flex-col min-h-0">
+            {view === 'selection' ? (
+              <div className="p-6 space-y-4 animate-in fade-in duration-300">
+                <h4 className="text-sm font-secondary-400 font-bold text-center text-white mb-2 uppercase tracking-widest">
+                  Choose Your Guide
+                </h4>
+                <div className="grid grid-cols-1 gap-3">
+                  {GUIDES.map((guide) => (
+                    <button
+                      key={guide.id}
+                      onClick={() => handleSelectGuide(guide)}
+                      className="flex items-center gap-4 p-4 bg-earth-800/50 border border-earth-700 rounded-2xl hover:border-secondary-500/50 hover:bg-earth-800 transition-all text-left"
+                    >
+                      <div className="p-2 bg-primary-900/30 rounded-xl text-primary-400">
+                        <guide.icon size={20} />
+                      </div>
+                      <div>
+                        <div className="text-sm font-bold text-white">{guide.name}</div>
+                        <div className="text-xs text-earth-400">{guide.description}</div>
+                      </div>
+                    </button>
+                  ))}
+                </div>
+                <p className="text-[10px] text-center text-earth-500 italic mt-4">
+                  &quot;The Council provides frameworks, not medical diagnosis.&quot;
+                </p>
+              </div>
+            ) : (
+              <>
+                {/* Messages */}
+                <div
+                  ref={scrollRef}
+                  className="h-80 overflow-y-auto p-4 space-y-4 bg-earth-900/95 backdrop-blur-sm"
+                >
+                  {messages.map((m, i) => (
+                    <div
+                      key={i}
+                      className={`flex flex-col ${m.role === 'user' ? 'items-end' : 'items-start'}`}
+                    >
+                      <div
+                        className={`max-w-[80%] rounded-2xl px-4 py-2 text-sm ${
+                          m.role === 'user'
+                            ? 'bg-secondary-600 text-white rounded-tr-none'
+                            : 'bg-earth-800 text-earth-100 border border-earth-700 rounded-tl-none whitespace-pre-wrap'
+                        }`}
+                      >
+                        {m.content}
+                      </div>
+                      {m.role === 'assistant' &&
+                        (m.content.includes('Consultation') ||
+                          m.content.includes('join the Circle')) && (
+                          <div className="mt-2 flex gap-2">
+                            <Link
+                              href="/consultations"
+                              className="text-xs bg-secondary-500 hover:bg-secondary-400 text-black font-bold py-1 px-3 rounded-full transition-colors"
                             >
-                                ←
-                            </button>
-                            <div className="p-2 bg-primary-900/50 rounded-full text-primary-400">
-                                <selectedGuide.icon size={20} />
-                            </div>
-                            <div>
-                                <h3 className="font-serif text-secondary-400 font-bold">{selectedGuide.name}</h3>
-                                <p className="text-xs text-earth-400">{selectedGuide.description}</p>
-                            </div>
-                        </div>
-                        <button onClick={() => setIsOpen(false)} className="text-earth-400 hover:text-white transition-colors">
-                            <X size={20} />
-                        </button>
-                    </div>
-
-                    <div className="flex-1 flex flex-col min-h-0">
-                        {view === 'selection' ? (
-                            <div className="p-6 space-y-4 animate-in fade-in duration-300">
-                                <h4 className="text-sm font-secondary-400 font-bold text-center text-white mb-2 uppercase tracking-widest">Choose Your Guide</h4>
-                                <div className="grid grid-cols-1 gap-3">
-                                    {GUIDES.map((guide) => (
-                                        <button
-                                            key={guide.id}
-                                            onClick={() => handleSelectGuide(guide)}
-                                            className="flex items-center gap-4 p-4 bg-earth-800/50 border border-earth-700 rounded-2xl hover:border-secondary-500/50 hover:bg-earth-800 transition-all text-left"
-                                        >
-                                            <div className="p-2 bg-primary-900/30 rounded-xl text-primary-400">
-                                                <guide.icon size={20} />
-                                            </div>
-                                            <div>
-                                                <div className="text-sm font-bold text-white">{guide.name}</div>
-                                                <div className="text-xs text-earth-400">{guide.description}</div>
-                                            </div>
-                                        </button>
-                                    ))}
-                                </div>
-                                <p className="text-[10px] text-center text-earth-500 italic mt-4">&quot;The Council provides frameworks, not medical diagnosis.&quot;</p>
-                            </div>
-                        ) : (
-                            <>
-                                {/* Messages */}
-                                <div ref={scrollRef} className="h-80 overflow-y-auto p-4 space-y-4 bg-earth-900/95 backdrop-blur-sm">
-                                    {messages.map((m, i) => (
-                                        <div key={i} className={`flex flex-col ${m.role === 'user' ? 'items-end' : 'items-start'}`}>
-                                            <div className={`max-w-[80%] rounded-2xl px-4 py-2 text-sm ${m.role === 'user'
-                                                ? 'bg-secondary-600 text-white rounded-tr-none'
-                                                : 'bg-earth-800 text-earth-100 border border-earth-700 rounded-tl-none whitespace-pre-wrap'
-                                                }`}>
-                                                {m.content}
-                                            </div>
-                                            {m.role === 'assistant' && (m.content.includes('Consultation') || m.content.includes('join the Circle')) && (
-                                                <div className="mt-2 flex gap-2">
-                                                    <Link href="/consultations" className="text-xs bg-secondary-500 hover:bg-secondary-400 text-black font-bold py-1 px-3 rounded-full transition-colors">
-                                                        Book Consult
-                                                    </Link>
-                                                    <Link href="/library" className="text-xs bg-earth-700 hover:bg-earth-600 text-white font-bold py-1 px-3 rounded-full transition-colors">
-                                                        Join Circle
-                                                    </Link>
-                                                </div>
-                                            )}
-                                        </div>
-                                    ))}
-                                </div>
-
-                                {/* Input */}
-                                <div className="p-3 bg-earth-950 border-t border-earth-800 flex gap-2">
-                                    <input
-                                        type="text"
-                                        value={input}
-                                        onChange={(e) => setInput(e.target.value)}
-                                        onKeyDown={(e) => e.key === 'Enter' && handleSend()}
-                                        placeholder="Ask a question..."
-                                        className="flex-1 bg-earth-900 border border-earth-700 rounded-xl px-4 py-2 text-sm text-white focus:outline-none focus:border-secondary-500 transition-colors placeholder:text-earth-500"
-                                    />
-                                    <button
-                                        onClick={handleSend}
-                                        className="p-2 bg-secondary-500 hover:bg-secondary-400 text-black rounded-xl transition-colors"
-                                    >
-                                        <Send size={18} />
-                                    </button>
-                                </div>
-                            </>
+                              Book Consult
+                            </Link>
+                            <Link
+                              href="/library"
+                              className="text-xs bg-earth-700 hover:bg-earth-600 text-white font-bold py-1 px-3 rounded-full transition-colors"
+                            >
+                              Join Circle
+                            </Link>
+                          </div>
                         )}
                     </div>
+                  ))}
                 </div>
-            )}
 
-            {/* Toggle Button */}
-            <button
-                onClick={() => setIsOpen(!isOpen)}
-                className={`p-4 rounded-full shadow-lg transition-all duration-300 hover:scale-105 flex items-center justify-center ${isOpen ? 'bg-earth-800 text-earth-400 rotate-90' : 'bg-gradient-to-r from-primary-700 to-secondary-600 text-white animate-pulse-slow'
-                    }`}
-            >
-                {isOpen ? <X size={24} /> : <Sparkles size={24} />}
-            </button>
+                {/* Input */}
+                <div className="p-3 bg-earth-950 border-t border-earth-800 flex gap-2">
+                  <input
+                    type="text"
+                    value={input}
+                    onChange={(e) => setInput(e.target.value)}
+                    onKeyDown={(e) => e.key === 'Enter' && handleSend()}
+                    placeholder="Ask a question..."
+                    className="flex-1 bg-earth-900 border border-earth-700 rounded-xl px-4 py-2 text-sm text-white focus:outline-none focus:border-secondary-500 transition-colors placeholder:text-earth-500"
+                  />
+                  <button
+                    onClick={handleSend}
+                    className="p-2 bg-secondary-500 hover:bg-secondary-400 text-black rounded-xl transition-colors"
+                  >
+                    <Send size={18} />
+                  </button>
+                </div>
+              </>
+            )}
+          </div>
         </div>
-    );
+      )}
+
+      {/* Toggle Button */}
+      <button
+        onClick={() => setIsOpen(!isOpen)}
+        className={`p-4 rounded-full shadow-lg transition-all duration-300 hover:scale-105 flex items-center justify-center ${
+          isOpen
+            ? 'bg-earth-800 text-earth-400 rotate-90'
+            : 'bg-gradient-to-r from-primary-700 to-secondary-600 text-white animate-pulse-slow'
+        }`}
+      >
+        {isOpen ? <X size={24} /> : <Sparkles size={24} />}
+      </button>
+    </div>
+  );
 }

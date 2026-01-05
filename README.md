@@ -29,21 +29,24 @@ A comprehensive global herbal wellness platform featuring eCommerce, subscriptio
 ## 📦 Installation
 
 1. **Clone the repository**
+
    ```bash
    git clone https://github.com/richhabits/blackmossandherbs-platform.git
    cd blackmossandherbs-platform
    ```
 
 2. **Install dependencies**
+
    ```bash
    npm install
    ```
 
 3. **Set up environment variables**
+
    ```bash
    cp .env.example .env
    ```
-   
+
    Edit `.env` and add your configuration:
    - Database URL (PostgreSQL)
    - NextAuth secret and URL
@@ -51,12 +54,14 @@ A comprehensive global herbal wellness platform featuring eCommerce, subscriptio
    - Email service credentials (optional)
 
 4. **Set up the database**
+
    ```bash
    npx prisma generate
    npx prisma db push
    ```
 
 5. **Run the development server**
+
    ```bash
    npm run dev
    ```
@@ -81,6 +86,7 @@ A comprehensive global herbal wellness platform featuring eCommerce, subscriptio
 ### Production Database
 
 For production, we recommend:
+
 - **Supabase** (Free tier available)
 - **Railway** (PostgreSQL hosting)
 - **Neon** (Serverless PostgreSQL)
@@ -174,6 +180,7 @@ blackmossandherbs-platform/
 ### Colors
 
 Edit `tailwind.config.js` to customize the color palette:
+
 - `primary`: Main brand color (green)
 - `secondary`: Accent color (yellow)
 - `earth`: Neutral tones
@@ -220,16 +227,19 @@ NEXT_PUBLIC_APP_URL="http://localhost:3000"
 ## 🐛 Troubleshooting
 
 ### Database Connection Issues
+
 - Verify PostgreSQL is running
 - Check connection string format
 - Ensure database exists
 
 ### Build Errors
+
 - Clear `.next` folder: `rm -rf .next`
 - Reinstall dependencies: `rm -rf node_modules && npm install`
 - Check Node.js version (requires 18+)
 
 ### Stripe Webhooks
+
 - Use Stripe CLI for local testing
 - Verify webhook secret matches
 - Check endpoint URL is accessible

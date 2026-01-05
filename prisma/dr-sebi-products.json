@@ -1,69 +1,59 @@
 {
-    "products": [
-        {
-            "name": "Wildcrafted Sea Moss Gold Gel",
-            "slug": "wildcrafted-sea-moss-gold-gel",
-            "description": "Premium wildcrafted sea moss gel from the Caribbean. Contains 92 of 102 minerals your body needs. Rich in iodine, calcium, and potassium.",
-            "price": 27.99,
-            "category": "Sea Moss",
-            "benefits": [
-                "Supports thyroid function",
-                "Boosts immune system",
-                "Promotes healthy digestion",
-                "Enhances skin health"
-            ]
-        },
-        {
-            "name": "Purple Sea Moss Gel",
-            "slug": "purple-sea-moss-gel",
-            "description": "Rare purple sea moss gel with powerful antioxidants. Supports respiratory and immune health.",
-            "price": 29.99,
-            "category": "Sea Moss",
-            "benefits": [
-                "High in antioxidants",
-                "Supports respiratory health",
-                "Boosts energy",
-                "Anti-inflammatory"
-            ]
-        },
-        {
-            "name": "Bladderwrack Powder",
-            "slug": "bladderwrack-powder",
-            "description": "Pure bladderwrack seaweed powder. Excellent source of iodine for thyroid support.",
-            "price": 19.99,
-            "category": "Sea Moss",
-            "benefits": [
-                "Thyroid support",
-                "Metabolism boost",
-                "Rich in minerals",
-                "Digestive health"
-            ]
-        },
-        {
-            "name": "Irish Moss (Chondrus Crispus)",
-            "slug": "irish-moss-dried",
-            "description": "Authentic Irish Moss from Atlantic waters. Excellent for respiratory and digestive support.",
-            "price": 19.99,
-            "category": "Sea Moss",
-            "benefits": [
-                "Respiratory support",
-                "Digestive health",
-                "Rich in vitamins",
-                "Natural carrageenan"
-            ]
-        },
-        {
-            "name": "Sea Moss Capsules (1000mg)",
-            "slug": "sea-moss-capsules",
-            "description": "Convenient sea moss capsules. 1000mg per serving. Perfect for on-the-go wellness.",
-            "price": 24.99,
-            "category": "Sea Moss",
-            "benefits": [
-                "Convenient dosing",
-                "92 minerals",
-                "Energy boost",
-                "Immune support"
-            ]
-        }
-    ]
+  "products": [
+    {
+      "name": "Wildcrafted Sea Moss Gold Gel",
+      "slug": "wildcrafted-sea-moss-gold-gel",
+      "description": "Premium wildcrafted sea moss gel from the Caribbean. Contains 92 of 102 minerals your body needs. Rich in iodine, calcium, and potassium.",
+      "price": 27.99,
+      "category": "Sea Moss",
+      "benefits": [
+        "Supports thyroid function",
+        "Boosts immune system",
+        "Promotes healthy digestion",
+        "Enhances skin health"
+      ]
+    },
+    {
+      "name": "Purple Sea Moss Gel",
+      "slug": "purple-sea-moss-gel",
+      "description": "Rare purple sea moss gel with powerful antioxidants. Supports respiratory and immune health.",
+      "price": 29.99,
+      "category": "Sea Moss",
+      "benefits": [
+        "High in antioxidants",
+        "Supports respiratory health",
+        "Boosts energy",
+        "Anti-inflammatory"
+      ]
+    },
+    {
+      "name": "Bladderwrack Powder",
+      "slug": "bladderwrack-powder",
+      "description": "Pure bladderwrack seaweed powder. Excellent source of iodine for thyroid support.",
+      "price": 19.99,
+      "category": "Sea Moss",
+      "benefits": ["Thyroid support", "Metabolism boost", "Rich in minerals", "Digestive health"]
+    },
+    {
+      "name": "Irish Moss (Chondrus Crispus)",
+      "slug": "irish-moss-dried",
+      "description": "Authentic Irish Moss from Atlantic waters. Excellent for respiratory and digestive support.",
+      "price": 19.99,
+      "category": "Sea Moss",
+      "benefits": [
+        "Respiratory support",
+        "Digestive health",
+        "Rich in vitamins",
+        "Natural carrageenan"
+      ]
+    },
+    {
+      "name": "Sea Moss Capsules (1000mg)",
+      "slug": "sea-moss-capsules",
+      "description": "Convenient sea moss capsules. 1000mg per serving. Perfect for on-the-go wellness.",
+      "price": 24.99,
+      "category": "Sea Moss",
+      "benefits": ["Convenient dosing", "92 minerals", "Energy boost", "Immune support"]
+    }
+  ]
 }
