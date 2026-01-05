@@ -16,6 +16,12 @@ services:
       - "5435:5432"
     networks:
       - blackmoss-network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${DB_USER:-dbuser} -d ${DB_NAME:-blackmossandherbs}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
 
   # Next.js Application
   blackmoss-app-service:
@@ -32,14 +38,22 @@ services:
       - STRIPE_SECRET_KEY=${STRIPE_SECRET_KEY}
       - STRIPE_WEBHOOK_SECRET=${STRIPE_WEBHOOK_SECRET}
       - NEXT_PUBLIC_APP_URL=${NEXT_PUBLIC_APP_URL:-http://localhost:3000}
+      - NODE_ENV=production
     ports:
       - "3005:3000"
     depends_on:
-      - blackmoss-db-service
+      blackmoss-db-service:
+        condition: service_healthy
     networks:
       - blackmoss-network
     volumes:
       - ./prisma:/app/prisma
+    healthcheck:
+      test: ["CMD", "wget", "--quiet", "--tries=1", "--spider", "http://localhost:3000/api/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
 
 volumes:
   blackmoss-db-volume:

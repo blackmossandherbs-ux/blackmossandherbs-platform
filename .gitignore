@@ -1,30 +1,59 @@
 # Dependencies
-node_modules
+node_modules/
 /.pnp
 .pnp.js
+.pnp.*
 
 # Testing
 /coverage
+/.nyc_output
+*.test.js
+*.test.ts
+*.test.tsx
+*.spec.js
+*.spec.ts
+*.spec.tsx
 
 # Next.js
 /.next/
 /out/
+/build
+.next/
+out/
+build/
 
 # Production
-/build
+dist/
+*.tsbuildinfo
+next-env.d.ts
 
 # Misc
 .DS_Store
 *.pem
+*.key
+*.cert
+*.crt
+Thumbs.db
+*.swp
+*.swo
+*~
+.cache/
 
 # Debug
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+.pnpm-debug.log*
 
 # Local env files
 .env
 .env*.local
+.env.development
+.env.production
+.env.test
+!.env.example
 
 # Vercel
 .vercel
@@ -34,4 +63,49 @@ yarn-error.log*
 next-env.d.ts
 
 # Prisma
-prisma/migrations
+prisma/migrations/
+*.db
+*.db-journal
+
+# IDE
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+*.code-workspace
+
+# OS
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Desktop.ini
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+# Temporary files
+tmp/
+temp/
+*.tmp
+*.temp
+
+# PM2
+.pm2/
+ecosystem.config.js.bak
+
+# Docker
+.dockerignore.bak
+
+# Backup files
+*.bak
+*.backup
+*~

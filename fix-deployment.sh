@@ -2,8 +2,9 @@
 
 # Comprehensive Fix Script for Black Moss & Herbs Deployment
 # This fixes port conflicts, nginx configs, and ensures the site is live
+# Enterprise-grade deployment automation
 
-set -e
+set -euo pipefail
 
 echo "🔧 Black Moss & Herbs - Deployment Fix Script"
 echo "=============================================="
@@ -265,6 +266,16 @@ if systemctl is-active --quiet nginx; then
 else
     echo -e "${RED}⚠️  Nginx is not running${NC}"
     systemctl start nginx
+fi
+
+echo ""
+# Run health check
+echo -e "${YELLOW}Step 8: Running health checks...${NC}"
+sleep 3
+if curl -s -f http://localhost:$APP_PORT/api/health > /dev/null; then
+    echo -e "${GREEN}✓ Health check passed${NC}"
+else
+    echo -e "${YELLOW}⚠️  Health check endpoint not responding (may need time to start)${NC}"
 fi
 
 echo ""

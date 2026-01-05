@@ -1,0 +1,27 @@
+name: Deploy to Production
+
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+      
+      - name: Setup SSH
+        uses: webfactory/ssh-agent@v0.7.0
+        with:
+          ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+      
+      - name: Deploy to server
+        run: |
+          ssh -o StrictHostKeyChecking=no root@213.199.45.126 << 'EOF'
+            cd /var/www/blackmossandherbs-platform
+            git pull origin main
+            chmod +x fix-deployment.sh
+            ./fix-deployment.sh
+          EOF

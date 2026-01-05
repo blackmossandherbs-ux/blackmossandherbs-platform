@@ -7,10 +7,20 @@ yarn-error.log
 .next
 out
 build
+dist
 
 # Environment
 .env
 .env*.local
+.env.development
+.env.production
+.env.test
+!.env.example
+
+# Git
+.git
+.gitignore
+.gitattributes
 
 # IDE
 .vscode
@@ -18,6 +28,7 @@ build
 *.swp
 *.swo
 *~
+.cache
 
 # OS
 .DS_Store
@@ -26,15 +37,34 @@ Thumbs.db
 # Testing
 coverage
 .nyc_output
+*.test.js
+*.test.ts
+*.test.tsx
+*.spec.js
+*.spec.ts
+*.spec.tsx
 
-# Misc
-*.log
-.cache
-
-# Git
-.git
-.gitignore
-
-# Documentation (keep in image)
+# Documentation (keep essential)
 !README.md
 !DEPLOYMENT.md
+!QUICKSTART.md
+
+# Logs
+*.log
+logs
+
+# Temporary
+tmp
+temp
+*.tmp
+*.temp
+*.bak
+*.backup
+
+# PM2
+.pm2
+ecosystem.config.js.bak
+
+# Misc
+*.tsbuildinfo
+next-env.d.ts
