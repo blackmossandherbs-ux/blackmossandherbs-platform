@@ -11,7 +11,12 @@
     "db:generate": "prisma generate",
     "db:push": "prisma db push",
     "db:studio": "prisma studio",
-    "db:seed": "ts-node prisma/seed.ts"
+    "db:seed": "ts-node prisma/seed.ts",
+    "db:backup": "bash scripts/backup-database.sh",
+    "db:restore": "bash scripts/restore-database.sh",
+    "health": "curl http://localhost:3000/api/health",
+    "monitor": "bash scripts/setup-monitoring.sh",
+    "postinstall": "prisma generate"
   },
   "prisma": {
     "seed": "ts-node prisma/seed.ts"
