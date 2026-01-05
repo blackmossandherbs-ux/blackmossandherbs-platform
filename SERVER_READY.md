@@ -68,7 +68,7 @@ nano .env  # Add your credentials
 ### Deployment Files
 - ✅ `docker-compose.yml` - Full stack deployment
 - ✅ `Dockerfile` - Optimized production build
-- ✅ `nginx.conf` - Reverse proxy + SSL
+- ✅ `config/blackmoss.nginx.conf` - Per-site Nginx config (multi-site safe)
 - ✅ `deploy.sh` - Automated deployment
 - ✅ `setup-server.sh` - Server initialization
 - ✅ `setup-ssl.sh` - Free SSL setup

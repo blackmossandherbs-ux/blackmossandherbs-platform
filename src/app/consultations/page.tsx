@@ -3,13 +3,73 @@
  * Black Moss & Herbs Platform - Herbal Consultations
  */
 import { Metadata } from 'next'
-import { Calendar, Clock, Video, MessageCircle } from 'lucide-react'
+import { Video, MessageCircle } from 'lucide-react'
 import Button from '@/components/Button'
 
 export const metadata: Metadata = {
     title: 'Consultations - Black Moss & Herbs',
     description: 'Book a personalized herbal wellness consultation with our certified herbalists.',
 }
+
+type ConsultationType = {
+    id: string
+    name: string
+    price: number
+    duration: number
+    description: string
+    features: string[]
+}
+
+const consultationTypes: ConsultationType[] = [
+    {
+        id: 'foundation',
+        name: 'Foundation Session',
+        price: 75,
+        duration: 30,
+        description: 'A focused intake session to identify your priorities and establish a grounded starting framework.',
+        features: [
+            'Intake + goal mapping',
+            'One foundational protocol',
+            'Supplement & lifestyle alignment',
+            'Secure follow-up notes',
+        ],
+    },
+    {
+        id: 'protocol',
+        name: 'Protocol Session',
+        price: 125,
+        duration: 60,
+        description: 'A deeper, structured session to refine protocols and address obstacles with clarity and accountability.',
+        features: [
+            'Deeper protocol refinement',
+            'Diet + rhythm guidance',
+            'Optional product recommendations',
+            'Next steps roadmap',
+        ],
+    },
+    {
+        id: 'private',
+        name: 'Private Intensive',
+        price: 250,
+        duration: 90,
+        description: 'High-touch guidance for complex goals, with extended time to build a personalized plan.',
+        features: [
+            'Full personalized protocol',
+            'Lifestyle + recovery strategy',
+            'Priority support plan',
+            'Extended Q&A',
+        ],
+    },
+]
+
+const availableTimes: string[] = [
+    '09:00',
+    '10:30',
+    '12:00',
+    '14:00',
+    '15:30',
+    '17:00',
+]
 
 export default function ConsultationsPage() {
     return (
@@ -79,7 +139,7 @@ export default function ConsultationsPage() {
                     <div className="organic-glass p-12 md:p-20 rounded-[3rem] border-amber-500/10">
                         <div className="text-center mb-16">
                             <h2 className="text-5xl font-serif font-bold text-stone-50 mb-6">Secure Your Slot</h2>
-                            <p className="text-stone-400 font-light">Enter the alchemist's intake system below.</p>
+                            <p className="text-stone-400 font-light">Enter the alchemist&apos;s intake system below.</p>
                         </div>
 
                         <form className="space-y-8">

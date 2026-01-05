@@ -8,14 +8,9 @@
 import { useState } from 'react';
 import {
     TrendingUp,
-    TrendingDown,
     DollarSign,
     Users,
-    Eye,
-    ShoppingBag,
-    ArrowUpRight,
     Activity,
-    Calendar,
     Filter
 } from 'lucide-react';
 import Button from '@/components/Button';

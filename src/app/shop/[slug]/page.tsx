@@ -8,9 +8,24 @@ import { ShoppingCart, Heart, Share2, Star, Check } from 'lucide-react'
 import Button from '@/components/Button'
 import { formatPrice } from '@/lib/utils'
 
+type Product = {
+    id: string
+    name: string
+    price: number
+    compareAtPrice?: number
+    description: string
+    category: string
+    stock: number
+    rating: number
+    reviews: number
+    benefits: string[]
+    ingredients: string
+    usage: string
+}
+
 // Mock product data
 const getProduct = (slug: string) => {
-    const products: Record<string, any> = {
+    const products: Record<string, Product> = {
         'sea-moss-gold-gel': {
             id: '1',
             name: 'Sea Moss Gold Gel',

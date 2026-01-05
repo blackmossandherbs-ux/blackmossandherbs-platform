@@ -4,7 +4,7 @@
  * Black Moss & Herbs Platform - Customer Management
  */
 import { Metadata } from 'next'
-import { Users, Search, Mail, Phone, Calendar, ArrowUpRight, MoreVertical } from 'lucide-react'
+import { Search, MoreVertical } from 'lucide-react'
 
 export const metadata: Metadata = {
     title: 'Customer Management - Black Moss & Herbs',

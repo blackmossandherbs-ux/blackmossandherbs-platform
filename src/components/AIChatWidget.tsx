@@ -7,7 +7,7 @@
 
 import { useState, useRef, useEffect } from 'react';
 import Link from 'next/link';
-import { Sparkles, X, Send, Bot, User, Stethoscope } from 'lucide-react';
+import { Sparkles, X, Send, Bot, User, Stethoscope, type LucideIcon } from 'lucide-react';
 import { sanitizeWellnessContent, getGlobalDisclaimer, enforceAlchemistBoundary } from '@/lib/compliance';
 
 type GuideId = 'alchemist' | 'herbalist' | 'clinical';
@@ -16,9 +16,11 @@ interface Guide {
     id: GuideId;
     name: string;
     description: string;
-    icon: any;
+    icon: LucideIcon;
     initialMessage: string;
 }
+
+type ChatMessage = { role: 'user' | 'assistant'; content: string };
 
 const GUIDES: Guide[] = [
     {
@@ -48,7 +50,7 @@ export default function AIChatWidget() {
     const [isOpen, setIsOpen] = useState(false);
     const [view, setView] = useState<'selection' | 'chat'>('selection');
     const [selectedGuide, setSelectedGuide] = useState<Guide>(GUIDES[0]);
-    const [messages, setMessages] = useState<any[]>([]);
+    const [messages, setMessages] = useState<ChatMessage[]>([]);
     const [hasUsedFreeGift, setHasUsedFreeGift] = useState(false);
     const [userMessageCount, setUserMessageCount] = useState(0);
     const [input, setInput] = useState('');
@@ -70,7 +72,7 @@ export default function AIChatWidget() {
         if (!input.trim()) return;
 
         const userMsg = input;
-        const newMessages = [...messages, { role: 'user', content: userMsg }];
+        const newMessages: ChatMessage[] = [...messages, { role: 'user', content: userMsg }];
         setMessages(newMessages);
         setInput('');
 
@@ -156,7 +158,7 @@ export default function AIChatWidget() {
                                         </button>
                                     ))}
                                 </div>
-                                <p className="text-[10px] text-center text-earth-500 italic mt-4">"The Council provides frameworks, not medical diagnosis."</p>
+                                <p className="text-[10px] text-center text-earth-500 italic mt-4">&quot;The Council provides frameworks, not medical diagnosis.&quot;</p>
                             </div>
                         ) : (
                             <>

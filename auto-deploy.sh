@@ -3,6 +3,8 @@
 # One-Command Server Setup for 213.199.45.126
 # This script does EVERYTHING automatically
 
+set -euo pipefail
+
 SERVER="213.199.45.126"
 
 echo "🚀 Black Moss & Herbs - Automated Server Setup"
@@ -49,7 +51,7 @@ echo ""
 # Create deployment script on server
 ssh root@$SERVER 'bash -s' << ENDSSH
 #!/bin/bash
-set -e
+set -euo pipefail
 
 echo "📦 Updating system..."
 apt update && apt upgrade -y
@@ -61,7 +63,9 @@ echo "🔥 Configuring firewall..."
 ufw allow 22
 ufw allow 80
 ufw allow 443
-ufw allow 3000
+# App ports (PM2 uses 3000; Docker uses 3005)
+ufw allow 3000 || true
+ufw allow 3005 || true
 echo "y" | ufw enable
 
 echo "📗 Installing Node.js 18..."
@@ -134,10 +138,10 @@ pm2 save
 pm2 startup | tail -n 1 | bash
 
 echo "🌐 Configuring Nginx..."
-cat > /etc/nginx/sites-available/blackmossandherbs << 'NGINXEOF'
+cat > /etc/nginx/sites-available/blackmossandherbs << NGINXEOF
 server {
     listen 80;
-    server_name $DOMAIN;
+    server_name $DOMAIN www.$DOMAIN;
 
     location / {
         proxy_pass http://localhost:3000;
@@ -153,10 +157,10 @@ server {
 }
 NGINXEOF
 
-ln -sf /etc/nginx/sites-available/blackmossandherbs /etc/nginx/sites-enabled/
-rm -f /etc/nginx/sites-enabled/default
+ln -sf /etc/nginx/sites-available/blackmossandherbs /etc/nginx/sites-enabled/blackmossandherbs
+# Multi-site safe: do NOT remove the distro default site (other projects may rely on it)
 nginx -t
-systemctl restart nginx
+systemctl reload nginx
 
 echo ""
 echo "✅ DEPLOYMENT COMPLETE!"

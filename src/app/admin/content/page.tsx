@@ -9,11 +9,21 @@ import { useState } from 'react';
 import { PenTool, Send, Globe, MessageSquare, CheckCircle, RefreshCw, Layers } from 'lucide-react';
 import Button from '@/components/Button';
 
+interface Draft {
+    title: string;
+    excerpt: string;
+    content: string;
+    socials: {
+        instagram: string;
+        twitter: string;
+    };
+}
+
 export default function ContentHubPage() {
     const [topic, setTopic] = useState('');
     const [persona, setPersona] = useState('ALCHEMIST');
     const [generating, setGenerating] = useState(false);
-    const [draft, setDraft] = useState<any>(null);
+    const [draft, setDraft] = useState<Draft | null>(null);
     const [deployed, setDeployed] = useState(false);
 
     const handleGenerate = async () => {
@@ -148,7 +158,7 @@ export default function ContentHubPage() {
                                     <h1 className="text-4xl font-serif font-bold text-white mb-6 leading-tight">{draft.title}</h1>
                                     <div className="space-y-6 text-earth-300">
                                         <p className="font-medium text-xl text-secondary-400 italic bg-secondary-950/20 p-6 rounded-2xl border-l-4 border-secondary-500">
-                                            "{draft.excerpt}"
+                                            &quot;{draft.excerpt}&quot;
                                         </p>
                                         <div className="p-8 bg-earth-950/50 rounded-3xl border border-earth-800 leading-relaxed text-lg">
                                             {draft.content}
@@ -158,11 +168,11 @@ export default function ContentHubPage() {
                                     <div className="mt-12 grid grid-cols-2 gap-6">
                                         <div className="p-6 bg-earth-900/50 border border-earth-800 rounded-2xl">
                                             <h4 className="font-black text-[10px] mb-4 uppercase text-earth-500 tracking-[0.2em]">Instagram Dispersion</h4>
-                                            <p className="text-sm italic text-earth-300 font-medium leading-relaxed">"{draft.socials.instagram}"</p>
+                                            <p className="text-sm italic text-earth-300 font-medium leading-relaxed">&quot;{draft.socials.instagram}&quot;</p>
                                         </div>
                                         <div className="p-6 bg-earth-900/50 border border-earth-800 rounded-2xl">
                                             <h4 className="font-black text-[10px] mb-4 uppercase text-earth-500 tracking-[0.2em]">X (Twitter) Dispersion</h4>
-                                            <p className="text-sm italic text-earth-300 font-medium leading-relaxed">"{draft.socials.twitter}"</p>
+                                            <p className="text-sm italic text-earth-300 font-medium leading-relaxed">&quot;{draft.socials.twitter}&quot;</p>
                                         </div>
                                     </div>
                                 </div>

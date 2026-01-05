@@ -24,8 +24,9 @@ export async function POST(req: Request) {
             signature,
             process.env.STRIPE_WEBHOOK_SECRET
         )
-    } catch (error: any) {
-        return new NextResponse(`Webhook Error: ${error.message}`, { status: 400 })
+    } catch (error: unknown) {
+        const message = error instanceof Error ? error.message : 'Unknown error'
+        return new NextResponse(`Webhook Error: ${message}`, { status: 400 })
     }
 
     const session = event.data.object as Stripe.Checkout.Session
@@ -98,7 +99,7 @@ export async function POST(req: Request) {
     }
 
     if (event.type === 'customer.subscription.deleted') {
-        const subscriptionId = (event.data.object as any).id;
+        const subscriptionId = (event.data.object as Stripe.Subscription).id;
         try {
             await prisma.subscription.update({
                 where: { stripeSubscriptionId: subscriptionId },

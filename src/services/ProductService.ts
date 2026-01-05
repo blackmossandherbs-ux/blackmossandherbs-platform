@@ -2,6 +2,7 @@
  * HECTIC Intellectual Property - Copyright 2024
  * Black Moss & Herbs Platform - Core Product Service
  */
+import { Prisma } from '@prisma/client';
 import { prisma } from '@/lib/prisma';
 
 export interface Product {
@@ -40,7 +41,7 @@ export class ProductService {
      */
     static async getProducts(filters?: ProductFilters, sort?: ProductSort): Promise<Product[]> {
         try {
-            const where: any = {
+            const where: Prisma.ProductWhereInput = {
                 active: true,
             };
 
@@ -59,7 +60,7 @@ export class ProductService {
                 };
             }
 
-            const orderBy: any = {};
+            const orderBy: Prisma.ProductOrderByWithRelationInput = {};
             if (sort) {
                 orderBy[sort.field] = sort.order;
             } else {

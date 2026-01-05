@@ -11,13 +11,16 @@ export interface DistributionTargets {
     email: boolean;
 }
 
+type DistributionResult = { target: 'website' | 'socials' | 'email'; status: 'SUCCESS' | 'QUEUED' | 'PENDING' };
+
 export class DistributionService {
     /**
      * Dispatches a content pack to various targets.
      * In production, 'socials' would hit a Buffer/Zapier webhook.
      */
-    static async dispatch(content: any, targets: DistributionTargets) {
-        const results = [];
+    static async dispatch(content: unknown, targets: DistributionTargets): Promise<DistributionResult[]> {
+        void content;
+        const results: DistributionResult[] = [];
 
         if (targets.website) {
             console.log('Pushing to Internal Blog API...');

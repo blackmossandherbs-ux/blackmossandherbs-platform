@@ -45,7 +45,7 @@
 
   /* Frosted Glass - apothecary style */
   .organic-glass {
-    @apply bg-stone-900/60 backdrop-blur-2xl border border-white/5 shadow-[0_8px_32px_rgba(0, 0, 0, 0.5)];
+    @apply bg-stone-900/60 backdrop-blur-2xl border border-white/5 shadow-[0_8px_32px_rgba(0,0,0,0.5)];
   }
 
   .premium-card {
@@ -57,11 +57,11 @@
   }
 
   .btn-organic-primary {
-    @apply btn-organic bg-green-700 text-stone-50 shadow-[0_10px_20px_-5px_rgba(21, 128, 61, 0.4)] hover:shadow-[0_20px_40px_-10px_rgba(21, 128, 61, 0.6)] hover:bg-green-600;
+    @apply btn-organic bg-green-700 text-stone-50 shadow-[0_10px_20px_-5px_rgba(21,128,61,0.4)] hover:shadow-[0_20px_40px_-10px_rgba(21,128,61,0.6)] hover:bg-green-600;
   }
 
   .btn-organic-gold {
-    @apply btn-organic bg-amber-600 text-stone-950 shadow-[0_10px_20px_-5px_rgba(202, 138, 4, 0.4)] hover:shadow-[0_20px_40px_-10px_rgba(202, 138, 4, 0.6)] hover:bg-amber-500;
+    @apply btn-organic bg-amber-600 text-stone-950 shadow-[0_10px_20px_-5px_rgba(202,138,4,0.4)] hover:shadow-[0_20px_40px_-10px_rgba(202,138,4,0.6)] hover:bg-amber-500;
   }
 
   .btn-organic-outline {

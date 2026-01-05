@@ -35,7 +35,7 @@ export default function LoginPage() {
                 router.push("/admin");
                 router.refresh();
             }
-        } catch (err) {
+        } catch {
             setError("Something went wrong. Science is debugging...");
         } finally {
             setLoading(false);

@@ -1,10 +1,11 @@
 
 import { Metadata } from 'next'
-import { Play, BookOpen, Image as ImageIcon, Search, ExternalLink, Lock, ArrowRight } from 'lucide-react'
+import { Play, BookOpen, Image as ImageIcon, Lock, ArrowRight } from 'lucide-react'
 import Link from 'next/link'
 import { getServerSession } from 'next-auth'
 import { authOptions } from '@/lib/auth'
 import { SubscriptionService, SubscriptionTier } from '@/services/SubscriptionService'
+import Button from '@/components/Button'
 
 export const metadata: Metadata = {
     title: 'The Alchemist\'s Wisdom - Black Moss & Herbs',
