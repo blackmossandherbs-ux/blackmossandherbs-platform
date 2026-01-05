@@ -1,50 +1,67 @@
 version: '3.8'
 
+# BLACK MOSS & HERBS - PRODUCTION DEPLOYMENT
+# Unique names prevent conflicts with other projects on the same server
+
 services:
   # PostgreSQL Database
-  blackmoss-db-service:
+  blackmossherbs-db:
     image: postgres:15-alpine
-    container_name: blackmoss-db
+    container_name: blackmossherbs-db
     restart: always
     environment:
-      POSTGRES_USER: ${DB_USER:-dbuser}
-      POSTGRES_PASSWORD: ${DB_PASSWORD:-changeme}
-      POSTGRES_DB: ${DB_NAME:-blackmossandherbs}
+      POSTGRES_USER: ${DB_USER:-blackmoss_user}
+      POSTGRES_PASSWORD: ${DB_PASSWORD:-changeme_blackmoss_2024}
+      POSTGRES_DB: ${DB_NAME:-blackmossherbs}
     volumes:
-      - blackmoss-db-volume:/var/lib/postgresql/data
+      - blackmossherbs-db-data:/var/lib/postgresql/data
     ports:
-      - "5435:5432"
+      - "5435:5432"  # Unique external port
     networks:
-      - blackmoss-network
+      - blackmossherbs-net
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${DB_USER:-blackmoss_user}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
 
   # Next.js Application
-  blackmoss-app-service:
+  blackmossherbs-app:
     build:
       context: .
       dockerfile: Dockerfile
-    container_name: blackmoss-app
+    container_name: blackmossherbs-app
     restart: always
     environment:
-      - DATABASE_URL=postgresql://${DB_USER:-dbuser}:${DB_PASSWORD:-changeme}@blackmoss-db-service:5432/${DB_NAME:-blackmossandherbs}
+      - NODE_ENV=production
+      - DATABASE_URL=postgresql://${DB_USER:-blackmoss_user}:${DB_PASSWORD:-changeme_blackmoss_2024}@blackmossherbs-db:5432/${DB_NAME:-blackmossherbs}
       - NEXTAUTH_URL=${NEXTAUTH_URL:-http://localhost:3000}
       - NEXTAUTH_SECRET=${NEXTAUTH_SECRET}
       - NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY=${NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY}
       - STRIPE_SECRET_KEY=${STRIPE_SECRET_KEY}
       - STRIPE_WEBHOOK_SECRET=${STRIPE_WEBHOOK_SECRET}
       - NEXT_PUBLIC_APP_URL=${NEXT_PUBLIC_APP_URL:-http://localhost:3000}
+      - PORT=3000
     ports:
-      - "3005:3000"
+      - "3005:3000"  # Unique external port 3005 for Black Moss
     depends_on:
-      - blackmoss-db-service
+      blackmossherbs-db:
+        condition: service_healthy
     networks:
-      - blackmoss-network
+      - blackmossherbs-net
     volumes:
       - ./prisma:/app/prisma
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:3000"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
 
 volumes:
-  blackmoss-db-volume:
-
+  blackmossherbs-db-data:
+    driver: local
 
 networks:
-  blackmoss-network:
+  blackmossherbs-net:
     driver: bridge
+    name: blackmossherbs-network
