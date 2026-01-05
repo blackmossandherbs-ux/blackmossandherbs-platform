@@ -43,10 +43,11 @@ export default function HomePage() {
 
                         <div className="relative">
                             <div className="relative aspect-square rounded-2xl overflow-hidden border border-stone-800">
-                                <img
+                                <Image
                                     src="/images/sea_moss_gold.webp"
                                     alt="Sea Moss Gold Gel"
-                                    className="w-full h-full object-cover"
+                                    fill
+                                    className="object-cover"
                                 />
                                 <div className="absolute inset-0 bg-gradient-to-t from-stone-950/80 via-transparent to-transparent"></div>
                                 <div className="absolute bottom-6 left-6 right-6">
@@ -63,9 +64,9 @@ export default function HomePage() {
             <section className="py-20 bg-white">
                 <div className="container">
                     <div className="text-center mb-16">
-                        <h2 className="section-title">Why Choose Black Moss & Herbs</h2>
+                            <h2 className="section-title">Why Choose Black Moss & Herbs</h2>
                         <p className="section-subtitle mx-auto">
-                            We're committed to providing the highest quality herbal wellness solutions
+                            We&apos;re committed to providing the highest quality herbal wellness solutions
                         </p>
                     </div>
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
@@ -83,7 +84,7 @@ export default function HomePage() {
                             {
                                 icon: Shield,
                                 title: 'Safe & Natural',
-                                description: 'No harmful chemicals, only nature\'s finest ingredients',
+                                description: 'No harmful chemicals, only nature&apos;s finest ingredients',
                             },
                             {
                                 icon: Star,
@@ -124,7 +125,7 @@ export default function HomePage() {
                         {[1, 2, 3, 4].map((item) => (
                             <div key={item} className="bg-white border border-stone-200 rounded-lg overflow-hidden hover:border-green-500 transition-colors">
                                 <div className="relative h-64 bg-stone-900 overflow-hidden">
-                                    <img
+                                    <Image
                                         src={`https://images.unsplash.com/photo-${[
                                             '1512106374988-c95f566d339c',
                                             '1612810806563-4cb1a2e71c1b',
@@ -132,7 +133,8 @@ export default function HomePage() {
                                             '1505575967455-40e256f7377c'
                                         ][item - 1]}?auto=format&fit=crop&q=80`}
                                         alt={`Product ${item}`}
-                                        className="w-full h-full object-cover"
+                                        fill
+                                        className="object-cover"
                                     />
                                 </div>
                                 <div className="p-6">
@@ -194,14 +196,15 @@ export default function HomePage() {
                         {[1, 2, 3].map((item) => (
                             <article key={item} className="card group">
                                 <div className="relative h-48 bg-earth-900 overflow-hidden">
-                                    <img
+                                    <Image
                                         src={`https://images.unsplash.com/photo-${[
                                             '1540491731775-681283db5630',
                                             '1512428559083-560dfc18b20e',
                                             '1512428559083-560dfc282209'
                                         ][item - 1]}?auto=format&fit=crop&q=80`}
                                         alt="Herbal Knowledge"
-                                        className="w-full h-full object-cover opacity-60 group-hover:scale-105 transition-transform duration-500"
+                                        fill
+                                        className="object-cover opacity-60 group-hover:scale-105 transition-transform duration-500"
                                     />
                                 </div>
                                 <div className="p-6">

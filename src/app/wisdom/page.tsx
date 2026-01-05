@@ -1,10 +1,11 @@
-
+import Image from 'next/image'
 import { Metadata } from 'next'
 import { Play, BookOpen, Image as ImageIcon, Search, ExternalLink, Lock, ArrowRight } from 'lucide-react'
 import Link from 'next/link'
 import { getServerSession } from 'next-auth'
 import { authOptions } from '@/lib/auth'
 import { SubscriptionService, SubscriptionTier } from '@/services/SubscriptionService'
+import Button from '@/components/Button'
 
 export const metadata: Metadata = {
     title: 'The Alchemist\'s Wisdom - Black Moss & Herbs',
@@ -93,10 +94,11 @@ export default async function WisdomPage() {
                             {/* Video Power Feature */}
                             <div className="group relative rounded-[3rem] overflow-hidden aspect-square lg:aspect-video organic-glass p-4 border-white/5 shadow-2xl">
                                 <div className="h-full w-full rounded-[2rem] overflow-hidden relative">
-                                    <img
+                                    <Image
                                         src="https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?auto=format&fit=crop&q=80"
                                         alt="Herbal processing"
-                                        className="w-full h-full object-cover transition-transform duration-[2s] group-hover:scale-105 opacity-40 group-hover:opacity-60"
+                                        fill
+                                        className="object-cover transition-transform duration-[2s] group-hover:scale-105 opacity-40 group-hover:opacity-60"
                                     />
                                     <div className="absolute inset-0 bg-gradient-to-t from-stone-950 via-stone-950/40 to-transparent flex flex-col justify-end p-12">
                                         <div className="flex items-center gap-4 mb-6">
@@ -115,15 +117,20 @@ export default async function WisdomPage() {
                             </div>
 
                             {/* Article Grid */}
-                            <div className="space-y-6">
+                                <div className="space-y-6">
                                 {[
-                                    { title: 'Iron Force: Why Salts aren\'t Iron', date: 'Jan 04, 2026', type: 'Biological' },
+                                    { title: 'Iron Force: Why Salts aren&apos;t Iron', date: 'Jan 04, 2026', type: 'Biological' },
                                     { title: 'Batana Oil: Cellular Follicle Repair', date: 'Jan 02, 2026', type: 'Botanical' },
                                     { title: 'The Acidic Myth vs Cellular Reality', date: 'Dec 28, 2025', type: 'Scientific' }
                                 ].map((article, idx) => (
                                     <div key={idx} className="organic-glass p-8 rounded-3xl group cursor-pointer border-transparent hover:border-amber-500/20 transition-all duration-700 flex gap-8 items-center">
-                                        <div className="w-24 h-24 bg-stone-950 rounded-2xl flex-shrink-0 overflow-hidden border border-stone-800 transition-all duration-700 group-hover:border-amber-500/30 group-hover:scale-95 shadow-lg">
-                                            <img src={`https://images.unsplash.com/photo-1544367567-0f2fcb00${idx}?auto=format&fit=crop&q=80`} className="w-full h-full object-cover opacity-30 group-hover:opacity-60 transition-opacity" alt="Article thumbnail" />
+                                        <div className="w-24 h-24 bg-stone-950 rounded-2xl flex-shrink-0 overflow-hidden border border-stone-800 transition-all duration-700 group-hover:border-amber-500/30 group-hover:scale-95 shadow-lg relative">
+                                            <Image 
+                                                src={`https://images.unsplash.com/photo-1544367567-0f2fcb00${idx}?auto=format&fit=crop&q=80`} 
+                                                fill
+                                                className="object-cover opacity-30 group-hover:opacity-60 transition-opacity" 
+                                                alt="Article thumbnail" 
+                                            />
                                         </div>
                                         <div className="flex-1">
                                             <div className="flex items-center gap-4 mb-3">

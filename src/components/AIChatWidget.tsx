@@ -156,7 +156,7 @@ export default function AIChatWidget() {
                                         </button>
                                     ))}
                                 </div>
-                                <p className="text-[10px] text-center text-earth-500 italic mt-4">"The Council provides frameworks, not medical diagnosis."</p>
+                                <p className="text-[10px] text-center text-earth-500 italic mt-4">&quot;The Council provides frameworks, not medical diagnosis.&quot;</p>
                             </div>
                         ) : (
                             <>

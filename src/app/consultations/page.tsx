@@ -79,7 +79,7 @@ export default function ConsultationsPage() {
                     <div className="organic-glass p-12 md:p-20 rounded-[3rem] border-amber-500/10">
                         <div className="text-center mb-16">
                             <h2 className="text-5xl font-serif font-bold text-stone-50 mb-6">Secure Your Slot</h2>
-                            <p className="text-stone-400 font-light">Enter the alchemist's intake system below.</p>
+                            <p className="text-stone-400 font-light">Enter the alchemist&apos;s intake system below.</p>
                         </div>
 
                         <form className="space-y-8">

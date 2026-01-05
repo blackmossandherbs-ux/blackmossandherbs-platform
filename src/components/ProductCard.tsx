@@ -1,4 +1,5 @@
 import Link from 'next/link'
+import Image from 'next/image'
 import { ShoppingCart } from 'lucide-react'
 import Button from './Button'
 
@@ -30,10 +31,11 @@ export default function ProductCard({
             <Link href={`/shop/${slug}`}>
                 <div className="relative h-80 overflow-hidden bg-stone-100">
                     {images && images.length > 0 ? (
-                        <img
+                        <Image
                             src={images[0]}
                             alt={name}
-                            className="w-full h-full object-cover"
+                            fill
+                            className="object-cover"
                         />
                     ) : (
                         <div className="absolute inset-0 flex items-center justify-center bg-stone-100 text-stone-400">
