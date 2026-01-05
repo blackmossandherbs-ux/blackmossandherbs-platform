@@ -153,7 +153,13 @@ async function main() {
 
     if (!existingAdmin) {
         console.log('Creating admin user...');
-        const hashedPassword = await bcrypt.hash('Hectic2024!', 10);
+        // Use environment variable for admin password, fallback to random secure password
+        const adminPassword = process.env.ADMIN_PASSWORD || require('crypto').randomBytes(16).toString('hex');
+        if (!process.env.ADMIN_PASSWORD) {
+            console.log('⚠️  No ADMIN_PASSWORD set in environment. Generated temporary password:', adminPassword);
+            console.log('   Please set ADMIN_PASSWORD environment variable for production!');
+        }
+        const hashedPassword = await bcrypt.hash(adminPassword, 10);
         await prisma.user.create({
             data: {
                 email: adminEmail,

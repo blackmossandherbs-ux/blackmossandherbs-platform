@@ -11,6 +11,58 @@ export const metadata: Metadata = {
     description: 'Book a personalized herbal wellness consultation with our certified herbalists.',
 }
 
+const consultationTypes = [
+    {
+        id: 'intro',
+        name: 'Introduction Session',
+        price: 49,
+        duration: 30,
+        description: 'Perfect for first-time clients. A comprehensive overview of your health goals and initial herbal recommendations.',
+        features: [
+            'Health history review',
+            'Initial protocol recommendations',
+            'Personalized product suggestions',
+        ],
+    },
+    {
+        id: 'deep-dive',
+        name: 'Deep Dive Protocol',
+        price: 129,
+        duration: 60,
+        description: 'In-depth analysis and personalized alkaline restoration protocol development for serious transformation.',
+        features: [
+            'Complete biological assessment',
+            'Custom 30-day protocol',
+            'Dietary transition guide',
+            'Follow-up email support',
+        ],
+    },
+    {
+        id: 'master',
+        name: 'Master Restoration',
+        price: 299,
+        duration: 90,
+        description: 'Our most comprehensive offering. Full transformation blueprint with ongoing practitioner support.',
+        features: [
+            'Extended consultation session',
+            'Complete 90-day protocol',
+            'Weekly check-in calls',
+            'Priority product access',
+            'Lifetime protocol adjustments',
+        ],
+    },
+];
+
+const availableTimes = [
+    '9:00 AM',
+    '10:00 AM',
+    '11:00 AM',
+    '1:00 PM',
+    '2:00 PM',
+    '3:00 PM',
+    '4:00 PM',
+];
+
 export default function ConsultationsPage() {
     return (
         <div className="py-24 bg-stone-950 min-h-screen relative overflow-hidden">
@@ -79,7 +131,7 @@ export default function ConsultationsPage() {
                     <div className="organic-glass p-12 md:p-20 rounded-[3rem] border-amber-500/10">
                         <div className="text-center mb-16">
                             <h2 className="text-5xl font-serif font-bold text-stone-50 mb-6">Secure Your Slot</h2>
-                            <p className="text-stone-400 font-light">Enter the alchemist's intake system below.</p>
+                            <p className="text-stone-400 font-light">Enter the alchemist&apos;s intake system below.</p>
                         </div>
 
                         <form className="space-y-8">

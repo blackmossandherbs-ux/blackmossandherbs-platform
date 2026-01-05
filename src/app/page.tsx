@@ -65,7 +65,7 @@ export default function HomePage() {
                     <div className="text-center mb-16">
                         <h2 className="section-title">Why Choose Black Moss & Herbs</h2>
                         <p className="section-subtitle mx-auto">
-                            We're committed to providing the highest quality herbal wellness solutions
+                            We&apos;re committed to providing the highest quality herbal wellness solutions
                         </p>
                     </div>
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
