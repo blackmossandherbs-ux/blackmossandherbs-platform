@@ -7,37 +7,10 @@ import { notFound } from 'next/navigation'
 import { ShoppingCart, Heart, Share2, Star, Check } from 'lucide-react'
 import Button from '@/components/Button'
 import { formatPrice } from '@/lib/utils'
-
-// Mock product data
-const getProduct = (slug: string) => {
-    const products: Record<string, any> = {
-        'sea-moss-gold-gel': {
-            id: '1',
-            name: 'Sea Moss Gold Gel',
-            price: 34.99,
-            compareAtPrice: 44.99,
-            description: 'Premium wildcrafted sea moss gel packed with 92 of the 102 minerals your body needs. Supports immune function, digestion, and overall wellness.',
-            category: 'Supplements',
-            stock: 45,
-            rating: 4.8,
-            reviews: 127,
-            benefits: [
-                'Rich in 92 essential minerals',
-                'Supports immune system',
-                'Promotes healthy digestion',
-                'Boosts energy levels',
-                'Supports thyroid function',
-            ],
-            ingredients: 'Wildcrafted Sea Moss, Spring Water',
-            usage: 'Take 1-2 tablespoons daily. Can be added to smoothies, teas, or consumed directly.',
-        },
-    }
-
-    return products[slug] || null
-}
+import { ProductService } from '@/services/ProductService'
 
 export async function generateMetadata({ params }: { params: { slug: string } }): Promise<Metadata> {
-    const product = getProduct(params.slug)
+    const product = await ProductService.getProductBySlug(params.slug)
 
     if (!product) {
         return {
@@ -51,8 +24,8 @@ export async function generateMetadata({ params }: { params: { slug: string } })
     }
 }
 
-export default function ProductPage({ params }: { params: { slug: string } }) {
-    const product = getProduct(params.slug)
+export default async function ProductPage({ params }: { params: { slug: string } }) {
+    const product = await ProductService.getProductBySlug(params.slug)
 
     if (!product) {
         notFound()
@@ -63,22 +36,34 @@ export default function ProductPage({ params }: { params: { slug: string } }) {
         : 0
 
     return (
-        <div className="py-12">
-            <div className="container">
-                <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
+        <div className="py-24 bg-earth-950 min-h-screen relative overflow-hidden">
+            {/* Background Texture */}
+            <div className="absolute inset-0 bg-[url('/patterns/sea-moss-pattern.svg')] bg-repeat opacity-5 pointer-events-none" />
+
+            <div className="container relative z-10 pt-12">
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-20 items-start">
                     {/* Product Images */}
-                    <div>
-                        <div className="card overflow-hidden mb-4">
-                            <div className="aspect-square bg-gradient-to-br from-primary-100 to-secondary-100 flex items-center justify-center">
-                                <span className="text-9xl">🌿</span>
+                    <div className="space-y-6">
+                        <div className="premium-card overflow-hidden group">
+                            <div className="aspect-square bg-earth-900 flex items-center justify-center relative">
+                                <img
+                                    src={product.images[0] || "/images/placeholder.jpg"}
+                                    alt={product.name}
+                                    className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-105"
+                                />
+                                {discount > 0 && (
+                                    <div className="absolute top-8 left-8">
+                                        <span className="px-6 py-2 bg-secondary-500 text-stone-950 text-[10px] font-black uppercase tracking-widest rounded-full shadow-2xl">
+                                            -{discount}% Authority
+                                        </span>
+                                    </div>
+                                )}
                             </div>
                         </div>
                         <div className="grid grid-cols-4 gap-4">
-                            {[1, 2, 3, 4].map((i) => (
-                                <div key={i} className="card overflow-hidden cursor-pointer hover:ring-2 hover:ring-primary-500 transition-all">
-                                    <div className="aspect-square bg-gradient-to-br from-earth-100 to-earth-200 flex items-center justify-center">
-                                        <span className="text-3xl">🌿</span>
-                                    </div>
+                            {product.images.slice(1).map((img, i) => (
+                                <div key={i} className="premium-card overflow-hidden cursor-pointer hover:border-primary-500/50 transition-all aspect-square">
+                                    <img src={img} alt={`${product.name} detail ${i}`} className="w-full h-full object-cover" />
                                 </div>
                             ))}
                         </div>
@@ -86,120 +71,93 @@ export default function ProductPage({ params }: { params: { slug: string } }) {
 
                     {/* Product Info */}
                     <div>
-                        <div className="mb-4">
-                            <span className="badge-primary">{product.category}</span>
-                            {discount > 0 && (
-                                <span className="badge bg-red-100 text-red-800 ml-2">
-                                    Save {discount}%
-                                </span>
+                        <div className="flex items-center gap-3 mb-6">
+                            <span className="text-[10px] font-black uppercase tracking-[0.3em] text-primary-400">{product.category}</span>
+                            <div className="h-1 w-1 bg-earth-800 rounded-full"></div>
+                            {product.stock > 0 ? (
+                                <span className="text-[10px] font-bold uppercase tracking-widest text-emerald-400">Available</span>
+                            ) : (
+                                <span className="text-[10px] font-bold uppercase tracking-widest text-red-400">Dormant</span>
                             )}
                         </div>
 
-                        <h1 className="text-4xl font-serif font-bold text-earth-900 mb-4">
+                        <h1 className="text-5xl md:text-6xl font-serif font-bold text-white mb-6 leading-tight tracking-tighter">
                             {product.name}
                         </h1>
 
-                        <div className="flex items-center gap-4 mb-6">
-                            <div className="flex items-center gap-1">
+                        <div className="flex items-center gap-6 mb-10">
+                            <div className="flex items-center gap-1.5">
                                 {[...Array(5)].map((_, i) => (
                                     <Star
                                         key={i}
-                                        className={`w-5 h-5 ${i < Math.floor(product.rating)
-                                            ? 'text-secondary-500 fill-secondary-500'
-                                            : 'text-earth-300'
-                                            }`}
+                                        size={14}
+                                        className={`${i < 5 ? 'text-secondary-400 fill-secondary-400' : 'text-earth-800'}`}
                                     />
                                 ))}
                             </div>
-                            <span className="text-earth-600">
-                                {product.rating} ({product.reviews} reviews)
+                            <span className="text-earth-400 text-xs font-bold uppercase tracking-widest">
+                                Clinical Excellence Verified
                             </span>
                         </div>
 
-                        <div className="flex items-center gap-3 mb-6">
-                            <span className="text-4xl font-bold text-primary-600">
+                        <div className="flex items-center gap-6 mb-12">
+                            <span className="text-5xl font-bold text-white">
                                 {formatPrice(product.price)}
                             </span>
                             {product.compareAtPrice && (
-                                <span className="text-xl text-earth-400 line-through">
+                                <span className="text-2xl text-earth-600 line-through italic font-light">
                                     {formatPrice(product.compareAtPrice)}
                                 </span>
                             )}
                         </div>
 
-                        <p className="text-earth-700 text-lg mb-8 leading-relaxed">
-                            {product.description}
-                        </p>
-
-                        {/* Stock Status */}
-                        <div className="mb-6">
-                            {product.stock > 0 ? (
-                                <div className="flex items-center gap-2 text-primary-600">
-                                    <Check className="w-5 h-5" />
-                                    <span className="font-medium">In Stock ({product.stock} available)</span>
-                                </div>
-                            ) : (
-                                <div className="text-red-600 font-medium">Out of Stock</div>
-                            )}
-                        </div>
-
-                        {/* Quantity Selector */}
-                        <div className="mb-6">
-                            <label className="label">Quantity</label>
-                            <div className="flex items-center gap-4">
-                                <div className="flex items-center border border-earth-300 rounded-lg">
-                                    <button className="px-4 py-2 hover:bg-earth-100 transition-colors">-</button>
-                                    <input
-                                        type="number"
-                                        value="1"
-                                        min="1"
-                                        max={product.stock}
-                                        className="w-16 text-center border-x border-earth-300 py-2 focus:outline-none"
-                                        readOnly
-                                    />
-                                    <button className="px-4 py-2 hover:bg-earth-100 transition-colors">+</button>
-                                </div>
+                        <div className="p-8 bg-earth-900/40 backdrop-blur-xl border border-earth-800 rounded-[2rem] mb-12">
+                            <p className="text-earth-300 text-lg leading-relaxed italic font-light mb-8">
+                                &quot;{product.description}&quot;
+                            </p>
+                            <div className="space-y-4">
+                                {product.benefits.map((benefit: string, index: number) => (
+                                    <div key={index} className="flex items-center gap-3 text-sm text-stone-300 font-medium">
+                                        <div className="w-5 h-5 bg-primary-900/40 rounded-full flex items-center justify-center border border-primary-500/30">
+                                            <Check className="w-3 h-3 text-primary-400" />
+                                        </div>
+                                        {benefit}
+                                    </div>
+                                ))}
                             </div>
                         </div>
 
                         {/* Action Buttons */}
-                        <div className="flex gap-4 mb-8">
-                            <Button size="lg" className="flex-1" disabled={product.stock === 0}>
-                                <ShoppingCart className="w-5 h-5 mr-2" />
-                                Add to Cart
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-12">
+                            <Button size="lg" className="h-20 rounded-2xl text-lg font-bold group" disabled={product.stock === 0}>
+                                Manifest Formula
+                                <ShoppingCart className="ml-3 w-5 h-5 group-hover:translate-x-1 transition-transform" />
                             </Button>
-                            <Button variant="outline" size="lg">
-                                <Heart className="w-5 h-5" />
-                            </Button>
-                            <Button variant="outline" size="lg">
-                                <Share2 className="w-5 h-5" />
-                            </Button>
-                        </div>
-
-                        {/* Benefits */}
-                        <div className="card p-6 mb-6">
-                            <h3 className="font-serif text-xl font-bold text-earth-900 mb-4">
-                                Key Benefits
-                            </h3>
-                            <ul className="space-y-2">
-                                {product.benefits.map((benefit: string, index: number) => (
-                                    <li key={index} className="flex items-start gap-2">
-                                        <Check className="w-5 h-5 text-primary-600 flex-shrink-0 mt-0.5" />
-                                        <span className="text-earth-700">{benefit}</span>
-                                    </li>
-                                ))}
-                            </ul>
-                        </div>
-
-                        {/* Product Details */}
-                        <div className="space-y-4">
-                            <div className="card p-6">
-                                <h3 className="font-semibold text-earth-900 mb-2">Ingredients</h3>
-                                <p className="text-earth-700">{product.ingredients}</p>
+                            <div className="flex gap-4">
+                                <Button variant="outline" size="lg" className="h-20 flex-1 rounded-2xl border-earth-800 hover:border-earth-600">
+                                    <Heart className="w-6 h-6" />
+                                </Button>
+                                <Button variant="outline" size="lg" className="h-20 flex-1 rounded-2xl border-earth-800 hover:border-earth-600">
+                                    <Share2 className="w-6 h-6" />
+                                </Button>
                             </div>
-                            <div className="card p-6">
-                                <h3 className="font-semibold text-earth-900 mb-2">How to Use</h3>
-                                <p className="text-earth-700">{product.usage}</p>
+                        </div>
+
+                        {/* Technical Matrix */}
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div className="p-6 bg-earth-950/50 border border-earth-800 rounded-2xl">
+                                <h3 className="font-black text-[10px] mb-3 uppercase text-earth-500 tracking-[0.2em]">Therapeutic Goals</h3>
+                                <div className="flex flex-wrap gap-2">
+                                    {product.therapeuticGoals?.map((goal: string) => (
+                                        <span key={goal} className="px-3 py-1 bg-white/5 border border-white/10 text-[9px] font-bold text-earth-400 rounded-lg">
+                                            {goal}
+                                        </span>
+                                    ))}
+                                </div>
+                            </div>
+                            <div className="p-6 bg-earth-950/50 border border-earth-800 rounded-2xl">
+                                <h3 className="font-black text-[10px] mb-3 uppercase text-earth-500 tracking-[0.2em]">Biometric ID</h3>
+                                <div className="text-secondary-400 font-mono text-xs uppercase">Entity_ALC_{product.id.slice(-8)}</div>
                             </div>
                         </div>
                     </div>

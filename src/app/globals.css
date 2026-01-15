@@ -1,8 +1,7 @@
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Playfair+Display:ital,wght@0,400;0,700;1,400;1,700&display=swap');
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-
-@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Playfair+Display:ital,wght@0,400;0,700;1,400;1,700&display=swap');
 
 @layer base {
   :root {
@@ -18,14 +17,19 @@
   }
 
   * {
-    @apply border-stone-800/40;
+    border-color: rgba(41, 37, 36, 0.4);
+    /* border-stone-800/40 equivalent */
   }
 
   body {
-    @apply bg-[#0c0a09] text-stone-200 font-sans selection:bg-green-600/30 selection:text-green-100 overflow-x-hidden;
+    @apply bg-[#0c0a09] text-stone-200 font-sans overflow-x-hidden;
     background-image:
       radial-gradient(circle at 0% 0%, rgba(21, 128, 61, 0.08) 0%, transparent 40%),
       radial-gradient(circle at 100% 100%, rgba(202, 138, 4, 0.08) 0%, transparent 40%);
+  }
+
+  ::selection {
+    @apply bg-green-600/30 text-green-100;
   }
 
   h1,
@@ -45,7 +49,8 @@
 
   /* Frosted Glass - apothecary style */
   .organic-glass {
-    @apply bg-stone-900/60 backdrop-blur-2xl border border-white/5 shadow-[0_8px_32px_rgba(0, 0, 0, 0.5)];
+    @apply bg-stone-900/60 backdrop-blur-2xl border border-white/5;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
   }
 
   .premium-card {
@@ -57,11 +62,21 @@
   }
 
   .btn-organic-primary {
-    @apply btn-organic bg-green-700 text-stone-50 shadow-[0_10px_20px_-5px_rgba(21, 128, 61, 0.4)] hover:shadow-[0_20px_40px_-10px_rgba(21, 128, 61, 0.6)] hover:bg-green-600;
+    @apply btn-organic bg-green-700 text-stone-50 hover:bg-green-600;
+    box-shadow: 0 10px 20px -5px rgba(21, 128, 61, 0.4);
+  }
+
+  .btn-organic-primary:hover {
+    box-shadow: 0 20px 40px -10px rgba(21, 128, 61, 0.6);
   }
 
   .btn-organic-gold {
-    @apply btn-organic bg-amber-600 text-stone-950 shadow-[0_10px_20px_-5px_rgba(202, 138, 4, 0.4)] hover:shadow-[0_20px_40px_-10px_rgba(202, 138, 4, 0.6)] hover:bg-amber-500;
+    @apply btn-organic bg-amber-600 text-stone-950 hover:bg-amber-500;
+    box-shadow: 0 10px 20px -5px rgba(202, 138, 4, 0.4);
+  }
+
+  .btn-organic-gold:hover {
+    box-shadow: 0 20px 40px -10px rgba(202, 138, 4, 0.6);
   }
 
   .btn-organic-outline {
@@ -103,7 +118,7 @@
   }
 
   .gold-glow {
-    @apply shadow-[0_0_30px_rgba(202, 138, 4, 0.2)];
+    box-shadow: 0 0 30px rgba(202, 138, 4, 0.2);
   }
 }
 

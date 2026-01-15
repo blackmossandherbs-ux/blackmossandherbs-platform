@@ -4,7 +4,7 @@
  */
 import { Metadata } from 'next'
 import Link from 'next/link'
-import { Calendar, Clock, ArrowRight } from 'lucide-react'
+import { Calendar, Clock, ArrowRight, Sparkles, Leaf } from 'lucide-react'
 import { formatDate } from '@/lib/utils'
 
 export const metadata: Metadata = {
@@ -77,11 +77,40 @@ export default function BlogPage() {
         <div className="py-12">
             <div className="container">
                 {/* Header */}
-                <div className="mb-12">
-                    <h1 className="section-title">Wellness Blog</h1>
-                    <p className="section-subtitle">
-                        Expert insights, herbal wisdom, and natural health tips
+                <div className="mb-16 text-center max-w-3xl mx-auto">
+                    <h1 className="text-6xl font-serif font-bold text-white mb-6">Herbal Wisdom</h1>
+                    <p className="text-earth-400 text-xl leading-relaxed">
+                        Access our curated libraries of botanical research, biological restoration protocols, and alchemical education.
                     </p>
+                </div>
+
+                {/* Interactive Wisdom Hub */}
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-20">
+                    <Link href="/quiz">
+                        <div className="group card p-10 border border-primary-500/20 bg-primary-950/10 hover:bg-primary-900/20 transition-all rounded-[3rem] relative overflow-hidden">
+                            <div className="flex items-start justify-between mb-8">
+                                <div className="w-16 h-16 bg-primary-900/40 border border-primary-500/30 rounded-2xl flex items-center justify-center group-hover:scale-110 transition-transform">
+                                    <Sparkles className="w-8 h-8 text-primary-400" />
+                                </div>
+                                <ArrowRight className="text-earth-700 group-hover:text-primary-400 group-hover:translate-x-2 transition-all" />
+                            </div>
+                            <h2 className="text-3xl font-serif font-bold text-white mb-4">Bio-Restoration Quiz</h2>
+                            <p className="text-earth-400 text-lg mb-0 leading-relaxed">Discover your custom herbal protocol through our clinical data-driven diagnostic tool.</p>
+                        </div>
+                    </Link>
+
+                    <Link href="/wisdom/registry">
+                        <div className="group card p-10 border border-emerald-500/20 bg-emerald-950/10 hover:bg-emerald-900/20 transition-all rounded-[3rem] relative overflow-hidden">
+                            <div className="flex items-start justify-between mb-8">
+                                <div className="w-16 h-16 bg-emerald-900/40 border border-emerald-500/30 rounded-2xl flex items-center justify-center group-hover:scale-110 transition-transform">
+                                    <Leaf className="w-8 h-8 text-emerald-400" />
+                                </div>
+                                <ArrowRight className="text-earth-700 group-hover:text-emerald-400 group-hover:translate-x-2 transition-all" />
+                            </div>
+                            <h2 className="text-3xl font-serif font-bold text-white mb-4">Nutritional Registry</h2>
+                            <p className="text-earth-400 text-lg mb-0 leading-relaxed">A clinical directory of Dr. Sebi-approved vs. acidic foods for cellular harmony.</p>
+                        </div>
+                    </Link>
                 </div>
 
                 {/* Categories */}

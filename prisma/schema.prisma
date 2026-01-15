@@ -32,6 +32,7 @@ model User {
   consultations Consultation[]
   membership    Membership?
   downloads     Download[]
+  loyaltyPoints Int       @default(0)
   
   @@map("users")
 }
@@ -91,6 +92,9 @@ model Product {
   category    String
   tags        String[]
   benefits    String[]      @default([])
+  therapeuticGoals String[] @default([])
+  isBundle    Boolean       @default(false)
+  bundleItems String[]      @default([])
   stock       Int           @default(0)
   type        ProductType
   featured    Boolean       @default(false)

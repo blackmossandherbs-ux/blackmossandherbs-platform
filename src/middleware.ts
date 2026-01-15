@@ -1,27 +1,32 @@
-
 /**
- * HECTIC Intellectual Property - Copyright 2024
- * Black Moss & Herbs Platform - Security Middleware
+ * Black Moss & Herbs Platform - Security & Routing Middleware
  */
 import { withAuth } from "next-auth/middleware";
 import { NextResponse } from "next/server";
+import type { NextRequest } from "next/server";
 
-export default withAuth(
-    function middleware(req) {
-        const token = req.nextauth.token;
-        const isAdminPath = req.nextUrl.pathname.startsWith("/admin");
+export default async function middleware(req: NextRequest) {
+    const host = req.headers.get("host");
+    const url = req.nextUrl;
 
-        if (isAdminPath && token?.role !== "ADMIN") {
-            return NextResponse.redirect(new URL("/", req.url));
-        }
-    },
-    {
-        callbacks: {
-            authorized: ({ token }) => !!token,
-        },
+    // Domain Redirection Strategy for .co.uk and .info
+    if (host && (host.includes("blackmossandherbs.co.uk") || host.includes("blackmossandherbs.info"))) {
+        return NextResponse.redirect(new URL(`https://blackmossandherbs.com${url.pathname}`, req.url));
     }
-);
+
+    // Admin Authority Protection
+    if (url.pathname.startsWith("/admin") || url.pathname.startsWith("/dashboard")) {
+        // @ts-ignore - Explicitly invoking the auth middleware for protected authorities
+        return withAuth(req, {
+            callbacks: {
+                authorized: ({ token }) => !!token && token.role === "ADMIN",
+            },
+        });
+    }
+
+    return NextResponse.next();
+}
 
 export const config = {
-    matcher: ["/admin/:path*", "/dashboard/:path*"],
+    matcher: ["/((?!api|_next/static|_next/image|favicon.ico).*)"],
 };

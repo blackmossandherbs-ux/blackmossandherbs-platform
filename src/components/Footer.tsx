@@ -34,7 +34,7 @@ export default function Footer() {
 
                     {/* Quick Links */}
                     <div>
-                        <h4 className="font-semibold mb-4">Quick Links</h4>
+                        <h4 className="font-semibold mb-4 text-white">Quick Links</h4>
                         <ul className="space-y-2 text-sm">
                             <li>
                                 <Link href="/shop" className="text-earth-300 hover:text-primary-400 transition-colors">
@@ -66,7 +66,7 @@ export default function Footer() {
 
                     {/* Resources */}
                     <div>
-                        <h4 className="font-semibold mb-4">Resources</h4>
+                        <h4 className="font-semibold mb-4 text-white">Resources</h4>
                         <ul className="space-y-2 text-sm">
                             <li>
                                 <Link href="/blog" className="text-earth-300 hover:text-primary-400 transition-colors">
@@ -98,7 +98,7 @@ export default function Footer() {
 
                     {/* Newsletter */}
                     <div>
-                        <h4 className="font-semibold mb-4">Newsletter</h4>
+                        <h4 className="font-semibold mb-4 text-white">Newsletter</h4>
                         <p className="text-earth-300 text-sm mb-4">
                             Subscribe for wellness tips and exclusive offers.
                         </p>
@@ -121,7 +121,7 @@ export default function Footer() {
                         Disclaimer: These statements have not been evaluated by the FDA or any medical authority. Our products and protocols are for educational and traditional herbal purposes only. They are not intended to diagnose, treat, cure, or prevent any disease. Always consult with a qualified health professional.
                     </p>
                     <div className="flex flex-col md:flex-row justify-between w-full items-center">
-                        <p>&copy; 2024 Black Moss & Herbs. All rights reserved.</p>
+                        <p>&copy; {new Date().getFullYear()} Black Moss & Herbs. All rights reserved.</p>
                         <div className="flex space-x-6 mt-4 md:mt-0">
                             <Link href="/privacy" className="hover:text-primary-400 transition-colors">
                                 Privacy Policy

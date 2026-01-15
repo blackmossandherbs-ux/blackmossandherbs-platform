@@ -33,24 +33,51 @@ export default async function ShopPage() {
                 <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
                     {/* Filters Sidebar */}
                     <aside className="lg:col-span-1">
-                        <div className="card p-6 sticky top-24">
-                            <div className="flex items-center gap-2 mb-6">
-                                <Filter className="w-5 h-5 text-earth-700" />
-                                <h2 className="text-lg font-bold text-earth-900">Filters</h2>
+                        <div className="card p-8 sticky top-24 border border-earth-800 bg-earth-900/40 backdrop-blur-xl rounded-[2.5rem]">
+                            <div className="flex items-center gap-2 mb-8">
+                                <Filter className="w-5 h-5 text-secondary-400" />
+                                <h2 className="text-xl font-serif font-bold text-white">Biological Filters</h2>
+                            </div>
+
+                            {/* Therapeutic Goals */}
+                            <div className="mb-8">
+                                <h3 className="text-[10px] font-black uppercase tracking-[0.2em] text-earth-500 mb-4">Therapeutic Goals</h3>
+                                <div className="space-y-3">
+                                    {[
+                                        'Deep Cleanse',
+                                        'Immune Support',
+                                        'Intracellular Hydration',
+                                        'Blood Purifier',
+                                        'Nervous System',
+                                        'Vitality'
+                                    ].map((goal) => (
+                                        <label key={goal} className="flex items-center cursor-pointer group">
+                                            <div className="relative flex items-center">
+                                                <input
+                                                    type="checkbox"
+                                                    className="peer h-5 w-5 cursor-pointer appearance-none rounded-md border border-earth-700 transition-all checked:bg-secondary-500 checked:border-secondary-500"
+                                                />
+                                                <span className="ml-3 text-sm text-earth-400 group-hover:text-white transition-colors">
+                                                    {goal}
+                                                </span>
+                                            </div>
+                                        </label>
+                                    ))}
+                                </div>
                             </div>
 
                             {/* Categories */}
-                            <div className="mb-6">
-                                <h3 className="font-semibold text-earth-900 mb-3">Categories</h3>
-                                <div className="space-y-2">
+                            <div className="mb-8">
+                                <h3 className="text-[10px] font-black uppercase tracking-[0.2em] text-earth-500 mb-4">Compound Types</h3>
+                                <div className="space-y-3">
                                     {availableCategories.map((category) => (
                                         <label key={category} className="flex items-center cursor-pointer group">
                                             <input
                                                 type="checkbox"
-                                                className="w-4 h-4 text-primary-600 border-earth-300 rounded focus:ring-primary-500"
+                                                className="h-5 w-5 rounded-md border-earth-700 bg-transparent checked:bg-primary-500"
                                                 defaultChecked={category === 'All Products'}
                                             />
-                                            <span className="ml-2 text-sm text-earth-700 group-hover:text-primary-600">
+                                            <span className="ml-3 text-sm text-earth-400 group-hover:text-white transition-colors">
                                                 {category}
                                             </span>
                                         </label>
@@ -58,75 +85,29 @@ export default async function ShopPage() {
                                 </div>
                             </div>
 
-                            {/* Price Range */}
-                            <div className="mb-6">
-                                <h3 className="font-semibold text-earth-900 mb-3">Price Range</h3>
-                                <div className="space-y-2">
-                                    {[
-                                        'Under $20',
-                                        '$20 - $30',
-                                        '$30 - $40',
-                                        'Over $40',
-                                    ].map((range) => (
-                                        <label key={range} className="flex items-center cursor-pointer group">
-                                            <input
-                                                type="checkbox"
-                                                className="w-4 h-4 text-primary-600 border-earth-300 rounded focus:ring-primary-500"
-                                            />
-                                            <span className="ml-2 text-sm text-earth-700 group-hover:text-primary-600">
-                                                {range}
-                                            </span>
-                                        </label>
-                                    ))}
-                                </div>
-                            </div>
-
-                            {/* Special Offers */}
-                            <div>
-                                <h3 className="font-semibold text-earth-900 mb-3">Special Offers</h3>
-                                <div className="space-y-2">
-                                    <label className="flex items-center cursor-pointer group">
-                                        <input
-                                            type="checkbox"
-                                            className="w-4 h-4 text-primary-600 border-earth-300 rounded focus:ring-primary-500"
-                                        />
-                                        <span className="ml-2 text-sm text-earth-700 group-hover:text-primary-600">
-                                            On Sale
-                                        </span>
-                                    </label>
-                                    <label className="flex items-center cursor-pointer group">
-                                        <input
-                                            type="checkbox"
-                                            className="w-4 h-4 text-primary-600 border-earth-300 rounded focus:ring-primary-500"
-                                        />
-                                        <span className="ml-2 text-sm text-earth-700 group-hover:text-primary-600">
-                                            Featured
-                                        </span>
-                                    </label>
-                                </div>
-                            </div>
+                            <button className="w-full py-4 bg-earth-800 hover:bg-earth-700 text-white font-black text-[10px] uppercase tracking-widest rounded-xl transition-all">
+                                Reset Filters
+                            </button>
                         </div>
                     </aside>
 
                     {/* Products Grid */}
                     <div className="lg:col-span-3">
-                        <div className="flex items-center justify-between mb-6">
-                            <p className="text-earth-600">
-                                Showing <span className="font-semibold">{products.length}</span> products
+                        <div className="flex items-center justify-between mb-8">
+                            <p className="text-earth-500 font-mono text-xs uppercase tracking-widest">
+                                <span className="text-white font-bold">{products.length}</span> Entities Identified
                             </p>
-                            <select className="input w-auto">
-                                <option>Sort by: Featured</option>
-                                <option>Price: Low to High</option>
-                                <option>Price: High to Low</option>
-                                <option>Newest</option>
+                            <select className="bg-earth-900 border border-earth-800 text-white rounded-xl px-4 py-2 text-xs font-bold outline-none focus:border-primary-500">
+                                <option>Sort by: Priority</option>
+                                <option>Potency: High to Low</option>
+                                <option>Newest Discovery</option>
                             </select>
                         </div>
 
-                        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
+                        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8">
                             {products.map((product) => (
                                 <ProductCard
                                     key={product.id}
-                                    id={product.id}
                                     name={product.name}
                                     slug={product.slug}
                                     price={product.price}
@@ -134,6 +115,7 @@ export default async function ShopPage() {
                                     images={product.images}
                                     category={product.category}
                                     featured={product.featured}
+                                    isBundle={product.isBundle}
                                 />
                             ))}
                         </div>

@@ -26,7 +26,7 @@ const GUIDES: Guide[] = [
         name: 'The Alchemist',
         description: 'Scientific Herbalism',
         icon: Bot,
-        initialMessage: "Peace. I am HECTIC's digital consciousness, functioning as The Alchemist. I provide biological perspectives and traditional herbal frameworks. One specific insight is available per inquiry; deeper alignment requires a subscription or consultation. How can I assist you today?"
+        initialMessage: "Peace. I am the platform's digital consciousness, functioning as The Alchemist. I provide biological perspectives and traditional herbal frameworks. One specific insight is available per inquiry; deeper alignment requires a subscription or consultation. How can I assist you today?"
     },
     {
         id: 'herbalist',
@@ -74,38 +74,30 @@ export default function AIChatWidget() {
         setMessages(newMessages);
         setInput('');
 
-        const currentCount = userMessageCount + 1;
-        setUserMessageCount(currentCount);
+        try {
+            const response = await fetch('/api/chat', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ message: userMsg, guideId: selectedGuide.id }),
+            });
 
-        setTimeout(() => {
-            let response = "";
+            const data = await response.json();
+
+            if (data.error) throw new Error(data.error);
+
+            let finalResponse = sanitizeWellnessContent(data.content);
             const lower = userMsg.toLowerCase();
             const isHealthInquiry = enforceAlchemistBoundary(userMsg) || lower.includes('pain') || lower.includes('condition') || lower.includes('chronic');
 
-            if (!hasUsedFreeGift) {
-                // Shared Core: Acknowledge -> Insight -> Clarify -> Convert -> Disclaimer
-                let insight = "";
-                if (lower.includes('sea moss')) {
-                    insight = "Sea Moss is traditionally recognized for its high mineral density, particularly iodine and potassium. From a biological perspective, it supports thyroid function and mucosal health.";
-                } else if (lower.includes('iron') || lower.includes('blood')) {
-                    insight = "Iron is central to cellular oxygenation. In traditional herbal frameworks, we focus on plant-based biological iron to support blood quality without synthetic oxidative stress.";
-                } else {
-                    insight = "Biological wellness depends on a mineral-rich, alkaline environment. Protocols focus on reintroducing organic minerals to support the body's natural state.";
-                }
-
-                response = `${selectedGuide.name} Perspective:\n\n${insight}\n\nClarification: How long have you felt this way, and are you currently on any protocols? I can provide the framework, but personalized guidance requires a Private Consultation.`;
-                setHasUsedFreeGift(true);
-            } else {
-                response = "I have provided your initial insight. My time and expertise are reserved for members and consulting clients. To receive a personalized protocol, please book a consultation.";
-            }
-
-            let finalResponse = sanitizeWellnessContent(response);
             if (isHealthInquiry) {
                 finalResponse += "\n\n" + getGlobalDisclaimer();
             }
 
             setMessages(prev => [...prev, { role: 'assistant', content: finalResponse }]);
-        }, 1200);
+        } catch (error) {
+            console.error('[AI Chat Widget] ERROR:', error);
+            setMessages(prev => [...prev, { role: 'assistant', content: "Our biological logic stream is currently undergoing maintenance. Please try again shortly." }]);
+        }
     };
 
     return (

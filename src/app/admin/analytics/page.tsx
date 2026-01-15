@@ -26,9 +26,9 @@ export default function AnalyticsPage() {
     // Mock data for HECTIC intelligence
     const stats = [
         { label: 'Monthly Recurring Revenue', value: '£42,850', sub: '+12.5%', icon: DollarSign, color: 'text-primary-400' },
-        { label: 'Community Growth', value: '8,420', sub: '+3.2%', icon: Users, color: 'text-secondary-400' },
+        { label: 'Abandoned Cart Pulse', value: '12', sub: 'Recovery: 18%', icon: ShoppingBag, color: 'text-secondary-400' },
         { label: 'Interaction Volume', value: '142.5K', sub: '+18.4%', icon: Activity, color: 'text-primary-400' },
-        { label: 'Conversion Delta', value: '4.8%', sub: '-0.2%', icon: TrendingUp, color: 'text-secondary-400' },
+        { label: 'Botanical Credits Issued', value: '84.2K', sub: 'Burn: 12%', icon: Users, color: 'text-secondary-400' },
     ];
 
     const topEntities = [

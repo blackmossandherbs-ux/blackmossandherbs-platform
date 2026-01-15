@@ -170,15 +170,16 @@ export default function DashboardPage() {
                             </Link>
                         </div>
 
-                        {/* Wellness Points */}
-                        <div className="card p-6 bg-gradient-secondary text-white">
-                            <h3 className="font-serif text-xl font-bold mb-2">Wellness Points</h3>
-                            <div className="text-4xl font-bold mb-2">1,250</div>
-                            <p className="text-secondary-100 text-sm mb-4">
-                                Earn points with every purchase and redeem for rewards!
+                        {/* Botanical Credits */}
+                        <div className="card p-8 border border-secondary-500/20 bg-secondary-950/20 backdrop-blur-xl relative overflow-hidden group">
+                            <div className="absolute -right-8 -top-8 w-24 h-24 bg-secondary-500/10 blur-2xl rounded-full group-hover:scale-150 transition-transform duration-700" />
+                            <h3 className="font-serif text-2xl font-bold text-white mb-2">Botanical Credits</h3>
+                            <div className="text-5xl font-black text-secondary-400 mb-2">1,250</div>
+                            <p className="text-earth-400 text-sm mb-6 leading-relaxed">
+                                You have high-affinity credits available for redemption on any organic compound.
                             </p>
-                            <button className="w-full bg-white text-secondary-600 font-medium py-2 rounded-lg hover:bg-secondary-50 transition-colors">
-                                Redeem Points
+                            <button className="w-full bg-secondary-600 text-white font-black uppercase tracking-widest py-4 rounded-xl hover:bg-secondary-500 transition-all shadow-lg shadow-secondary-900/20">
+                                Reclaim Rewards
                             </button>
                         </div>
                     </div>

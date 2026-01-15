@@ -1,5 +1,4 @@
 /**
- * HECTIC Intellectual Property - Copyright 2024
  * Black Moss & Herbs Platform - Core Product Service
  */
 import { prisma } from '@/lib/prisma';
@@ -16,8 +15,11 @@ export interface Product {
     tags: string[];
     benefits: string[];
     stock: number;
-    featured: boolean;
+    isBundle: boolean;
+    bundleItems: string[];
+    therapeuticGoals: string[];
     active: boolean;
+    featured: boolean;
     createdAt: Date;
     updatedAt: Date;
 }
@@ -71,13 +73,54 @@ export class ProductService {
                 orderBy,
             });
 
-            return products.map(p => ({
-                ...p,
-                compareAtPrice: p.compareAtPrice ?? undefined,
-            })) as Product[];
+            return products.map(p => {
+                let images = p.images;
+                if ((p.slug.includes('sea-moss') || p.name.toLowerCase().includes('sea moss')) && !p.images.some(img => img.includes('gold-sea-moss-gel'))) {
+                    images = ['/images/products/gold-sea-moss-gel.png', ...p.images];
+                }
+
+                return {
+                    ...p,
+                    price: Number(p.price),
+                    compareAtPrice: p.compareAtPrice ? Number(p.compareAtPrice) : undefined,
+                    // Inject visual authority images if missing/placeholder
+                    images: images,
+                    isBundle: p.isBundle,
+                    therapeuticGoals: p.therapeuticGoals,
+                };
+            }) as Product[];
         } catch (error) {
             console.error('[ProductService.getProducts] FAILURE:', error);
             throw new Error('INDUSTRIAL_CATALOG_FAILURE: Could not retrieve product list.');
+        }
+    }
+
+    /**
+     * Get featured products for the home page
+     */
+    static async getFeaturedProducts(limit = 4): Promise<Product[]> {
+        try {
+            const products = await prisma.product.findMany({
+                where: { active: true, featured: true },
+                take: limit,
+                orderBy: { createdAt: 'desc' },
+            });
+
+            return products.map(p => {
+                let images = p.images;
+                if ((p.slug.includes('sea-moss') || p.name.toLowerCase().includes('sea moss')) && !p.images.some(img => img.includes('gold-sea-moss-gel'))) {
+                    images = ['/images/products/gold-sea-moss-gel.png', ...p.images];
+                }
+                return {
+                    ...p,
+                    price: Number(p.price),
+                    compareAtPrice: p.compareAtPrice ? Number(p.compareAtPrice) : undefined,
+                    images: images,
+                };
+            }) as Product[];
+        } catch (error) {
+            console.error('[ProductService.getFeaturedProducts] FAILURE:', error);
+            return [];
         }
     }
 
@@ -92,9 +135,16 @@ export class ProductService {
 
             if (!product) return null;
 
+            let images = product.images;
+            if ((product.slug.includes('sea-moss') || product.name.toLowerCase().includes('sea moss')) && !product.images.some(img => img.includes('gold-sea-moss-gel'))) {
+                images = ['/images/products/gold-sea-moss-gel.png', ...product.images];
+            }
+
             return {
                 ...product,
-                compareAtPrice: product.compareAtPrice ?? undefined,
+                price: Number(product.price),
+                compareAtPrice: product.compareAtPrice ? Number(product.compareAtPrice) : undefined,
+                images: images,
             } as Product;
         } catch (error) {
             console.error(`[ProductService.getProductBySlug] FAILURE for slug ${slug}:`, error);

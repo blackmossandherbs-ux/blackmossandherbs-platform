@@ -3,55 +3,69 @@
  * Black Moss & Herbs Platform - Home Page
  */
 import Link from 'next/link'
-import Image from 'next/image'
-import { ArrowRight, Leaf, Heart, Shield, Star } from 'lucide-react'
+import { ArrowRight, Leaf, Heart, Shield, Star, ShoppingCart, Play, CheckCircle2 } from 'lucide-react'
 import Button from '@/components/Button'
+import { ProductService } from '@/services/ProductService'
+import { BlogService } from '@/services/BlogService'
+import ProductCard from '@/components/ProductCard'
 
-export default function HomePage() {
+export default async function HomePage() {
+    const featuredProducts = await ProductService.getFeaturedProducts(4);
+    const latestBlogs = await BlogService.getLatestPosts(3);
+
     return (
-        <>
-            {/* Hero Section */}
-            <section className="relative min-h-[90vh] flex items-center pt-24 bg-stone-950">
-                <div className="container">
-                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
-                        <div className="max-w-xl">
-                            <div className="inline-flex items-center gap-2 px-4 py-2 bg-green-900/20 rounded-full mb-8 border border-green-500/30">
-                                <Leaf className="w-4 h-4 text-green-500" />
-                                <span className="text-xs text-green-400">Natural Wellness</span>
+        <div className="bg-earth-950 overflow-x-hidden">
+            {/* Premium Hero Section */}
+            <section className="relative min-h-screen flex items-center pt-24 overflow-hidden">
+                {/* Abstract Background Elements */}
+                <div className="absolute inset-0 z-0">
+                    <div className="absolute top-[10%] right-[-5%] w-[40vw] h-[40vw] bg-primary-500/10 rounded-full blur-[120px] animate-pulse-slow"></div>
+                    <div className="absolute bottom-[-10%] left-[-5%] w-[50vw] h-[50vw] bg-secondary-500/10 rounded-full blur-[150px] animate-pulse-slow"></div>
+                </div>
+
+                <div className="container relative z-10">
+                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-20 items-center">
+                        <div className="animate-in fade-in slide-in-from-left-8 duration-1000">
+                            <div className="inline-flex items-center gap-2 px-5 py-2 glass-premium rounded-full mb-10 border border-primary-500/20 shadow-lg">
+                                <Leaf className="w-4 h-4 text-primary-400" />
+                                <span className="text-[10px] font-black uppercase tracking-[0.2em] text-primary-300">Botanical Authority</span>
                             </div>
-                            <h1 className="text-5xl md:text-6xl font-serif font-bold text-white mb-6 leading-tight">
-                                Natural Sea Moss <br />
-                                <span className="text-amber-500">& Herbal Wellness</span>
+                            <h1 className="text-6xl md:text-8xl font-serif font-bold text-white mb-8 leading-[0.9] tracking-tighter">
+                                Biological<br />
+                                <span className="text-secondary-400 italic">Restoration.</span>
                             </h1>
-                            <p className="text-lg text-stone-300 mb-8">
-                                Wildcrafted sea moss and traditional herbs sourced directly from nature. Experience the benefits of Dr. Sebi-inspired alkaline nutrition.
+                            <p className="text-xl text-stone-400 mb-12 max-w-lg leading-relaxed font-light italic">
+                                &quot;Where traditional herbal wisdom meets modern biological reality. We don&apos;t just sell products; we provide the framework for alkaline excellence.&quot;
                             </p>
-                            <div className="flex flex-col sm:flex-row gap-4">
+                            <div className="flex flex-col sm:flex-row gap-6">
                                 <Link href="/shop">
-                                    <Button size="lg" className="w-full sm:w-auto">
-                                        Shop Products
-                                        <ArrowRight className="ml-2 w-5 h-5" />
-                                    </Button>
+                                    <button className="h-20 px-10 text-lg font-black uppercase tracking-widest bg-primary-600 hover:bg-primary-500 text-white rounded-2xl transition-all shadow-2xl shadow-primary-900/40 group flex items-center justify-center">
+                                        Manifest Wellness
+                                        <ArrowRight className="ml-3 w-5 h-5 group-hover:translate-x-2 transition-transform" />
+                                    </button>
                                 </Link>
                                 <Link href="/consultations">
-                                    <Button variant="outline" size="lg" className="w-full sm:w-auto">
-                                        Get Guidance
-                                    </Button>
+                                    <button className="h-20 px-10 text-lg font-black uppercase tracking-widest border border-earth-700 hover:border-earth-500 text-white rounded-2xl transition-all hover:bg-white/5">
+                                        Clinical Guidance
+                                    </button>
                                 </Link>
                             </div>
                         </div>
 
-                        <div className="relative">
-                            <div className="relative aspect-square rounded-2xl overflow-hidden border border-stone-800">
-                                <img
-                                    src="/images/sea_moss_gold.webp"
-                                    alt="Sea Moss Gold Gel"
-                                    className="w-full h-full object-cover"
-                                />
-                                <div className="absolute inset-0 bg-gradient-to-t from-stone-950/80 via-transparent to-transparent"></div>
-                                <div className="absolute bottom-6 left-6 right-6">
-                                    <h3 className="text-2xl font-serif font-bold text-white mb-1">Sea Moss Gold Gel</h3>
-                                    <p className="text-stone-300 text-sm">Wildcrafted from the Caribbean</p>
+                        <div className="relative group animate-in fade-in slide-in-from-right-8 duration-1000">
+                            <div className="absolute -inset-4 bg-gradient-to-r from-primary-500/20 to-secondary-500/20 rounded-[3rem] blur-2xl opacity-50 group-hover:opacity-100 transition-opacity duration-1000"></div>
+                            <div className="relative aspect-[4/5] rounded-[2.5rem] overflow-hidden glass-premium p-3 border border-white/10 shadow-3xl">
+                                <div className="h-full w-full rounded-[2rem] overflow-hidden relative">
+                                    <img
+                                        src="/images/sea-moss-gold.jpg"
+                                        alt="Sea Moss Gold Matrix"
+                                        className="w-full h-full object-cover transition-all duration-1000 group-hover:scale-105"
+                                    />
+                                    <div className="absolute inset-0 bg-gradient-to-t from-earth-950 via-earth-950/20 to-transparent"></div>
+                                    <div className="absolute bottom-10 left-10">
+                                        <div className="text-[10px] font-black uppercase tracking-[0.3em] text-secondary-400 mb-2">Wildcrafted Source</div>
+                                        <h3 className="text-4xl font-serif font-bold text-white">Biological Gold.</h3>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -59,196 +73,173 @@ export default function HomePage() {
                 </div>
             </section>
 
-            {/* Features Section */}
-            <section className="py-20 bg-white">
-                <div className="container">
-                    <div className="text-center mb-16">
-                        <h2 className="section-title">Why Choose Black Moss & Herbs</h2>
-                        <p className="section-subtitle mx-auto">
-                            We're committed to providing the highest quality herbal wellness solutions
-                        </p>
-                    </div>
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-                        {[
-                            {
-                                icon: Leaf,
-                                title: 'Premium Quality',
-                                description: 'Sourced from trusted suppliers and rigorously tested for purity',
-                            },
-                            {
-                                icon: Heart,
-                                title: 'Holistic Approach',
-                                description: 'Comprehensive wellness solutions for mind, body, and spirit',
-                            },
-                            {
-                                icon: Shield,
-                                title: 'Safe & Natural',
-                                description: 'No harmful chemicals, only nature\'s finest ingredients',
-                            },
-                            {
-                                icon: Star,
-                                title: 'Expert Guidance',
-                                description: 'Professional consultations from certified herbalists',
-                            },
-                        ].map((feature, index) => (
-                            <div key={index} className="bg-white border border-stone-200 rounded-lg p-6 text-center hover:border-green-500 transition-colors">
-                                <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                                    <feature.icon className="w-8 h-8 text-green-600" />
-                                </div>
-                                <h3 className="text-xl font-serif font-bold text-stone-900 mb-2">
-                                    {feature.title}
-                                </h3>
-                                <p className="text-stone-600">{feature.description}</p>
+            {/* Biological Restoration Path Section */}
+            <section className="py-32 relative overflow-hidden bg-stone-50">
+                <div className="absolute top-0 right-0 w-1/2 h-full bg-earth-950 hidden lg:block"></div>
+                <div className="container relative z-10">
+                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-0 items-stretch overflow-hidden rounded-[4rem] shadow-2xl border border-earth-800/10">
+                        <div className="bg-white p-12 md:p-24 flex flex-col justify-center">
+                            <h2 className="text-5xl md:text-6xl font-serif font-bold text-earth-950 mb-10 tracking-tighter leading-[0.9]">
+                                The Path of <br />
+                                <span className="text-primary-700 italic">Alkaline Mastery.</span>
+                            </h2>
+                            <p className="text-xl text-stone-600 mb-12 leading-relaxed font-light italic">
+                                Our protocols are rooted in the biological reality that an alkaline environment is the fundamental state of health.
+                            </p>
+                            <ul className="space-y-8">
+                                {[
+                                    { title: 'Wildcrafted Integrity', desc: 'No farm-raised moss. Only wild, ocean-grown minerals.' },
+                                    { title: 'Biological Iron', desc: 'Sourcing cellular oxygenation through organic plant based iron.' },
+                                    { title: 'Cellular Cleansing', desc: 'Removing the acidic load to allow for natural restoration.' }
+                                ].map((step, idx) => (
+                                    <li key={idx} className="flex gap-6 group">
+                                        <div className="w-12 h-12 rounded-2xl bg-primary-100 flex items-center justify-center flex-shrink-0 text-primary-700 font-bold text-sm italic group-hover:bg-primary-600 group-hover:text-white transition-all transform group-hover:rotate-12">
+                                            0{idx + 1}
+                                        </div>
+                                        <div>
+                                            <h4 className="font-bold text-earth-950 uppercase tracking-tight text-lg mb-2">{step.title}</h4>
+                                            <p className="text-stone-500 text-base leading-relaxed">{step.desc}</p>
+                                        </div>
+                                    </li>
+                                ))}
+                            </ul>
+                        </div>
+                        <div className="bg-earth-950 p-12 md:p-24 relative overflow-hidden group">
+                            <div className="absolute inset-0 opacity-40 group-hover:scale-110 transition-transform duration-[4s]">
+                                <img
+                                    src="https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?auto=format&fit=crop&q=80"
+                                    className="w-full h-full object-cover grayscale"
+                                    alt="Botanical background"
+                                />
                             </div>
-                        ))}
+                            <div className="relative z-10 h-full flex flex-col justify-center">
+                                <div className="mb-12 w-24 h-[2px] bg-secondary-500"></div>
+                                <h3 className="text-5xl font-serif font-bold text-white mb-8 leading-tight">Dr. Sebi Inspired. <br /><span className="text-secondary-400">Biological Proven.</span></h3>
+                                <p className="text-xl text-stone-400 mb-12 italic font-light leading-relaxed">&quot;If you put the right things in the body, the body will take care of itself. It is the alchemist within.&quot;</p>
+                                <Link href="/wisdom">
+                                    <button className="h-16 px-10 bg-secondary-600 hover:bg-secondary-500 text-stone-950 font-black uppercase tracking-widest text-sm rounded-xl transition-all flex items-center justify-center group w-full sm:w-auto">
+                                        Enter the Wisdom Archive
+                                        <Star className="ml-3 w-4 h-4 group-hover:rotate-90 transition-transform" />
+                                    </button>
+                                </Link>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </section>
 
-            {/* Featured Products */}
-            <section className="py-20 bg-stone-50">
+            {/* Featured Products Section */}
+            <section className="py-32">
                 <div className="container">
-                    <div className="flex justify-between items-end mb-12">
+                    <div className="flex flex-col md:flex-row justify-between items-end mb-24 gap-8">
                         <div>
-                            <h2 className="text-4xl font-serif font-bold text-stone-900 mb-2">Featured Products</h2>
-                            <p className="text-lg text-stone-600">Handpicked selections for your wellness journey</p>
+                            <div className="text-[10px] font-black uppercase tracking-[0.4em] text-secondary-500 mb-4">The Manifest</div>
+                            <h2 className="text-6xl font-serif font-bold text-white tracking-tighter">Biological <span className="text-secondary-400 italic">Formulas.</span></h2>
                         </div>
                         <Link href="/shop">
-                            <Button variant="outline">
-                                View All
-                                <ArrowRight className="ml-2 w-4 h-4" />
-                            </Button>
+                            <button className="h-14 px-8 border border-earth-700 hover:border-earth-500 text-white font-bold text-xs uppercase tracking-widest rounded-xl transition-all group flex items-center justify-center">
+                                Explore Catalog
+                                <ArrowRight className="ml-3 w-4 h-4 group-hover:translate-x-2 transition-transform" />
+                            </button>
                         </Link>
                     </div>
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-                        {[1, 2, 3, 4].map((item) => (
-                            <div key={item} className="bg-white border border-stone-200 rounded-lg overflow-hidden hover:border-green-500 transition-colors">
-                                <div className="relative h-64 bg-stone-900 overflow-hidden">
-                                    <img
-                                        src={`https://images.unsplash.com/photo-${[
-                                            '1512106374988-c95f566d339c',
-                                            '1612810806563-4cb1a2e71c1b',
-                                            '1544367567-0f2fcb009e0b',
-                                            '1505575967455-40e256f7377c'
-                                        ][item - 1]}?auto=format&fit=crop&q=80`}
-                                        alt={`Product ${item}`}
-                                        className="w-full h-full object-cover"
-                                    />
-                                </div>
-                                <div className="p-6">
-                                    <h3 className="font-serif text-xl font-bold text-stone-900 mb-2">
-                                        Herbal Blend {item}
-                                    </h3>
-                                    <p className="text-stone-600 text-sm mb-4">
-                                        Natural wellness support for daily vitality
-                                    </p>
-                                    <div className="flex items-center justify-between">
-                                        <span className="text-2xl font-bold text-green-600">$29.99</span>
-                                        <Button size="sm">Add to Cart</Button>
-                                    </div>
-                                </div>
+
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10">
+                        {featuredProducts.length > 0 ? featuredProducts.map((product) => (
+                            <ProductCard
+                                key={product.id}
+                                name={product.name}
+                                slug={product.slug}
+                                price={product.price}
+                                compareAtPrice={product.compareAtPrice ?? undefined}
+                                images={product.images}
+                                category={product.category}
+                            />
+                        )) : (
+                            <div className="col-span-full py-20 text-center text-earth-600 font-bold uppercase text-sm tracking-[0.2em] animate-pulse">
+                                Identifying Alchemical Entities...
                             </div>
-                        ))}
+                        )}
                     </div>
                 </div>
             </section>
 
-            {/* Subscription CTA */}
-            <section className="py-20 bg-green-600 text-white">
+            {/* Wisdom Archive (Latest Blogs) */}
+            <section className="py-32 bg-earth-900/40 border-y border-earth-800 backdrop-blur-3xl">
                 <div className="container">
-                    <div className="max-w-3xl mx-auto text-center">
-                        <h2 className="text-4xl md:text-5xl font-serif font-bold mb-6">
-                            Subscribe & Save 20%
-                        </h2>
-                        <p className="text-xl mb-8 text-green-50">
-                            Get your favorite herbal products delivered monthly and enjoy exclusive member benefits
-                        </p>
-                        <Link href="/subscriptions">
-                            <Button variant="outline" size="lg" className="bg-white text-green-600 hover:bg-green-50 border-white">
-                                View Subscription Plans
-                                <ArrowRight className="ml-2 w-5 h-5" />
-                            </Button>
-                        </Link>
-                    </div>
-                </div>
-            </section>
-
-            {/* Latest Blog Posts */}
-            <section className="py-20 bg-white">
-                <div className="container">
-                    <div className="flex justify-between items-end mb-12">
+                    <div className="flex justify-between items-end mb-24">
                         <div>
-                            <h2 className="section-title">Wellness Insights</h2>
-                            <p className="section-subtitle">
-                                Expert tips and herbal wisdom from our blog
-                            </p>
+                            <div className="text-[10px] font-black uppercase tracking-[0.4em] text-primary-400 mb-4">Intellectual Property</div>
+                            <h2 className="text-6xl font-serif font-bold text-white tracking-tighter">Wisdom <span className="text-primary-400 italic">Archive.</span></h2>
                         </div>
-                        <Link href="/blog">
-                            <Button variant="outline">
-                                Read More
-                                <ArrowRight className="ml-2 w-4 h-4" />
-                            </Button>
+                        <Link href="/wisdom">
+                            <button className="h-14 px-8 bg-earth-800 text-white font-bold text-xs uppercase tracking-widest rounded-xl hover:bg-earth-700 transition-all">
+                                View Full Repository
+                            </button>
                         </Link>
                     </div>
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-                        {[1, 2, 3].map((item) => (
-                            <article key={item} className="card group">
-                                <div className="relative h-48 bg-earth-900 overflow-hidden">
-                                    <img
-                                        src={`https://images.unsplash.com/photo-${[
-                                            '1540491731775-681283db5630',
-                                            '1512428559083-560dfc18b20e',
-                                            '1512428559083-560dfc282209'
-                                        ][item - 1]}?auto=format&fit=crop&q=80`}
-                                        alt="Herbal Knowledge"
-                                        className="w-full h-full object-cover opacity-60 group-hover:scale-105 transition-transform duration-500"
-                                    />
-                                </div>
-                                <div className="p-6">
-                                    <div className="flex items-center gap-2 mb-3">
-                                        <span className="badge-secondary">Wellness</span>
-                                        <span className="text-sm text-earth-500">Dec 28, 2024</span>
+
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
+                        {latestBlogs.length > 0 ? latestBlogs.map((post) => (
+                            <Link key={post.id} href={`/wisdom/blogs/${post.slug}`} className="group block">
+                                <article className="premium-card h-full bg-earth-950/50 border-earth-800 group-hover:border-primary-500/30 transition-all duration-700 overflow-hidden relative">
+                                    <div className="aspect-video overflow-hidden">
+                                        <img
+                                            src={post.coverImage || "/images/wisdom-placeholder.jpg"}
+                                            alt={post.title}
+                                            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-[2s] opacity-70 group-hover:opacity-100"
+                                        />
                                     </div>
-                                    <h3 className="font-serif text-xl font-bold text-earth-900 mb-2 group-hover:text-primary-600 transition-colors">
-                                        The Benefits of Herbal Wellness
-                                    </h3>
-                                    <p className="text-earth-600 text-sm mb-4">
-                                        Discover how incorporating herbal remedies into your daily routine can transform your health...
-                                    </p>
-                                    <Link href={`/blog/post-${item}`} className="text-primary-600 font-medium hover:text-primary-700 inline-flex items-center">
-                                        Read More
-                                        <ArrowRight className="ml-1 w-4 h-4" />
-                                    </Link>
-                                </div>
-                            </article>
-                        ))}
+                                    <div className="p-10">
+                                        <div className="flex items-center gap-4 mb-6">
+                                            <span className="text-[10px] font-black uppercase tracking-widest text-primary-400">{post.category}</span>
+                                            <div className="w-1 h-1 bg-earth-800 rounded-full"></div>
+                                            <span className="text-earth-500 text-[10px] font-bold uppercase tracking-widest">{new Date(post.createdAt).toLocaleDateString()}</span>
+                                        </div>
+                                        <h3 className="text-2xl font-serif font-bold text-white mb-6 leading-tight group-hover:text-primary-400 transition-colors">
+                                            {post.title}
+                                        </h3>
+                                        <div className="flex items-center gap-3 text-stone-500 font-black text-[10px] uppercase tracking-widest group-hover:text-white transition-colors">
+                                            Extract Knowledge <ArrowRight size={12} className="group-hover:translate-x-2 transition-transform" />
+                                        </div>
+                                    </div>
+                                </article>
+                            </Link>
+                        )) : (
+                            <div className="col-span-full py-20 text-center text-earth-600 font-bold uppercase text-xs tracking-[0.2em]">
+                                Synchronizing Wisdom Streams...
+                            </div>
+                        )}
                     </div>
                 </div>
             </section>
 
-            {/* Newsletter Section */}
-            <section className="py-20 bg-earth-900 text-white">
-                <div className="container">
-                    <div className="max-w-2xl mx-auto text-center">
-                        <h2 className="text-4xl font-serif font-bold mb-4">
-                            Join Our Wellness Community
+            {/* Newsletter Manifestation */}
+            <section className="py-32 relative overflow-hidden">
+                <div className="absolute inset-0 bg-primary-900/10 pointer-events-none" />
+                <div className="container relative z-10">
+                    <div className="max-w-4xl mx-auto glass-premium p-16 md:p-24 rounded-[4rem] text-center border-white/5 relative group overflow-hidden">
+                        <div className="absolute inset-0 bg-gradient-to-br from-primary-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-[3s]" />
+                        <h2 className="text-4xl md:text-5xl font-serif font-bold text-white mb-6 tracking-tighter">
+                            Join the Alchemist <span className="text-primary-400 italic">Circle.</span>
                         </h2>
-                        <p className="text-earth-300 mb-8">
-                            Get exclusive tips, special offers, and herbal wisdom delivered to your inbox
+                        <p className="text-lg text-stone-400 mb-12 max-w-xl mx-auto italic font-light leading-relaxed">
+                            Subscribe to receive alchemical protocols, botanical discoveries, and exclusive authority updates.
                         </p>
-                        <form className="flex flex-col sm:flex-row gap-4 max-w-md mx-auto">
+                        <form className="flex flex-col sm:flex-row gap-4 max-w-lg mx-auto relative z-10">
                             <input
                                 type="email"
-                                placeholder="Enter your email"
-                                className="flex-1 px-6 py-3 rounded-lg bg-earth-800 border border-earth-700 text-white placeholder-earth-400 focus:outline-none focus:ring-2 focus:ring-primary-500"
+                                placeholder="Identification (Email)"
+                                className="flex-1 h-16 px-8 rounded-2xl bg-earth-950/80 border border-earth-800 text-white placeholder-earth-600 focus:outline-none focus:border-primary-500 transition-all font-medium"
+                                required
                             />
-                            <Button type="submit" size="lg">
-                                Subscribe
-                            </Button>
+                            <button type="submit" className="h-16 px-10 bg-primary-600 hover:bg-primary-500 text-white font-black uppercase tracking-widest text-xs rounded-2xl transition-all shadow-xl shadow-primary-900/20">
+                                Authenticate
+                            </button>
                         </form>
                     </div>
                 </div>
             </section>
-        </>
+        </div>
     )
 }

@@ -11,6 +11,35 @@ export const metadata: Metadata = {
     description: 'Book a personalized herbal wellness consultation with our certified herbalists.',
 }
 
+const consultationTypes = [
+    {
+        id: 'initial',
+        name: 'Initial Bio-Assessment',
+        price: 150,
+        duration: 60,
+        description: 'Comprehensive evaluation of your biological terrain and alkaline transition path.',
+        features: ['Full Health History Review', 'Alkaline Protocol Design', 'Herbal Prescription', 'Follow-up Plan'],
+    },
+    {
+        id: 'follow-up',
+        name: 'Follow-up Session',
+        price: 85,
+        duration: 30,
+        description: 'Progress review and protocol adjustments for ongoing biological restoration.',
+        features: ['Results Analysis', 'Formula Fine-tuning', 'Q&A Support', 'Next Steps'],
+    },
+    {
+        id: 'intensive',
+        name: 'Intensive Protocol',
+        price: 250,
+        duration: 90,
+        description: 'Deep dive for complex requirements and thorough biological optimization.',
+        features: ['Advanced Terrain Analysis', 'Extended Support', 'Custom Master Formulas', 'Priority Support'],
+    },
+]
+
+const availableTimes = ['09:00', '10:00', '11:00', '13:00', '14:00', '15:00', '16:00']
+
 export default function ConsultationsPage() {
     return (
         <div className="py-24 bg-stone-950 min-h-screen relative overflow-hidden">

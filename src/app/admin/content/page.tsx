@@ -1,25 +1,79 @@
-/**
- * HECTIC Intellectual Property - Copyright 2024
- * Black Moss & Herbs Platform - Content Hub Dashboard
- */
-
 "use client";
 
-import { useState } from 'react';
-import { PenTool, Send, Globe, MessageSquare, CheckCircle, RefreshCw, Layers } from 'lucide-react';
+import { useState, useEffect } from 'react';
+import { PenTool, Send, Globe, MessageSquare, CheckCircle, RefreshCw, Layers, Library, Trash2, Edit2, Plus, X, Play, Loader2 } from 'lucide-react';
 import Button from '@/components/Button';
 
+interface BlogPost {
+    id: string;
+    title: string;
+    category: string;
+    createdAt: string;
+    published: boolean;
+}
+
+interface Video {
+    id: string;
+    title: string;
+    category: string;
+    createdAt: string;
+    url: string;
+}
+
 export default function ContentHubPage() {
+    const [view, setView] = useState<'AI' | 'LIBRARY'>('AI');
     const [topic, setTopic] = useState('');
     const [persona, setPersona] = useState('ALCHEMIST');
     const [generating, setGenerating] = useState(false);
     const [draft, setDraft] = useState<any>(null);
     const [deployed, setDeployed] = useState(false);
 
+    // Library State
+    const [blogs, setBlogs] = useState<BlogPost[]>([]);
+    const [videos, setVideos] = useState<Video[]>([]);
+    const [loadingLibrary, setLoadingLibrary] = useState(false);
+
+    useEffect(() => {
+        if (view === 'LIBRARY') {
+            fetchLibrary();
+        }
+    }, [view]);
+
+    const fetchLibrary = async () => {
+        setLoadingLibrary(true);
+        try {
+            const [blogsRes, videosRes] = await Promise.all([
+                fetch('/api/admin/blogs'),
+                fetch('/api/admin/videos')
+            ]);
+            const [blogsData, videosData] = await Promise.all([
+                blogsRes.json(),
+                videosRes.json()
+            ]);
+            setBlogs(blogsData);
+            setVideos(videosData);
+        } catch (error) {
+            console.error('Library sync failure:', error);
+        } finally {
+            setLoadingLibrary(false);
+        }
+    };
+
+    const deleteBlog = async (id: string) => {
+        if (!confirm('Purge this wisdom record?')) return;
+        await fetch(`/api/admin/blogs/${id}`, { method: 'DELETE' });
+        fetchLibrary();
+    };
+
+    const deleteVideo = async (id: string) => {
+        if (!confirm('Purge this visual record?')) return;
+        await fetch(`/api/admin/videos/${id}`, { method: 'DELETE' });
+        fetchLibrary();
+    };
+
     const handleGenerate = async () => {
         setGenerating(true);
         setDeployed(false);
-        // Simulate API call to AIContentService
         setTimeout(() => {
             setDraft({
                 title: topic === 'Sea Moss' ? 'The Alchemical Bio-Chemistry of Sea Moss' : `Autonomous Insights: ${topic}`,
@@ -34,150 +88,206 @@ export default function ContentHubPage() {
         }, 1500);
     };
 
-    const handleDeploy = () => {
+    const handleDeploy = async () => {
         setGenerating(true);
-        setTimeout(() => {
+        try {
+            const res = await fetch('/api/admin/blogs', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    title: draft.title,
+                    content: draft.content,
+                    excerpt: draft.excerpt,
+                    category: 'Wisdom',
+                    published: true
+                })
+            });
+            if (res.ok) setDeployed(true);
+        } catch (error) {
+            console.error('Deployment failure:', error);
+        } finally {
             setGenerating(false);
-            setDeployed(true);
-        }, 1000);
+        }
     };
 
     return (
         <div className="py-12 bg-earth-950 min-h-screen relative overflow-hidden">
-            {/* Background Pattern */}
-            <div className="absolute inset-0 bg-[url('/patterns/sea-moss-pattern.svg')] bg-repeat opacity-5 pointer-events-none" />
-
             <div className="container relative z-10">
-                <div className="mb-12 flex justify-between items-end">
+                <div className="mb-12 flex flex-col md:flex-row md:items-end justify-between gap-6">
                     <div>
                         <h1 className="font-serif text-5xl font-bold bg-gradient-to-r from-secondary-400 to-primary-400 bg-clip-text text-transparent mb-2">
-                            Content Intelligence
+                            Wisdom Authority
                         </h1>
-                        <p className="text-earth-400 text-lg">Autonomous Omnichannel Distribution Hub</p>
+                        <p className="text-earth-400 text-lg">Autonomous & Manual Alchemical Content Hub</p>
                     </div>
-                    <div className="bg-earth-900/50 p-1.5 rounded-2xl border border-earth-800 backdrop-blur-md">
+                    <div className="bg-earth-900/50 p-1.5 rounded-2xl border border-earth-800 backdrop-blur-md flex">
                         <button
-                            onClick={() => setPersona('ALCHEMIST')}
-                            className={`px-6 py-2.5 rounded-xl font-bold text-xs uppercase tracking-widest transition-all ${persona === 'ALCHEMIST' ? 'bg-primary-600 text-white shadow-lg shadow-primary-900/20' : 'text-earth-500 hover:text-earth-300'}`}>
-                            Alchemist
+                            onClick={() => setView('AI')}
+                            className={`px-6 py-2.5 rounded-xl font-bold text-xs uppercase tracking-widest transition-all flex items-center gap-2 ${view === 'AI' ? 'bg-primary-600 text-white shadow-lg shadow-primary-900/20' : 'text-earth-500 hover:text-earth-300'}`}>
+                            <RefreshCw size={14} className={view === 'AI' ? 'animate-spin-slow' : ''} />
+                            AI Synthesis
                         </button>
                         <button
-                            onClick={() => setPersona('CLINICAL')}
-                            className={`px-6 py-2.5 rounded-xl font-bold text-xs uppercase tracking-widest transition-all ${persona === 'CLINICAL' ? 'bg-primary-600 text-white shadow-lg shadow-primary-900/20' : 'text-earth-500 hover:text-earth-300'}`}>
-                            Clinical
+                            onClick={() => setView('LIBRARY')}
+                            className={`px-6 py-2.5 rounded-xl font-bold text-xs uppercase tracking-widest transition-all flex items-center gap-2 ${view === 'LIBRARY' ? 'bg-secondary-600 text-white shadow-lg shadow-secondary-900/20' : 'text-earth-500 hover:text-earth-300'}`}>
+                            <Library size={14} />
+                            Manifest Library
                         </button>
                     </div>
                 </div>
 
-                <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-                    {/* controls */}
-                    <div className="lg:col-span-1 space-y-6">
-                        <div className="card p-8 border border-earth-800 bg-earth-900/40 backdrop-blur-xl">
-                            <h2 className="text-xl font-bold text-white mb-6 flex items-center gap-3">
-                                <div className="w-10 h-10 bg-primary-900/20 rounded-xl flex items-center justify-center border border-primary-700/30">
-                                    <PenTool className="w-5 h-5 text-primary-400" />
+                {view === 'AI' ? (
+                    <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
+                        <div className="lg:col-span-1 space-y-6">
+                            <div className="card p-8 border border-earth-800 bg-earth-900/40 backdrop-blur-xl rounded-[2rem]">
+                                <h2 className="text-xl font-bold text-white mb-6 flex items-center gap-3">
+                                    <div className="w-10 h-10 bg-primary-900/20 rounded-xl flex items-center justify-center border border-primary-700/30">
+                                        <PenTool className="w-5 h-5 text-primary-400" />
+                                    </div>
+                                    Authority Draft
+                                </h2>
+                                <div className="space-y-6">
+                                    <div>
+                                        <label className="block text-xs font-bold text-earth-500 uppercase tracking-widest mb-3">Target Topic</label>
+                                        <input
+                                            type="text"
+                                            className="w-full bg-earth-950/50 border border-earth-800 rounded-2xl py-4 px-6 text-white text-sm focus:outline-none focus:border-secondary-500 transition-colors"
+                                            placeholder="e.g. Sea Moss Bio-Chemistry"
+                                            value={topic}
+                                            onChange={(e) => setTopic(e.target.value)}
+                                        />
+                                    </div>
+                                    <Button
+                                        className="w-full h-16 rounded-2xl text-sm font-black uppercase tracking-widest shadow-xl overflow-hidden group relative"
+                                        onClick={handleGenerate}
+                                        disabled={generating || !topic}>
+                                        <span className="relative z-10 flex items-center justify-center gap-2">
+                                            {generating ? <Loader2 className="animate-spin" /> : <Layers className="w-5 h-5" />}
+                                            Consult The Council
+                                        </span>
+                                    </Button>
                                 </div>
-                                Authority Draft
-                            </h2>
-                            <div className="space-y-6">
-                                <div>
-                                    <label className="block text-xs font-bold text-earth-500 uppercase tracking-widest mb-3">Target Topic</label>
-                                    <input
-                                        type="text"
-                                        className="w-full bg-earth-950/50 border border-earth-800 rounded-2xl py-4 px-6 text-white focus:outline-none focus:border-secondary-500 transition-colors"
-                                        placeholder="e.g. Sea Moss Bio-Chemistry"
-                                        value={topic}
-                                        onChange={(e) => setTopic(e.target.value)}
-                                    />
+                            </div>
+                        </div>
+
+                        <div className="lg:col-span-2">
+                            {draft ? (
+                                <div className="space-y-6 animate-in fade-in duration-700">
+                                    <div className="card border border-earth-800 bg-earth-900/60 backdrop-blur-xl p-10 rounded-[3rem]">
+                                        <div className="flex justify-between items-start mb-10">
+                                            <div className="flex items-center gap-3">
+                                                <span className="px-4 py-1.5 bg-secondary-900/30 text-secondary-400 border border-secondary-800/50 rounded-full text-[10px] font-black uppercase tracking-widest">
+                                                    ALCHEMIST VERIFIED
+                                                </span>
+                                            </div>
+                                            <Button
+                                                onClick={handleDeploy}
+                                                disabled={deployed || generating}
+                                                className="px-8 h-12 rounded-xl text-xs font-black uppercase tracking-widest">
+                                                {deployed ? <CheckCircle className="mr-2" size={16} /> : <Send className="mr-2" size={16} />}
+                                                {deployed ? 'Dispersion Complete' : 'Execute Publishing'}
+                                            </Button>
+                                        </div>
+                                        <h1 className="text-4xl font-serif font-bold text-white mb-6 leading-tight">{draft.title}</h1>
+                                        <div className="space-y-6 text-earth-300">
+                                            <p className="font-medium text-xl text-secondary-400 italic bg-secondary-950/20 p-6 rounded-2xl border-l-4 border-secondary-500">
+                                                "{draft.excerpt}"
+                                            </p>
+                                            <div className="p-8 bg-earth-950/50 rounded-3xl border border-earth-800 leading-relaxed">
+                                                {draft.content}
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
-                                <Button
-                                    className="w-full py-5 rounded-2xl text-lg font-bold shadow-xl overflow-hidden group relative"
-                                    onClick={handleGenerate}
-                                    disabled={generating || !topic}>
-                                    <div className="absolute inset-0 bg-gradient-to-r from-primary-600 to-secondary-600 opacity-100 group-hover:opacity-90 transition-opacity" />
-                                    <span className="relative flex items-center justify-center gap-2">
-                                        {generating ? <RefreshCw className="animate-spin" /> : <Layers className="w-5 h-5" />}
-                                        Consult The Council
-                                    </span>
+                            ) : (
+                                <div className="card h-full flex flex-col items-center justify-center p-20 text-center border-dashed border-2 border-earth-800/50 bg-earth-900/20 rounded-[3rem]">
+                                    <PenTool className="w-12 h-12 text-earth-700 mb-6" />
+                                    <h3 className="text-2xl font-serif font-bold text-earth-300 mb-2">Command Post Dormant</h3>
+                                    <p className="text-earth-500 text-sm max-w-sm mx-auto">Provide a topic core to initiate the autonomous HECTIC content production cycle.</p>
+                                </div>
+                            )}
+                        </div>
+                    </div>
+                ) : (
+                    <div className="space-y-12 animate-in fade-in slide-in-from-bottom-4 duration-500">
+                        {/* Blogs Section */}
+                        <section>
+                            <div className="flex items-center justify-between mb-6">
+                                <h3 className="text-2xl font-serif font-bold text-white uppercase tracking-tight">Wisdom Repository</h3>
+                                <Button className="h-10 px-4 rounded-lg text-[10px] font-black uppercase tracking-widest">
+                                    <Plus size={14} className="mr-1" /> New Entry
                                 </Button>
                             </div>
-                        </div>
-
-                        <div className="card p-8 border border-earth-800 bg-secondary-900/5 backdrop-blur-xl relative overflow-hidden">
-                            <div className="absolute -right-8 -top-8 w-32 h-32 bg-secondary-500/5 blur-3xl rounded-full" />
-
-                            <h2 className="text-xl font-bold text-white mb-3">Global Dispersion</h2>
-                            <p className="text-sm text-earth-400 mb-6 font-medium">Auto-dispatch current draft to the HECTIC ecosystem:</p>
-                            <div className="space-y-4">
-                                <div className="flex items-center gap-3 text-sm text-earth-300 font-medium">
-                                    <Globe className="w-5 h-5 text-secondary-400" /> Website Wisdom Hub
-                                </div>
-                                <div className="flex items-center gap-3 text-sm text-earth-300 font-medium">
-                                    <MessageSquare className="w-5 h-5 text-secondary-400" /> Instagram & X (Twitter)
-                                </div>
-                                <div className="flex items-center gap-3 text-sm text-earth-300 font-medium">
-                                    <Send className="w-5 h-5 text-secondary-400" /> Member Network (Email)
-                                </div>
+                            <div className="card border border-earth-800 bg-earth-900/60 backdrop-blur-xl rounded-[2.5rem] overflow-hidden">
+                                <table className="w-full text-left">
+                                    <thead className="bg-earth-950/80 border-b border-earth-800">
+                                        <tr>
+                                            <th className="px-8 py-5 text-[10px] font-black uppercase tracking-widest text-earth-500">Title</th>
+                                            <th className="px-8 py-5 text-[10px] font-black uppercase tracking-widest text-earth-500">Category</th>
+                                            <th className="px-8 py-5 text-[10px] font-black uppercase tracking-widest text-earth-500">Date</th>
+                                            <th className="px-8 py-5 text-[10px] font-black uppercase tracking-widest text-earth-500 text-right">Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody className="divide-y divide-earth-800/30">
+                                        {loadingLibrary ? (
+                                            <tr><td colSpan={4} className="px-8 py-10 text-center text-earth-500 uppercase text-[10px] font-black tracking-widest">Wait for Sync...</td></tr>
+                                        ) : blogs.length > 0 ? blogs.map(blog => (
+                                            <tr key={blog.id} className="hover:bg-white/5 transition-all">
+                                                <td className="px-8 py-5 font-bold text-white text-sm">{blog.title}</td>
+                                                <td className="px-8 py-5 text-earth-400 text-xs uppercase font-black">{blog.category}</td>
+                                                <td className="px-8 py-5 text-earth-500 text-xs">{new Date(blog.createdAt).toLocaleDateString()}</td>
+                                                <td className="px-8 py-5 text-right">
+                                                    <div className="flex items-center justify-end gap-2">
+                                                        <button onClick={() => deleteBlog(blog.id)} className="p-2 bg-red-950/30 text-red-500 border border-red-900/30 rounded-lg hover:bg-red-900/50 transition-all">
+                                                            <Trash2 size={14} />
+                                                        </button>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        )) : (
+                                            <tr><td colSpan={4} className="px-8 py-10 text-center text-earth-500 uppercase text-[10px] font-black tracking-widest">No Wisdom Manifested yet.</td></tr>
+                                        )}
+                                    </tbody>
+                                </table>
                             </div>
-                        </div>
+                        </section>
+
+                        {/* Videos Section */}
+                        <section>
+                            <div className="flex items-center justify-between mb-6">
+                                <h3 className="text-2xl font-serif font-bold text-white uppercase tracking-tight">Visual Wisdom</h3>
+                                <Button className="h-10 px-4 rounded-lg text-[10px] font-black uppercase tracking-widest">
+                                    <Plus size={14} className="mr-1" /> New Entry
+                                </Button>
+                            </div>
+                            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                                {loadingLibrary ? (
+                                    <div className="col-span-full py-20 text-center text-earth-500 uppercase text-[10px] font-black tracking-widest">Synchronizing Visuals...</div>
+                                ) : videos.length > 0 ? videos.map(video => (
+                                    <div key={video.id} className="card border border-earth-800 bg-earth-900/60 rounded-[2rem] overflow-hidden group">
+                                        <div className="aspect-video bg-earth-800 relative">
+                                            <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity bg-earth-950/60">
+                                                <Play className="text-white w-12 h-12" />
+                                            </div>
+                                        </div>
+                                        <div className="p-6">
+                                            <div className="text-[10px] font-black text-secondary-500 uppercase tracking-widest mb-2">{video.category}</div>
+                                            <h4 className="font-bold text-white mb-4 line-clamp-1">{video.title}</h4>
+                                            <div className="flex items-center justify-between">
+                                                <span className="text-[10px] text-earth-500">{new Date(video.createdAt).toLocaleDateString()}</span>
+                                                <button onClick={() => deleteVideo(video.id)} className="text-red-500 hover:text-red-400 transition-colors">
+                                                    <Trash2 size={16} />
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                )) : (
+                                    <div className="col-span-full py-20 text-center text-earth-500 uppercase text-[10px] font-black tracking-widest">No Visual Authority established yet.</div>
+                                )}
+                            </div>
+                        </section>
                     </div>
-
-                    {/* Preview Area */}
-                    <div className="lg:col-span-2">
-                        {draft ? (
-                            <div className="space-y-6 animate-fade-in">
-                                <div className="card border border-earth-800 bg-earth-900/60 backdrop-blur-xl p-10">
-                                    <div className="flex justify-between items-start mb-10">
-                                        <div className="flex items-center gap-3">
-                                            <span className="px-4 py-1.5 bg-secondary-900/30 text-secondary-400 border border-secondary-800/50 rounded-full text-[10px] font-black uppercase tracking-widest">
-                                                {persona} VERIFIED
-                                            </span>
-                                            <span className="px-4 py-1.5 bg-primary-900/30 text-primary-400 border border-primary-800/50 rounded-full text-[10px] font-black uppercase tracking-widest">
-                                                AI-GENERATED
-                                            </span>
-                                        </div>
-                                        <Button
-                                            variant="secondary"
-                                            onClick={handleDeploy}
-                                            disabled={deployed || generating}
-                                            className="px-8 py-3 rounded-xl font-bold">
-                                            {deployed ? <CheckCircle className="mr-2" /> : <Send className="mr-2" />}
-                                            {deployed ? 'Dispersion Complete' : 'Execute Global Publishing'}
-                                        </Button>
-                                    </div>
-                                    <h1 className="text-4xl font-serif font-bold text-white mb-6 leading-tight">{draft.title}</h1>
-                                    <div className="space-y-6 text-earth-300">
-                                        <p className="font-medium text-xl text-secondary-400 italic bg-secondary-950/20 p-6 rounded-2xl border-l-4 border-secondary-500">
-                                            "{draft.excerpt}"
-                                        </p>
-                                        <div className="p-8 bg-earth-950/50 rounded-3xl border border-earth-800 leading-relaxed text-lg">
-                                            {draft.content}
-                                        </div>
-                                    </div>
-
-                                    <div className="mt-12 grid grid-cols-2 gap-6">
-                                        <div className="p-6 bg-earth-900/50 border border-earth-800 rounded-2xl">
-                                            <h4 className="font-black text-[10px] mb-4 uppercase text-earth-500 tracking-[0.2em]">Instagram Dispersion</h4>
-                                            <p className="text-sm italic text-earth-300 font-medium leading-relaxed">"{draft.socials.instagram}"</p>
-                                        </div>
-                                        <div className="p-6 bg-earth-900/50 border border-earth-800 rounded-2xl">
-                                            <h4 className="font-black text-[10px] mb-4 uppercase text-earth-500 tracking-[0.2em]">X (Twitter) Dispersion</h4>
-                                            <p className="text-sm italic text-earth-300 font-medium leading-relaxed">"{draft.socials.twitter}"</p>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        ) : (
-                            <div className="card h-full flex flex-col items-center justify-center p-20 text-center border-dashed border-2 border-earth-800/50 bg-earth-900/20 rounded-[3rem]">
-                                <div className="w-24 h-24 bg-earth-900 border border-earth-800 rounded-3xl flex items-center justify-center mb-8 shadow-2xl">
-                                    <PenTool className="w-10 h-10 text-earth-700" />
-                                </div>
-                                <h3 className="text-3xl font-serif font-bold text-earth-300 mb-4">Command Post Dormant</h3>
-                                <p className="text-earth-500 text-lg max-w-sm mx-auto font-medium">Provide a topic core to initiate the autonomous HECTIC content production cycle.</p>
-                            </div>
-                        )}
-                    </div>
-                </div>
+                )}
             </div>
         </div>
     );
