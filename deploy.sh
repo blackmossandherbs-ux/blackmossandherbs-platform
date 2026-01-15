@@ -32,6 +32,6 @@ ssh -i /Users/romeovalentine/.ssh/hectic_cicd -o StrictHostKeyChecking=no root@1
   echo 'Restarting PM2 Process...'
   pm2 restart blackmoss-platform || pm2 start npm --name "blackmoss-platform" -- start
   
-  echo '✅ Deployment Complete!'
+  echo "✅ Deployment Complete!"
 EOF
- Site is live at https://blackmossandherbs.com"
+echo "🎉 Site is live at https://blackmossandherbs.com"

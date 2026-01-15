@@ -1,3 +1,5 @@
+"use client";
+
 /**
  * HECTIC Intellectual Property - Copyright 2024
  * Black Moss & Herbs Platform - System Sentinel
