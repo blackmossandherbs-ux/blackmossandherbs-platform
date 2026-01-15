@@ -6,121 +6,77 @@ import { Metadata } from 'next'
 import Link from 'next/link'
 import { Calendar, Clock, ArrowRight, Sparkles, Leaf } from 'lucide-react'
 import { formatDate } from '@/lib/utils'
+import { prisma } from '@/lib/prisma'
+
+export const dynamic = 'force-dynamic'
 
 export const metadata: Metadata = {
-    title: 'Blog - Black Moss & Herbs',
-    description: 'Wellness insights, herbal wisdom, and health tips from our experts.',
+    title: 'The Journal - Black Moss & Herbs',
+    description: 'A curated stream of botanical wisdom, alchemical research, and biological reporting.',
 }
 
-const posts = [
-    {
-        id: '1',
-        title: 'The Complete Guide to Sea Moss Benefits',
-        slug: 'complete-guide-sea-moss-benefits',
-        excerpt: 'Discover the incredible health benefits of sea moss and how to incorporate it into your daily routine for optimal wellness.',
-        category: 'Superfoods',
-        publishedAt: new Date('2024-12-20'),
-        readTime: 8,
-        featured: true,
-    },
-    {
-        id: '2',
-        title: '10 Herbs for Natural Immune Support',
-        slug: '10-herbs-natural-immune-support',
-        excerpt: 'Learn about powerful herbs that can help strengthen your immune system naturally and keep you healthy year-round.',
-        category: 'Immune Health',
-        publishedAt: new Date('2024-12-18'),
-        readTime: 6,
-    },
-    {
-        id: '3',
-        title: 'Adaptogens: Nature\'s Stress Solution',
-        slug: 'adaptogens-stress-solution',
-        excerpt: 'Explore how adaptogenic herbs can help your body manage stress and maintain balance in today\'s fast-paced world.',
-        category: 'Wellness',
-        publishedAt: new Date('2024-12-15'),
-        readTime: 7,
-    },
-    {
-        id: '4',
-        title: 'Herbal Tea Blends for Better Sleep',
-        slug: 'herbal-tea-blends-better-sleep',
-        excerpt: 'Discover calming herbal tea combinations that can help you achieve deeper, more restful sleep naturally.',
-        category: 'Sleep & Relaxation',
-        publishedAt: new Date('2024-12-12'),
-        readTime: 5,
-    },
-    {
-        id: '5',
-        title: 'Turmeric: The Golden Spice of Life',
-        slug: 'turmeric-golden-spice',
-        excerpt: 'Uncover the anti-inflammatory properties of turmeric and creative ways to add it to your diet.',
-        category: 'Nutrition',
-        publishedAt: new Date('2024-12-10'),
-        readTime: 6,
-    },
-    {
-        id: '6',
-        title: 'Building Your Home Herbal Apothecary',
-        slug: 'building-home-herbal-apothecary',
-        excerpt: 'A beginner\'s guide to creating your own collection of essential herbs and natural remedies at home.',
-        category: 'DIY Wellness',
-        publishedAt: new Date('2024-12-08'),
-        readTime: 10,
-    },
-]
+async function getPosts() {
+    return await prisma.blogPost.findMany({
+        where: { published: true },
+        orderBy: { publishedAt: 'desc' },
+        take: 12
+    })
+}
 
-const categories = ['All', 'Superfoods', 'Immune Health', 'Wellness', 'Sleep & Relaxation', 'Nutrition', 'DIY Wellness']
+export default async function BlogPage() {
+    const posts = await getPosts()
+    const featuredPost = posts[0]
+    const regularPosts = posts.slice(1)
+    const categories = ['All', 'Clinical Reports', 'Herbal Wisdom', 'Ecological News', 'Bio-Electric']
 
-export default function BlogPage() {
     return (
-        <div className="py-12">
+        <div className="py-20 bg-earth-950 min-h-screen">
             <div className="container">
-                {/* Header */}
-                <div className="mb-16 text-center max-w-3xl mx-auto">
-                    <h1 className="text-6xl font-serif font-bold text-white mb-6">Herbal Wisdom</h1>
-                    <p className="text-earth-400 text-xl leading-relaxed">
-                        Access our curated libraries of botanical research, biological restoration protocols, and alchemical education.
+                {/* Journalist Header */}
+                <div className="mb-20 text-center border-b border-earth-800 pb-12">
+                    <p className="text-secondary-500 text-xs font-black uppercase tracking-[0.3em] mb-4">The Hectic Chronicle</p>
+                    <h1 className="text-6xl md:text-8xl font-serif font-black text-white mb-6 tracking-tighter">
+                        THE JOURNAL
+                    </h1>
+                    <p className="text-earth-400 text-xl max-w-2xl mx-auto font-serif italic">
+                        "Reporting from the frontlines of biological warfare and cellular restoration."
                     </p>
                 </div>
 
-                {/* Interactive Wisdom Hub */}
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-20">
+                {/* Interactive Tickers */}
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-20">
                     <Link href="/quiz">
-                        <div className="group card p-10 border border-primary-500/20 bg-primary-950/10 hover:bg-primary-900/20 transition-all rounded-[3rem] relative overflow-hidden">
-                            <div className="flex items-start justify-between mb-8">
-                                <div className="w-16 h-16 bg-primary-900/40 border border-primary-500/30 rounded-2xl flex items-center justify-center group-hover:scale-110 transition-transform">
-                                    <Sparkles className="w-8 h-8 text-primary-400" />
-                                </div>
-                                <ArrowRight className="text-earth-700 group-hover:text-primary-400 group-hover:translate-x-2 transition-all" />
+                        <div className="group card p-8 border border-earth-800 bg-earth-900/30 hover:bg-earth-800/50 transition-all rounded-2xl flex items-center justify-between">
+                            <div>
+                                <h3 className="text-xl font-bold text-white mb-1">Bio-Analysis</h3>
+                                <p className="text-earth-500 text-sm">Take the diagnostic.</p>
                             </div>
-                            <h2 className="text-3xl font-serif font-bold text-white mb-4">Bio-Restoration Quiz</h2>
-                            <p className="text-earth-400 text-lg mb-0 leading-relaxed">Discover your custom herbal protocol through our clinical data-driven diagnostic tool.</p>
+                            <div className="w-10 h-10 bg-primary-900/20 rounded-full flex items-center justify-center text-primary-400 group-hover:scale-110 transition-transform">
+                                <Sparkles size={18} />
+                            </div>
                         </div>
                     </Link>
-
                     <Link href="/wisdom/registry">
-                        <div className="group card p-10 border border-emerald-500/20 bg-emerald-950/10 hover:bg-emerald-900/20 transition-all rounded-[3rem] relative overflow-hidden">
-                            <div className="flex items-start justify-between mb-8">
-                                <div className="w-16 h-16 bg-emerald-900/40 border border-emerald-500/30 rounded-2xl flex items-center justify-center group-hover:scale-110 transition-transform">
-                                    <Leaf className="w-8 h-8 text-emerald-400" />
-                                </div>
-                                <ArrowRight className="text-earth-700 group-hover:text-emerald-400 group-hover:translate-x-2 transition-all" />
+                        <div className="group card p-8 border border-earth-800 bg-earth-900/30 hover:bg-earth-800/50 transition-all rounded-2xl flex items-center justify-between">
+                            <div>
+                                <h3 className="text-xl font-bold text-white mb-1">Food Registry</h3>
+                                <p className="text-earth-500 text-sm">Alkaline vs Acidic index.</p>
                             </div>
-                            <h2 className="text-3xl font-serif font-bold text-white mb-4">Nutritional Registry</h2>
-                            <p className="text-earth-400 text-lg mb-0 leading-relaxed">A clinical directory of Dr. Sebi-approved vs. acidic foods for cellular harmony.</p>
+                            <div className="w-10 h-10 bg-secondary-900/20 rounded-full flex items-center justify-center text-secondary-400 group-hover:scale-110 transition-transform">
+                                <Leaf size={18} />
+                            </div>
                         </div>
                     </Link>
                 </div>
 
                 {/* Categories */}
-                <div className="flex flex-wrap gap-3 mb-12">
+                <div className="flex flex-wrap justify-center gap-4 mb-16">
                     {categories.map((category) => (
                         <button
                             key={category}
-                            className={`px-6 py-2 rounded-full font-medium transition-all ${category === 'All'
-                                ? 'bg-primary-600 text-white'
-                                : 'bg-white text-earth-700 hover:bg-earth-100 border border-earth-200'
+                            className={`px-6 py-2 rounded-full font-bold text-xs uppercase tracking-widest transition-all ${category === 'All'
+                                ? 'bg-white text-black'
+                                : 'bg-earth-900 text-earth-500 hover:text-white border border-earth-800'
                                 }`}
                         >
                             {category}
@@ -128,78 +84,83 @@ export default function BlogPage() {
                     ))}
                 </div>
 
-                {/* Featured Post */}
-                {posts.filter(p => p.featured).map((post) => (
-                    <Link key={post.id} href={`/blog/${post.slug}`}>
-                        <article className="card mb-12 overflow-hidden group hover:scale-[1.02] transition-transform">
-                            <div className="grid grid-cols-1 lg:grid-cols-2">
-                                <div className="h-64 lg:h-auto bg-gradient-to-br from-primary-200 to-secondary-200 flex items-center justify-center">
-                                    <span className="text-8xl">📚</span>
-                                </div>
-                                <div className="p-8 lg:p-12 flex flex-col justify-center">
-                                    <div className="flex items-center gap-3 mb-4">
-                                        <span className="badge-primary">Featured</span>
-                                        <span className="badge-secondary">{post.category}</span>
+                {posts.length > 0 ? (
+                    <>
+                        {/* Featured High-Impact Post */}
+                        {featuredPost && (
+                            <Link href={`/blog/${featuredPost.slug}`}>
+                                <article className="relative rounded-[2.5rem] overflow-hidden mb-20 group cursor-pointer border border-earth-800">
+                                    <div className="absolute inset-0 bg-gradient-to-t from-black via-black/50 to-transparent z-10" />
+                                    <div className="h-[600px] bg-earth-800 relative">
+                                        {/* Fallback pattern if no image */}
+                                        <div className="absolute inset-0 bg-[url('/patterns/topography.svg')] opacity-10" />
+                                        {featuredPost.coverImage && (
+                                            <div
+                                                className="absolute inset-0 bg-cover bg-center transition-transform duration-1000 group-hover:scale-105"
+                                                style={{ backgroundImage: `url(${featuredPost.coverImage})` }}
+                                            />
+                                        )}
                                     </div>
-                                    <h2 className="text-3xl lg:text-4xl font-serif font-bold text-earth-900 mb-4 group-hover:text-primary-600 transition-colors">
-                                        {post.title}
-                                    </h2>
-                                    <p className="text-earth-600 text-lg mb-6">
-                                        {post.excerpt}
-                                    </p>
-                                    <div className="flex items-center gap-6 text-sm text-earth-500">
-                                        <div className="flex items-center gap-2">
-                                            <Calendar className="w-4 h-4" />
-                                            {formatDate(post.publishedAt)}
+                                    <div className="absolute bottom-0 left-0 right-0 p-8 md:p-16 z-20">
+                                        <div className="flex items-center gap-4 mb-6">
+                                            <span className="bg-secondary-500 text-black px-4 py-1.5 rounded-full text-xs font-black uppercase tracking-widest"> Breaking News</span>
+                                            <span className="text-white text-xs font-bold uppercase tracking-widest border-l border-white/30 pl-4">{featuredPost.category}</span>
                                         </div>
-                                        <div className="flex items-center gap-2">
-                                            <Clock className="w-4 h-4" />
-                                            {post.readTime} min read
+                                        <h2 className="text-4xl md:text-6xl font-serif font-bold text-white mb-6 max-w-4xl leading-none group-hover:text-secondary-400 transition-colors">
+                                            {featuredPost.title}
+                                        </h2>
+                                        <p className="text-earth-200 text-lg md:text-xl max-w-2xl mb-8 line-clamp-2">
+                                            {featuredPost.excerpt}
+                                        </p>
+                                        <div className="flex items-center gap-2 text-white font-bold uppercase text-xs tracking-widest group-hover:translate-x-4 transition-transform">
+                                            Read Full Report <ArrowRight size={14} />
                                         </div>
                                     </div>
-                                </div>
-                            </div>
-                        </article>
-                    </Link>
-                ))}
+                                </article>
+                            </Link>
+                        )}
 
-                {/* Blog Grid */}
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                    {posts.filter(p => !p.featured).map((post) => (
-                        <Link key={post.id} href={`/blog/${post.slug}`}>
-                            <article className="card group h-full">
-                                <div className="h-48 bg-gradient-to-br from-earth-200 to-earth-300 flex items-center justify-center">
-                                    <span className="text-6xl">📖</span>
-                                </div>
-                                <div className="p-6">
-                                    <div className="flex items-center gap-2 mb-3">
-                                        <span className="badge-secondary text-xs">{post.category}</span>
-                                    </div>
-                                    <h3 className="font-serif text-xl font-bold text-earth-900 mb-3 group-hover:text-primary-600 transition-colors line-clamp-2">
-                                        {post.title}
-                                    </h3>
-                                    <p className="text-earth-600 text-sm mb-4 line-clamp-3">
-                                        {post.excerpt}
-                                    </p>
-                                    <div className="flex items-center justify-between text-xs text-earth-500 mb-4">
-                                        <div className="flex items-center gap-1">
-                                            <Calendar className="w-3 h-3" />
-                                            {formatDate(post.publishedAt)}
+                        {/* News Feed Grid */}
+                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                            {regularPosts.map((post) => (
+                                <Link key={post.id} href={`/blog/${post.slug}`}>
+                                    <article className="card bg-transparent border-t border-earth-800 rounded-none pt-8 hover:border-earth-600 transition-colors group">
+                                        <div className="aspect-[4/3] bg-earth-900 rounded-2xl mb-6 overflow-hidden relative border border-earth-800">
+                                            {post.coverImage ? (
+                                                <div
+                                                    className="absolute inset-0 bg-cover bg-center group-hover:scale-105 transition-transform duration-700"
+                                                    style={{ backgroundImage: `url(${post.coverImage})` }}
+                                                />
+                                            ) : (
+                                                <div className="absolute inset-0 flex items-center justify-center text-earth-700 text-4xl">📰</div>
+                                            )}
                                         </div>
-                                        <div className="flex items-center gap-1">
-                                            <Clock className="w-3 h-3" />
-                                            {post.readTime} min
+                                        <div className="flex items-center gap-3 mb-4 text-xs font-bold uppercase tracking-widest text-secondary-500">
+                                            <span>{post.category}</span>
+                                            <span className="text-earth-700">•</span>
+                                            <span className="text-earth-500">{formatDate(post.publishedAt || post.createdAt)}</span>
                                         </div>
-                                    </div>
-                                    <div className="text-primary-600 font-medium text-sm inline-flex items-center">
-                                        Read More
-                                        <ArrowRight className="ml-1 w-4 h-4" />
-                                    </div>
-                                </div>
-                            </article>
-                        </Link>
-                    ))}
-                </div>
+                                        <h3 className="text-2xl font-serif font-bold text-white mb-3 group-hover:text-primary-400 transition-colors leading-tight">
+                                            {post.title}
+                                        </h3>
+                                        <p className="text-earth-500 text-sm line-clamp-3 leading-relaxed mb-4">
+                                            {post.excerpt}
+                                        </p>
+                                        <div className="text-earth-600 text-xs font-bold uppercase tracking-widest group-hover:text-white transition-colors">
+                                            Read Report →
+                                        </div>
+                                    </article>
+                                </Link>
+                            ))}
+                        </div>
+                    </>
+                ) : (
+                    <div className="text-center py-20 border border-dashed border-earth-800 rounded-3xl">
+                        <div className="text-6xl mb-4">📡</div>
+                        <h3 className="text-2xl font-serif font-bold text-white mb-2">Signal Quiet</h3>
+                        <p className="text-earth-500">The Council is currently compiling reports. Check back shortly.</p>
+                    </div>
+                )}
             </div>
         </div>
     )

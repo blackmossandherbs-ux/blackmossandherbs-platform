@@ -26,21 +26,21 @@ const GUIDES: Guide[] = [
         name: 'The Alchemist',
         description: 'Scientific Herbalism',
         icon: Bot,
-        initialMessage: "Peace. I am the platform's digital consciousness, functioning as The Alchemist. I provide biological perspectives and traditional herbal frameworks. One specific insight is available per inquiry; deeper alignment requires a subscription or consultation. How can I assist you today?"
+        initialMessage: "Peace, friend. I'm here to chat about health in a real way. No pressure, just honest wisdom about herbs and how they work with your body. What's been going on with you?"
     },
     {
         id: 'herbalist',
         name: 'The Herbalist',
         description: 'Grounded Wisdom',
         icon: User,
-        initialMessage: "Welcome. I am the Herbalist. I focus on rhythmic wellness, hormonal balance, and tissue recovery. I offer one grounded framework for free; personalized protocols require a consultation. What are you looking to nourish?"
+        initialMessage: "Hey there. I focus on the rhythm of the body—hormones, rest, and recovery. Think of me as a friend who knows the plants. How are you feeling today?"
     },
     {
         id: 'clinical',
         name: 'The Clinical Lens',
         description: 'Evidence-Neutral',
         icon: Stethoscope,
-        initialMessage: "Greetings. I provide a faith-neutral, biological perspective on herbal support. I can outline one framework today; specific safety screenings and protocols are reserved for consultations. What is your biological inquiry?"
+        initialMessage: "Hello. I look at herbs through a biological lens, but I keep it simple. If you have questions about specific conditions or just want to understand the 'why' behind a remedy, I'm here."
     }
 ];
 
