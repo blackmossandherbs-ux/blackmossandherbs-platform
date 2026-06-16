@@ -17,11 +17,17 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     if (!post) return { title: 'Post Not Found' }
 
     return {
-        title: `${post.title} - Black Moss & Herbs`,
+        title: `${post.title} | Black Moss & Herbs`,
         description: post.excerpt,
+        alternates: { canonical: `https://blackmossandherbs.com/blog/${post.slug}` },
         openGraph: {
-            images: post.coverImage ? [post.coverImage] : []
-        }
+            title: post.title,
+            description: post.excerpt ?? undefined,
+            url: `https://blackmossandherbs.com/blog/${post.slug}`,
+            type: 'article',
+            publishedTime: (post.publishedAt || post.createdAt).toISOString(),
+            images: post.coverImage ? [{ url: post.coverImage, alt: post.title }] : [],
+        },
     }
 }
 
@@ -32,7 +38,31 @@ export default async function BlogPostPage({ params }: Props) {
 
     if (!post) notFound()
 
+    const articleSchema = {
+        '@context': 'https://schema.org',
+        '@type': 'Article',
+        headline: post.title,
+        description: post.excerpt,
+        image: post.coverImage ?? undefined,
+        datePublished: (post.publishedAt || post.createdAt).toISOString(),
+        dateModified: post.updatedAt.toISOString(),
+        author: {
+            '@type': 'Organization',
+            name: 'Black Moss & Herbs',
+            url: 'https://blackmossandherbs.com',
+        },
+        publisher: {
+            '@type': 'Organization',
+            name: 'Black Moss & Herbs',
+            logo: { '@type': 'ImageObject', url: 'https://blackmossandherbs.com/images/logo.png' },
+        },
+        url: `https://blackmossandherbs.com/blog/${post.slug}`,
+        mainEntityOfPage: `https://blackmossandherbs.com/blog/${post.slug}`,
+    }
+
     return (
+        <>
+        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(articleSchema) }} />
         <article className="min-h-screen bg-earth-50 pb-20">
             {/* Hero Header */}
             <div className="relative h-[60vh] bg-earth-900 overflow-hidden">
@@ -109,5 +139,6 @@ export default async function BlogPostPage({ params }: Props) {
                 </div>
             </div>
         </article>
+        </>
     )
 }

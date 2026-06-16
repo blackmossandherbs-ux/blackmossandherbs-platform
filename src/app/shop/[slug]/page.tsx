@@ -14,14 +14,20 @@ export async function generateMetadata({ params }: { params: { slug: string } })
     const product = await ProductService.getProductBySlug(params.slug)
 
     if (!product) {
-        return {
-            title: 'Product Not Found',
-        }
+        return { title: 'Product Not Found' }
     }
 
     return {
-        title: `${product.name} - Black Moss & Herbs`,
+        title: `${product.name} | Black Moss & Herbs`,
         description: product.description,
+        alternates: { canonical: `https://blackmossandherbs.com/shop/${product.slug}` },
+        openGraph: {
+            title: `${product.name} | Black Moss & Herbs`,
+            description: product.description,
+            url: `https://blackmossandherbs.com/shop/${product.slug}`,
+            images: product.images[0] ? [{ url: product.images[0], alt: product.name }] : [],
+            type: 'website',
+        },
     }
 }
 
@@ -36,7 +42,39 @@ export default async function ProductPage({ params }: { params: { slug: string }
         ? Math.round(((product.compareAtPrice - product.price) / product.compareAtPrice) * 100)
         : 0
 
+    const productSchema = {
+        '@context': 'https://schema.org',
+        '@type': 'Product',
+        name: product.name,
+        description: product.description,
+        image: product.images,
+        url: `https://blackmossandherbs.com/shop/${product.slug}`,
+        brand: { '@type': 'Brand', name: 'Black Moss & Herbs' },
+        offers: {
+            '@type': 'Offer',
+            priceCurrency: 'GBP',
+            price: (product.price / 100).toFixed(2),
+            availability: product.stock > 0 ? 'https://schema.org/InStock' : 'https://schema.org/OutOfStock',
+            url: `https://blackmossandherbs.com/shop/${product.slug}`,
+            seller: { '@type': 'Organization', name: 'Black Moss & Herbs' },
+            priceValidUntil: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString().split('T')[0],
+        },
+    }
+
+    const breadcrumbSchema = {
+        '@context': 'https://schema.org',
+        '@type': 'BreadcrumbList',
+        itemListElement: [
+            { '@type': 'ListItem', position: 1, name: 'Home', item: 'https://blackmossandherbs.com' },
+            { '@type': 'ListItem', position: 2, name: 'Shop', item: 'https://blackmossandherbs.com/shop' },
+            { '@type': 'ListItem', position: 3, name: product.name, item: `https://blackmossandherbs.com/shop/${product.slug}` },
+        ],
+    }
+
     return (
+        <>
+            <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(productSchema) }} />
+            <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }} />
         <div className="py-24 bg-earth-950 min-h-screen relative overflow-hidden">
             {/* Background Texture */}
             <div className="absolute inset-0 bg-[url('/patterns/sea-moss-pattern.svg')] bg-repeat opacity-5 pointer-events-none" />
@@ -168,5 +206,6 @@ export default async function ProductPage({ params }: { params: { slug: string }
                 </div>
             </div>
         </div>
+        </>
     )
 }

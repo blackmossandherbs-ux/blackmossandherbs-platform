@@ -19,10 +19,20 @@ const PERSONA_LABELS: Record<string, { name: string; role: string }> = {
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
     const post = await prisma.blogPost.findUnique({ where: { slug: params.slug } })
     if (!post) return { title: 'Article Not Found' }
+    const persona = post.authorPersona ? PERSONA_LABELS[post.authorPersona] : null
     return {
-        title: `${post.title} - Black Moss & Herbs`,
-        description: post.excerpt,
-        openGraph: { images: post.coverImage ? [post.coverImage] : [] }
+        title: `${post.title} | Black Moss & Herbs`,
+        description: post.excerpt ?? undefined,
+        alternates: { canonical: `https://blackmossandherbs.com/wisdom/blogs/${post.slug}` },
+        openGraph: {
+            title: post.title,
+            description: post.excerpt ?? undefined,
+            url: `https://blackmossandherbs.com/wisdom/blogs/${post.slug}`,
+            type: 'article',
+            publishedTime: (post.publishedAt || post.createdAt).toISOString(),
+            authors: persona ? [persona.name] : undefined,
+            images: post.coverImage ? [{ url: post.coverImage, alt: post.title }] : [],
+        },
     }
 }
 
@@ -35,6 +45,26 @@ export default async function WisdomBlogPostPage({ params }: Props) {
 
     const persona = post.authorPersona ? PERSONA_LABELS[post.authorPersona] : null
 
+    const articleSchema = {
+        '@context': 'https://schema.org',
+        '@type': 'Article',
+        headline: post.title,
+        description: post.excerpt,
+        image: post.coverImage ?? undefined,
+        datePublished: (post.publishedAt || post.createdAt).toISOString(),
+        dateModified: post.updatedAt.toISOString(),
+        author: persona
+            ? { '@type': 'Person', name: persona.name, jobTitle: persona.role }
+            : { '@type': 'Organization', name: 'Black Moss & Herbs' },
+        publisher: {
+            '@type': 'Organization',
+            name: 'Black Moss & Herbs',
+            logo: { '@type': 'ImageObject', url: 'https://blackmossandherbs.com/images/logo.png' },
+        },
+        url: `https://blackmossandherbs.com/wisdom/blogs/${post.slug}`,
+        mainEntityOfPage: `https://blackmossandherbs.com/wisdom/blogs/${post.slug}`,
+    }
+
     // Related articles
     const related = await prisma.blogPost.findMany({
         where: { published: true, category: post.category, id: { not: post.id } },
@@ -44,6 +74,8 @@ export default async function WisdomBlogPostPage({ params }: Props) {
     })
 
     return (
+        <>
+        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(articleSchema) }} />
         <div className="min-h-screen bg-stone-950 pb-32 relative overflow-hidden">
             {/* Background */}
             <div className="absolute inset-0 pointer-events-none opacity-20">
@@ -165,5 +197,6 @@ export default async function WisdomBlogPostPage({ params }: Props) {
                 )}
             </div>
         </div>
+        </>
     )
 }
