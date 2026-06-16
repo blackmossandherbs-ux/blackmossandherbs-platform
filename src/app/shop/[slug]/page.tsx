@@ -53,7 +53,7 @@ export default async function ProductPage({ params }: { params: { slug: string }
         offers: {
             '@type': 'Offer',
             priceCurrency: 'GBP',
-            price: (product.price / 100).toFixed(2),
+            price: product.price.toFixed(2),
             availability: product.stock > 0 ? 'https://schema.org/InStock' : 'https://schema.org/OutOfStock',
             url: `https://blackmossandherbs.com/shop/${product.slug}`,
             seller: { '@type': 'Organization', name: 'Black Moss & Herbs' },
@@ -93,7 +93,7 @@ export default async function ProductPage({ params }: { params: { slug: string }
                                 {discount > 0 && (
                                     <div className="absolute top-8 left-8">
                                         <span className="px-6 py-2 bg-secondary-500 text-stone-950 text-[10px] font-black uppercase tracking-widest rounded-full shadow-2xl">
-                                            -{discount}% Authority
+                                            -{discount}% Off
                                         </span>
                                     </div>
                                 )}
@@ -114,9 +114,9 @@ export default async function ProductPage({ params }: { params: { slug: string }
                             <span className="text-[10px] font-black uppercase tracking-[0.3em] text-primary-400">{product.category}</span>
                             <div className="h-1 w-1 bg-earth-800 rounded-full"></div>
                             {product.stock > 0 ? (
-                                <span className="text-[10px] font-bold uppercase tracking-widest text-emerald-400">Available</span>
+                                <span className="text-[10px] font-bold uppercase tracking-widest text-emerald-400">In Stock</span>
                             ) : (
-                                <span className="text-[10px] font-bold uppercase tracking-widest text-red-400">Dormant</span>
+                                <span className="text-[10px] font-bold uppercase tracking-widest text-red-400">Out of Stock</span>
                             )}
                         </div>
 
@@ -135,7 +135,7 @@ export default async function ProductPage({ params }: { params: { slug: string }
                                 ))}
                             </div>
                             <span className="text-earth-400 text-xs font-bold uppercase tracking-widest">
-                                Clinical Excellence Verified
+                                Wildcrafted &amp; Verified
                             </span>
                         </div>
 
@@ -185,22 +185,25 @@ export default async function ProductPage({ params }: { params: { slug: string }
                             </div>
                         </div>
 
-                        {/* Technical Matrix */}
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        {/* Wellness Goals */}
+                        {product.therapeuticGoals?.length > 0 && (
                             <div className="p-6 bg-earth-950/50 border border-earth-800 rounded-2xl">
-                                <h3 className="font-black text-[10px] mb-3 uppercase text-earth-500 tracking-[0.2em]">Therapeutic Goals</h3>
+                                <h3 className="text-xs font-bold mb-3 uppercase text-earth-500 tracking-widest">Wellness Goals</h3>
                                 <div className="flex flex-wrap gap-2">
-                                    {product.therapeuticGoals?.map((goal: string) => (
-                                        <span key={goal} className="px-3 py-1 bg-white/5 border border-white/10 text-[9px] font-bold text-earth-400 rounded-lg">
+                                    {product.therapeuticGoals.map((goal: string) => (
+                                        <span key={goal} className="px-3 py-1 bg-primary-900/30 border border-primary-800/40 text-xs text-primary-300 rounded-lg">
                                             {goal}
                                         </span>
                                     ))}
                                 </div>
                             </div>
-                            <div className="p-6 bg-earth-950/50 border border-earth-800 rounded-2xl">
-                                <h3 className="font-black text-[10px] mb-3 uppercase text-earth-500 tracking-[0.2em]">Biometric ID</h3>
-                                <div className="text-secondary-400 font-mono text-xs uppercase">Entity_ALC_{product.id.slice(-8)}</div>
-                            </div>
+                        )}
+
+                        {/* Trust row */}
+                        <div className="flex flex-wrap gap-4 pt-2 text-xs text-earth-500">
+                            <span>🌿 Wildcrafted &amp; natural</span>
+                            <span>🚚 Free UK delivery over £40</span>
+                            <span>🔄 14-day returns</span>
                         </div>
                     </div>
                 </div>

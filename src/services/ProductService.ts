@@ -40,7 +40,7 @@ export class ProductService {
     /**
      * Fetch all products with filtering and sorting
      */
-    static async getProducts(filters?: ProductFilters, sort?: ProductSort): Promise<Product[]> {
+    static async getProducts(filters?: ProductFilters, sort?: ProductSort, page = 1, perPage = 12): Promise<{ products: Product[]; total: number; pages: number }> {
         try {
             const where: any = {
                 active: true,
@@ -65,33 +65,34 @@ export class ProductService {
             if (sort) {
                 orderBy[sort.field] = sort.order;
             } else {
-                orderBy.createdAt = 'desc';
+                orderBy.featured = 'desc';
             }
 
-            const products = await prisma.product.findMany({
-                where,
-                orderBy,
-            });
+            const skip = (page - 1) * perPage;
+            const [total, products] = await Promise.all([
+                prisma.product.count({ where }),
+                prisma.product.findMany({ where, orderBy, skip, take: perPage }),
+            ]);
 
-            return products.map(p => {
+            const mapped = products.map(p => {
                 let images = p.images;
                 if ((p.slug.includes('sea-moss') || p.name.toLowerCase().includes('sea moss')) && !p.images.some(img => img.includes('gold-sea-moss-gel'))) {
                     images = ['/images/products/gold-sea-moss-gel.png', ...p.images];
                 }
-
                 return {
                     ...p,
                     price: Number(p.price),
                     compareAtPrice: p.compareAtPrice ? Number(p.compareAtPrice) : undefined,
-                    // Inject visual authority images if missing/placeholder
-                    images: images,
+                    images,
                     isBundle: p.isBundle,
                     therapeuticGoals: p.therapeuticGoals,
                 };
             }) as Product[];
+
+            return { products: mapped, total, pages: Math.ceil(total / perPage) };
         } catch (error) {
-            console.error('[ProductService.getProducts] FAILURE:', error);
-            throw new Error('INDUSTRIAL_CATALOG_FAILURE: Could not retrieve product list.');
+            console.error('[ProductService.getProducts] error:', error);
+            throw new Error('Could not retrieve products.');
         }
     }
 

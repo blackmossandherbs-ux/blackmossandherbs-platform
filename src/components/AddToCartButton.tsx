@@ -37,7 +37,7 @@ export default function AddToCartButton({ slug, name, price, image, disabled }: 
                 </>
             ) : (
                 <>
-                    Manifest Formula
+                    Add to Cart
                     <ShoppingCart className="ml-3 w-5 h-5 group-hover:translate-x-1 transition-transform" />
                 </>
             )}
