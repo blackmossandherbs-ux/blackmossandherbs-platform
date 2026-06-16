@@ -1,0 +1,37 @@
+name: Deploy to Production
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    name: Deploy to blackmossandherbs.com
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+      - name: Deploy via SSH
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: 161.97.137.85
+          username: root
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          port: 22
+          command_timeout: 12m
+          script: |
+            cd /var/www/blackmossandherbs-platform
+            git pull origin main
+            bash fix-server.sh
+
+      - name: Verify site is live
+        run: |
+          sleep 10
+          STATUS=$(curl -s -o /dev/null -w "%{http_code}" https://blackmossandherbs.com || echo "000")
+          echo "Site returned HTTP $STATUS"
+          if [[ "$STATUS" == "200" || "$STATUS" == "301" || "$STATUS" == "302" ]]; then
+            echo "✅ Site is live!"
+          else
+            echo "⚠️  Site returned $STATUS — check server logs"
+          fi
