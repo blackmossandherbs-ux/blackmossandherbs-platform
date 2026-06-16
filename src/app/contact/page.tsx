@@ -1,3 +1,10 @@
+import ContactForm from '@/components/ContactForm'
+
+export const metadata = {
+    title: 'Contact Us - Black Moss & Herbs',
+    description: 'Get in touch with the Black Moss & Herbs team about your protocol, order, or wholesale enquiry.',
+}
+
 export default function ContactPage() {
     return (
         <div className="pt-32 pb-20 container min-h-screen">
@@ -18,21 +25,7 @@ export default function ContactPage() {
                         </div>
                     </div>
                 </div>
-                <form className="space-y-6 bg-earth-900/20 p-8 rounded-3xl border border-earth-800">
-                    <div>
-                        <label className="block text-sm font-bold text-earth-400 mb-2">Name</label>
-                        <input type="text" className="w-full bg-earth-950 border border-earth-800 rounded-xl px-4 py-3 text-white focus:border-secondary-500 outline-none" placeholder="Your Name" />
-                    </div>
-                    <div>
-                        <label className="block text-sm font-bold text-earth-400 mb-2">Email</label>
-                        <input type="email" className="w-full bg-earth-950 border border-earth-800 rounded-xl px-4 py-3 text-white focus:border-secondary-500 outline-none" placeholder="your@email.com" />
-                    </div>
-                    <div>
-                        <label className="block text-sm font-bold text-earth-400 mb-2">Message</label>
-                        <textarea rows={4} className="w-full bg-earth-950 border border-earth-800 rounded-xl px-4 py-3 text-white focus:border-secondary-500 outline-none" placeholder="How can we assist?" />
-                    </div>
-                    <button className="w-full py-4 bg-primary-600 hover:bg-primary-500 text-white font-bold rounded-xl transition-all">Send Message</button>
-                </form>
+                <ContactForm />
             </div>
         </div>
     );

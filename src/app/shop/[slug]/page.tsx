@@ -4,8 +4,9 @@
  */
 import { Metadata } from 'next'
 import { notFound } from 'next/navigation'
-import { ShoppingCart, Heart, Share2, Star, Check } from 'lucide-react'
+import { Heart, Share2, Star, Check } from 'lucide-react'
 import Button from '@/components/Button'
+import AddToCartButton from '@/components/AddToCartButton'
 import { formatPrice } from '@/lib/utils'
 import { ProductService } from '@/services/ProductService'
 
@@ -129,10 +130,13 @@ export default async function ProductPage({ params }: { params: { slug: string }
 
                         {/* Action Buttons */}
                         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-12">
-                            <Button size="lg" className="h-20 rounded-2xl text-lg font-bold group" disabled={product.stock === 0}>
-                                Manifest Formula
-                                <ShoppingCart className="ml-3 w-5 h-5 group-hover:translate-x-1 transition-transform" />
-                            </Button>
+                            <AddToCartButton
+                                slug={product.slug}
+                                name={product.name}
+                                price={product.price}
+                                image={product.images[0]}
+                                disabled={product.stock === 0}
+                            />
                             <div className="flex gap-4">
                                 <Button variant="outline" size="lg" className="h-20 flex-1 rounded-2xl border-earth-800 hover:border-earth-600">
                                     <Heart className="w-6 h-6" />

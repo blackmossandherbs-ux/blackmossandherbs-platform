@@ -6,6 +6,7 @@ import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '@/lib/auth';
+import { requireAdmin } from '@/lib/api-auth';
 
 export async function GET(req: Request) {
     try {
@@ -26,22 +27,26 @@ export async function GET(req: Request) {
     }
 }
 
+/**
+ * Adjust a user's loyalty points. Admin-only: previously any authenticated user
+ * could grant themselves unlimited points. Point awards from purchases should be
+ * driven server-side (e.g. the Stripe webhook), never by client requests.
+ */
 export async function POST(req: Request) {
+    const denied = await requireAdmin();
+    if (denied) return denied;
     try {
-        const session = await getServerSession(authOptions);
-        if (!session?.user?.email) {
-            return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+        const { email, amount } = await req.json();
+
+        if (!email || typeof amount !== 'number' || Number.isNaN(amount)) {
+            return NextResponse.json({ error: 'email and numeric amount are required.' }, { status: 400 });
         }
 
-        const { action, amount } = await req.json();
-
-        // Simple logic for awarding points based on purchase amount (simplified)
-        // In a real app, this would be triggered by a Stripe Webhook
         const updatedUser = await prisma.user.update({
-            where: { email: session.user.email },
+            where: { email },
             data: {
                 loyaltyPoints: {
-                    increment: Math.floor(amount || 0)
+                    increment: Math.floor(amount)
                 }
             }
         });

@@ -7,6 +7,7 @@ import './globals.css'
 import Header from '@/components/Header'
 import Footer from '@/components/Footer'
 import AIChatWidget from '@/components/AIChatWidget'
+import { CartProvider } from '@/context/CartContext'
 
 const inter = Inter({
     subsets: ['latin'],
@@ -36,12 +37,14 @@ export default function RootLayout({
     return (
         <html lang="en" className={`${inter.variable} ${playfair.variable}`}>
             <body>
-                <Header />
-                <main className="min-h-screen">
-                    {children}
-                </main>
-                <Footer />
-                <AIChatWidget />
+                <CartProvider>
+                    <Header />
+                    <main className="min-h-screen">
+                        {children}
+                    </main>
+                    <Footer />
+                    <AIChatWidget />
+                </CartProvider>
             </body>
         </html>
     )

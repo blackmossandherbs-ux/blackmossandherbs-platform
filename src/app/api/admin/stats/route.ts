@@ -4,8 +4,11 @@
  */
 import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
+import { requireAdmin } from '@/lib/api-auth';
 
 export async function GET() {
+    const denied = await requireAdmin();
+    if (denied) return denied;
     try {
         // 1. Total Revenue (Sum of all non-cancelled orders)
         const totalRevenue = await prisma.order.aggregate({

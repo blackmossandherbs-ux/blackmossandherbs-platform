@@ -8,6 +8,11 @@ import Button from '@/components/Button'
 import { ProductService } from '@/services/ProductService'
 import { BlogService } from '@/services/BlogService'
 import ProductCard from '@/components/ProductCard'
+import NewsletterForm from '@/components/NewsletterForm'
+
+// Renders at request time: the homepage reads featured products and posts from
+// the database, which is not available during a static build.
+export const dynamic = 'force-dynamic'
 
 export default async function HomePage() {
     const featuredProducts = await ProductService.getFeaturedProducts(4);
@@ -226,17 +231,15 @@ export default async function HomePage() {
                         <p className="text-lg text-stone-400 mb-12 max-w-xl mx-auto italic font-light leading-relaxed">
                             Subscribe to receive alchemical protocols, botanical discoveries, and exclusive authority updates.
                         </p>
-                        <form className="flex flex-col sm:flex-row gap-4 max-w-lg mx-auto relative z-10">
-                            <input
-                                type="email"
+                        <div className="max-w-lg mx-auto relative z-10">
+                            <NewsletterForm
                                 placeholder="Identification (Email)"
-                                className="flex-1 h-16 px-8 rounded-2xl bg-earth-950/80 border border-earth-800 text-white placeholder-earth-600 focus:outline-none focus:border-primary-500 transition-all font-medium"
-                                required
+                                buttonLabel="Authenticate"
+                                formClassName="flex flex-col sm:flex-row gap-4"
+                                inputClassName="flex-1 h-16 px-8 rounded-2xl bg-earth-950/80 border border-earth-800 text-white placeholder-earth-600 focus:outline-none focus:border-primary-500 transition-all font-medium"
+                                buttonClassName="h-16 px-10 bg-primary-600 hover:bg-primary-500 text-white font-black uppercase tracking-widest text-xs rounded-2xl transition-all shadow-xl shadow-primary-900/20 disabled:opacity-60 inline-flex items-center justify-center"
                             />
-                            <button type="submit" className="h-16 px-10 bg-primary-600 hover:bg-primary-500 text-white font-black uppercase tracking-widest text-xs rounded-2xl transition-all shadow-xl shadow-primary-900/20">
-                                Authenticate
-                            </button>
-                        </form>
+                        </div>
                     </div>
                 </div>
             </section>

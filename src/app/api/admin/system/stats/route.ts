@@ -6,8 +6,11 @@ import { NextResponse } from 'next/server';
 import os from 'os';
 import { execSync } from 'child_process';
 import { prisma } from '@/lib/prisma';
+import { requireAdmin } from '@/lib/api-auth';
 
 export async function GET() {
+    const denied = await requireAdmin();
+    if (denied) return denied;
     try {
         // System basic stats
         const uptime = os.uptime();

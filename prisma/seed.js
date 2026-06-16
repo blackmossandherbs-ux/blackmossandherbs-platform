@@ -147,13 +147,18 @@ extraHerbs.forEach(herb => {
 async function main() {
     console.log(`Seeding database...`);
 
-    // Create Admin User
-    const adminEmail = 'admin@blackmossandherbs.com';
+    // Create Admin User. Credentials are configurable via env so production
+    // deployments do not ship with a known default password.
+    const adminEmail = process.env.ADMIN_EMAIL || 'admin@blackmossandherbs.com';
+    const adminPassword = process.env.ADMIN_PASSWORD || 'Hectic2024!';
+    if (!process.env.ADMIN_PASSWORD) {
+        console.warn('⚠ ADMIN_PASSWORD not set — using the default password. Change it before going live.');
+    }
     const existingAdmin = await prisma.user.findUnique({ where: { email: adminEmail } });
 
     if (!existingAdmin) {
         console.log('Creating admin user...');
-        const hashedPassword = await bcrypt.hash('Hectic2024!', 10);
+        const hashedPassword = await bcrypt.hash(adminPassword, 10);
         await prisma.user.create({
             data: {
                 email: adminEmail,

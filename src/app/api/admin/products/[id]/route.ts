@@ -4,8 +4,11 @@
  */
 import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
+import { requireAdmin } from '@/lib/api-auth';
 
 export async function PATCH(req: Request, { params }: { params: { id: string } }) {
+    const denied = await requireAdmin();
+    if (denied) return denied;
     try {
         const { id } = params;
         const body = await req.json();
@@ -28,6 +31,8 @@ export async function PATCH(req: Request, { params }: { params: { id: string } }
 }
 
 export async function DELETE(req: Request, { params }: { params: { id: string } }) {
+    const denied = await requireAdmin();
+    if (denied) return denied;
     try {
         const { id } = params;
         await prisma.product.delete({

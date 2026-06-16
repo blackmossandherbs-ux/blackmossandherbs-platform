@@ -4,7 +4,7 @@
  */
 import { Metadata } from 'next'
 import { Check, Zap } from 'lucide-react'
-import Button from '@/components/Button'
+import SubscribeButton from '@/components/SubscribeButton'
 import { formatPrice } from '@/lib/utils'
 
 export const metadata: Metadata = {
@@ -15,6 +15,7 @@ export const metadata: Metadata = {
 const plans = [
     {
         id: '1',
+        key: 'starter' as const,
         name: 'Wellness Starter',
         price: 29.99,
         interval: 'month',
@@ -30,6 +31,7 @@ const plans = [
     },
     {
         id: '2',
+        key: 'plus' as const,
         name: 'Wellness Plus',
         price: 54.99,
         interval: 'month',
@@ -47,6 +49,7 @@ const plans = [
     },
     {
         id: '3',
+        key: 'pro' as const,
         name: 'Wellness Pro',
         price: 89.99,
         interval: 'month',
@@ -112,13 +115,7 @@ export default function SubscriptionsPage() {
                                     </div>
                                 </div>
 
-                                <Button
-                                    variant={plan.popular ? 'primary' : 'outline'}
-                                    className="w-full mb-6"
-                                    size="lg"
-                                >
-                                    Get Started
-                                </Button>
+                                <SubscribeButton plan={plan.key} popular={plan.popular} />
 
                                 <div className="space-y-3">
                                     {plan.features.map((feature, index) => (

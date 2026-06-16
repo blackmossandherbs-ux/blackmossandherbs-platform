@@ -1,6 +1,9 @@
+'use client'
+
 import Link from 'next/link'
-import { ShoppingCart, Star, Heart, ArrowRight } from 'lucide-react'
-import Button from './Button'
+import { ShoppingCart, ArrowRight, Check } from 'lucide-react'
+import { useState } from 'react'
+import { useCart } from '@/context/CartContext'
 
 interface ProductCardProps {
     name: string
@@ -35,7 +38,15 @@ export default function ProductCard({
     },
     isBundle
 }: ProductCardProps) {
-    const formatPrice = (cents: number) => `£${(cents / 100).toFixed(2)}`
+    const formatPrice = (amount: number) => `£${amount.toFixed(2)}`
+    const { addItem } = useCart()
+    const [added, setAdded] = useState(false)
+
+    const handleAdd = () => {
+        addItem({ slug, name, price, image: images?.[0] })
+        setAdded(true)
+        setTimeout(() => setAdded(false), 1500)
+    }
 
     return (
         <div className="bg-earth-900/40 backdrop-blur-md border border-earth-800/50 rounded-[2rem] overflow-hidden hover:border-primary-500/50 transition-all duration-700 group relative">
@@ -126,8 +137,12 @@ export default function ProductCard({
                             </span>
                         )}
                     </div>
-                    <button className="w-12 h-12 bg-white/5 rounded-full flex items-center justify-center border border-white/10 hover:bg-primary-600 hover:border-primary-600 transition-all text-white">
-                        <ShoppingCart className="w-5 h-5" />
+                    <button
+                        onClick={handleAdd}
+                        aria-label={`Add ${name} to cart`}
+                        className="w-12 h-12 bg-white/5 rounded-full flex items-center justify-center border border-white/10 hover:bg-primary-600 hover:border-primary-600 transition-all text-white"
+                    >
+                        {added ? <Check className="w-5 h-5 text-primary-400" /> : <ShoppingCart className="w-5 h-5" />}
                     </button>
                 </div>
             </div>

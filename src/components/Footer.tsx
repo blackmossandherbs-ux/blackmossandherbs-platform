@@ -2,7 +2,8 @@
  * HECTIC Intellectual Property - Copyright 2024
  */
 import Link from 'next/link'
-import { Facebook, Instagram, Twitter, Youtube, Mail } from 'lucide-react'
+import { Facebook, Instagram, Twitter, Youtube } from 'lucide-react'
+import NewsletterForm from '@/components/NewsletterForm'
 
 export default function Footer() {
     return (
@@ -102,17 +103,7 @@ export default function Footer() {
                         <p className="text-earth-300 text-sm mb-4">
                             Subscribe for wellness tips and exclusive offers.
                         </p>
-                        <form className="flex flex-col space-y-2">
-                            <input
-                                type="email"
-                                placeholder="Your email"
-                                className="px-4 py-2 rounded-lg bg-earth-800 border border-earth-700 text-earth-100 placeholder-earth-400 focus:outline-none focus:ring-2 focus:ring-primary-500"
-                            />
-                            <button type="submit" className="btn-primary">
-                                <Mail className="w-4 h-4 mr-2" />
-                                Subscribe
-                            </button>
-                        </form>
+                        <NewsletterForm layout="col" showMailIcon buttonLabel="Subscribe" />
                     </div>
                 </div>
 
@@ -123,14 +114,14 @@ export default function Footer() {
                     <div className="flex flex-col md:flex-row justify-between w-full items-center">
                         <p>&copy; {new Date().getFullYear()} Black Moss & Herbs. All rights reserved.</p>
                         <div className="flex space-x-6 mt-4 md:mt-0">
-                            <Link href="/privacy" className="hover:text-primary-400 transition-colors">
+                            <Link href="/legal/privacy" className="hover:text-primary-400 transition-colors">
                                 Privacy Policy
                             </Link>
-                            <Link href="/terms" className="hover:text-primary-400 transition-colors">
+                            <Link href="/legal/terms" className="hover:text-primary-400 transition-colors">
                                 Terms of Service
                             </Link>
-                            <Link href="/shipping" className="hover:text-primary-400 transition-colors">
-                                Shipping Policy
+                            <Link href="/faq" className="hover:text-primary-400 transition-colors">
+                                Shipping & FAQ
                             </Link>
                         </div>
                     </div>

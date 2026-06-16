@@ -4,8 +4,11 @@
  */
 import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
+import { requireAdmin } from '@/lib/api-auth';
 
 export async function GET() {
+    const denied = await requireAdmin();
+    if (denied) return denied;
     try {
         const videos = await prisma.video.findMany({
             orderBy: { createdAt: 'desc' }
@@ -18,6 +21,8 @@ export async function GET() {
 }
 
 export async function POST(req: Request) {
+    const denied = await requireAdmin();
+    if (denied) return denied;
     try {
         const data = await req.json();
         const video = await prisma.video.create({
@@ -28,7 +33,8 @@ export async function POST(req: Request) {
                 videoUrl: data.url,
                 thumbnail: data.thumbnail || '/images/placeholder.jpg',
                 category: data.category,
-                duration: data.duration || '0:00'
+                // duration is stored as seconds (Int); coerce or leave null
+                duration: data.duration ? parseInt(data.duration, 10) || null : null
             }
         });
         return NextResponse.json(video);

@@ -4,8 +4,11 @@
  */
 import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
+import { requireAdmin } from '@/lib/api-auth';
 
 export async function GET() {
+    const denied = await requireAdmin();
+    if (denied) return denied;
     try {
         const blogs = await prisma.blogPost.findMany({
             orderBy: { createdAt: 'desc' }
@@ -18,6 +21,8 @@ export async function GET() {
 }
 
 export async function POST(req: Request) {
+    const denied = await requireAdmin();
+    if (denied) return denied;
     try {
         const data = await req.json();
         const blog = await prisma.blogPost.create({

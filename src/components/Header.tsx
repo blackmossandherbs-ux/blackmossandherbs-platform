@@ -7,9 +7,19 @@
 import Link from 'next/link'
 import { useState } from 'react'
 import { ShoppingCart, Menu, X, User, Search } from 'lucide-react'
+import { useCart } from '@/context/CartContext'
+
+const NAV_ITEMS = [
+    { label: 'Shop', href: '/shop' },
+    { label: 'Subscriptions', href: '/subscriptions' },
+    { label: 'Wisdom', href: '/wisdom' },
+    { label: 'Videos', href: '/videos' },
+    { label: 'Consultations', href: '/consultations' },
+]
 
 export default function Header() {
     const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
+    const { count } = useCart()
 
     return (
         <header className="sticky top-0 z-50 py-4">
@@ -32,13 +42,13 @@ export default function Header() {
 
                     {/* Desktop Navigation */}
                     <div className="hidden md:flex items-center space-x-10">
-                        {['Shop', 'Subscriptions', 'Wisdom', 'Consultations'].map((item) => (
+                        {NAV_ITEMS.map((item) => (
                             <Link
-                                key={item}
-                                href={`/${item.toLowerCase()}`}
+                                key={item.href}
+                                href={item.href}
                                 className="text-stone-300 hover:text-amber-500 transition-all duration-300 font-bold text-sm uppercase tracking-widest relative group"
                             >
-                                {item}
+                                {item.label}
                                 <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-amber-500 transition-all duration-300 group-hover:w-full"></span>
                             </Link>
                         ))}
@@ -56,9 +66,11 @@ export default function Header() {
                             <div className="p-3 bg-white/5 rounded-full border border-white/5 group-hover:border-amber-500/50 transition-all duration-500">
                                 <ShoppingCart className="w-5 h-5 text-stone-300 group-hover:text-amber-500" />
                             </div>
-                            <span className="absolute -top-1 -right-1 bg-amber-500 text-stone-950 font-black text-[10px] rounded-full w-5 h-5 flex items-center justify-center shadow-lg">
-                                0
-                            </span>
+                            {count > 0 && (
+                                <span className="absolute -top-1 -right-1 bg-amber-500 text-stone-950 font-black text-[10px] rounded-full w-5 h-5 flex items-center justify-center shadow-lg">
+                                    {count}
+                                </span>
+                            )}
                         </Link>
 
                         {/* Mobile Menu Button */}
@@ -73,25 +85,24 @@ export default function Header() {
 
                 {/* Mobile Menu */}
                 {mobileMenuOpen && (
-                    <div className="md:hidden py-4 animate-slide-down bg-earth-950/95 backdrop-blur-xl border-t border-earth-800">
-                        <div className="flex flex-col space-y-4 px-4">
-                            <Link href="/shop" className="text-earth-200 hover:text-secondary-400 transition-colors font-medium">
-                                Shop
-                            </Link>
-                            <Link href="/subscriptions" className="text-earth-200 hover:text-secondary-400 transition-colors font-medium">
-                                Subscriptions
-                            </Link>
-                            <Link href="/library" className="text-earth-200 hover:text-secondary-400 transition-colors font-medium">
-                                Library
-                            </Link>
-                            <Link href="/blog" className="text-earth-200 hover:text-secondary-400 transition-colors font-medium">
+                    <div className="md:hidden mt-2 py-4 animate-slide-down bg-earth-950/95 backdrop-blur-xl border border-earth-800 rounded-2xl">
+                        <div className="flex flex-col space-y-4 px-6">
+                            {NAV_ITEMS.map((item) => (
+                                <Link
+                                    key={item.href}
+                                    href={item.href}
+                                    onClick={() => setMobileMenuOpen(false)}
+                                    className="text-earth-200 hover:text-secondary-400 transition-colors font-medium uppercase tracking-widest text-sm"
+                                >
+                                    {item.label}
+                                </Link>
+                            ))}
+                            <Link
+                                href="/blog"
+                                onClick={() => setMobileMenuOpen(false)}
+                                className="text-earth-200 hover:text-secondary-400 transition-colors font-medium uppercase tracking-widest text-sm"
+                            >
                                 Blog
-                            </Link>
-                            <Link href="/videos" className="text-earth-200 hover:text-secondary-400 transition-colors font-medium">
-                                Videos
-                            </Link>
-                            <Link href="/consultations" className="text-earth-200 hover:text-secondary-400 transition-colors font-medium">
-                                Consultations
                             </Link>
                         </div>
                     </div>
