@@ -48,7 +48,7 @@ export default async function ProductPage({ params }: { params: { slug: string }
                         <div className="premium-card overflow-hidden group">
                             <div className="aspect-square bg-earth-900 flex items-center justify-center relative">
                                 <img
-                                    src={product.images[0] || "/images/placeholder.jpg"}
+                                    src={product.images[0] || "/images/product-placeholder.svg"}
                                     alt={product.name}
                                     className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-105"
                                 />

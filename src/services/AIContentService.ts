@@ -1,79 +1,115 @@
 /**
- * HECTIC Intellectual Property - Copyright 2024
  * Black Moss & Herbs Platform - AI Content Engine
- * 
- * This service handles the autonomous generation of SEO-optimized articles
- * and social media distribution packs in the voice of 'The Council'.
+ *
+ * Generates SEO-style wellness articles in the voice of a chosen author persona
+ * using Claude, then persists them as drafts for admin review.
  */
-
-import { prisma } from '@/lib/prisma';
+import { prisma } from '@/lib/prisma'
+import { getAnthropic, CLAUDE_MODEL } from '@/lib/anthropic'
+import { getPersona, DEFAULT_PERSONA_KEY } from '@/lib/personas'
+import { sanitizeWellnessContent } from '@/lib/compliance'
+import { slugify } from '@/lib/utils'
 
 export interface GeneratedContent {
-    title: string;
-    excerpt: string;
-    content: string;
-    category: string;
+    title: string
+    excerpt: string
+    content: string // HTML
+    category: string
     socials: {
-        instagram: string;
-        twitter: string;
-        linkedin: string;
-    };
+        instagram: string
+        twitter: string
+        linkedin: string
+    }
+}
+
+const OUTPUT_SCHEMA = {
+    type: 'object',
+    additionalProperties: false,
+    properties: {
+        title: { type: 'string' },
+        excerpt: { type: 'string' },
+        content: { type: 'string', description: 'The full article body as semantic HTML (h2/h3/p/ul/li/strong). No <html> or <body> wrapper.' },
+        category: { type: 'string' },
+        socials: {
+            type: 'object',
+            additionalProperties: false,
+            properties: {
+                instagram: { type: 'string' },
+                twitter: { type: 'string' },
+                linkedin: { type: 'string' },
+            },
+            required: ['instagram', 'twitter', 'linkedin'],
+        },
+    },
+    required: ['title', 'excerpt', 'content', 'category', 'socials'],
 }
 
 export class AIContentService {
     /**
-     * Generates a complete content pack based on a topic.
-     * In a real production environment, this would call OpenAI/Anthropic.
-     * For this implementation, we utilize high-quality prompt templates.
+     * Generate a full content pack for a topic in a persona's voice.
+     * `personaKey` is one of the keys in src/lib/personas.ts.
      */
-    static async generatePack(topic: string, persona: 'ALCHEMIST' | 'HERBALIST' | 'CLINICAL_LENS'): Promise<GeneratedContent> {
-        console.log(`Generating AI content for topic: ${topic} as ${persona}`);
+    static async generatePack(topic: string, personaKey: string = DEFAULT_PERSONA_KEY): Promise<GeneratedContent> {
+        const anthropic = getAnthropic()
+        if (!anthropic) {
+            throw new Error('AI is not configured. Set ANTHROPIC_API_KEY to enable article generation.')
+        }
 
-        // Mocking the AI response with sophisticated templates based on the persona
-        const mockContent: Record<string, GeneratedContent> = {
-            'Sea Moss': {
-                title: 'The Alchemical Bio-Chemistry of Sea Moss',
-                excerpt: 'Understanding the 92 minerals through the lens of cellular regeneration and alkaline harmony.',
-                content: `Sea moss is not merely a plant; it is a bio-electrical storehouse of mineral vitality. When we analyze its composition—rich in iodine, potassium, and magnesium—we see a direct map to human thyroid health and mucous membrane integrity. 
+        const persona = getPersona(personaKey) ?? getPersona(DEFAULT_PERSONA_KEY)!
 
-From an alchemical perspective, sea moss represents the union of Earth and Water, synthesized in the depth of the ocean to provide the physical vessel with the requisite building blocks for repair. In this article, we explore how its mucilaginous properties support the gut-brain axis and 왜 (why) alkaline mineral density is the primary gatekeeper of human longevity.`,
-                category: 'Superfoods',
-                socials: {
-                    instagram: '🌊 Dive deep into the bio-chemistry of Sea Moss. 92 minerals. One source. #AlkaLibre #HECTIC',
-                    twitter: 'Sea Moss is a bio-electrical storehouse. Learn why your thyroid needs this ocean gold. #SeaMoss #Wellness',
-                    linkedin: 'The industrialization of wellness begins with mineral density. Analyzing the ROI of Sea Moss on human performance.'
-                }
-            }
-        };
+        const userPrompt = `Write an original Black Moss & Herbs article about: "${topic}".
 
-        // Return the specific mock or a generic fallback
-        return mockContent[topic] || {
-            title: `The ${persona.toLowerCase()} Perspective on ${topic}`,
-            excerpt: `An in-depth analysis of ${topic} through our proprietary wellness framework.`,
-            content: `[Provisional Content] This article analyzes ${topic} across three dimensions: historical usage, chemical profile, and clinical applications. By integrating these viewpoints, we provide a holistic roadmap for utilizing ${topic} in a modern health protocol.`,
-            category: 'Herbal Wisdom',
-            socials: {
-                instagram: `New Insight: ${topic}. Link in bio.`,
-                twitter: `How ${topic} fits into your 2024 protocol.`,
-                linkedin: `Reframing ${topic} for industrial-grade wellness.`
-            }
-        };
+Requirements:
+- 600-900 words in your distinct voice and genre.
+- Body as semantic HTML using <h2>, <h3>, <p>, <ul>/<li>, and <strong>. No title <h1>, no <html>/<body> wrapper.
+- A compelling title (no "Black Moss" prefix) and a one-sentence excerpt.
+- Pick the single best category from: Sea Moss, Herbal Wisdom, Alkaline Living, Superfoods, Wellness Science, Traditional Remedies.
+- Three short social captions (instagram, twitter, linkedin) promoting the article.
+- Stay strictly within the compliance rules.`
+
+        const response = await anthropic.messages.create({
+            model: CLAUDE_MODEL,
+            max_tokens: 8000,
+            system: persona.systemPrompt,
+            messages: [{ role: 'user', content: userPrompt }],
+            output_config: { format: { type: 'json_schema', schema: OUTPUT_SCHEMA } },
+        } as any)
+
+        const textBlock = response.content.find((b): b is Extract<typeof b, { type: 'text' }> => b.type === 'text')
+        if (!textBlock) {
+            throw new Error('AI returned no content.')
+        }
+
+        const parsed = JSON.parse(textBlock.text) as GeneratedContent
+
+        // Apply compliance sanitisation as a safety net on top of the prompt rules.
+        parsed.content = sanitizeWellnessContent(parsed.content)
+        parsed.excerpt = sanitizeWellnessContent(parsed.excerpt)
+
+        return parsed
     }
 
     /**
-     * Persists the generated content to the database.
+     * Persist generated content as an unpublished draft attributed to the persona.
      */
-    static async saveToDrafts(data: GeneratedContent, persona: string) {
-        return await prisma.blogPost.create({
+    static async saveToDrafts(data: GeneratedContent, personaKey: string) {
+        const baseSlug = slugify(data.title) || `article-${Date.now()}`
+        // Ensure slug uniqueness (slug is @unique in the schema).
+        let slug = baseSlug
+        if (await prisma.blogPost.findUnique({ where: { slug } })) {
+            slug = `${baseSlug}-${Date.now().toString(36)}`
+        }
+
+        return prisma.blogPost.create({
             data: {
                 title: data.title,
-                slug: data.title.toLowerCase().replace(/ /g, '-').replace(/[^\w-]+/g, ''),
+                slug,
                 excerpt: data.excerpt,
                 content: data.content,
                 category: data.category,
-                authorPersona: persona,
+                authorPersona: personaKey,
                 published: false,
-            }
-        });
+            },
+        })
     }
 }

@@ -14,45 +14,50 @@ export default function CustomerDetailPage() {
     const [customer, setCustomer] = useState<any>(null);
     const [loading, setLoading] = useState(true);
     const [saving, setSaving] = useState(false);
+    const [notes, setNotes] = useState('');
+    const [error, setError] = useState('');
 
-    // Mock initial data (Replace with API fetch)
     useEffect(() => {
-        // Simulate fetch
-        setTimeout(() => {
-            setCustomer({
-                id: params.id,
-                name: 'Sarah Jenkins',
-                email: 'sarah.j@example.com',
-                joinDate: 'Dec 12, 2024',
-                spent: 450.00,
-                status: 'VIP Authority',
-                bioProfile: {
-                    healthGoals: ['Hormonal Balance', 'Gut Reset'],
-                    dietType: 'Alkaline',
-                    allergies: ['Shellfish'],
-                    activeCondition: 'Hypothyroidism',
-                    clinicalNotes: 'User reports low energy in mornings. Recommended Iron Fluorine protocol. Monitoring thyroid levels.'
-                },
-                orders: [
-                    { id: 'ORD-001', date: 'Jan 10, 2025', items: 'Sea Moss Gold', total: 45.00, status: 'Shipped' },
-                    { id: 'ORD-002', date: 'Dec 20, 2024', items: 'Bio-Ferro Capsules', total: 65.00, status: 'Delivered' }
-                ]
-            });
-            setLoading(false);
-        }, 1000);
+        fetch(`/api/admin/customers/${params.id}`)
+            .then(async (r) => {
+                if (!r.ok) throw new Error((await r.json()).error || 'Not found');
+                return r.json();
+            })
+            .then((data) => {
+                setCustomer(data);
+                setNotes(data.bioProfile?.clinicalNotes || '');
+            })
+            .catch((e) => setError(e.message))
+            .finally(() => setLoading(false));
     }, [params.id]);
 
     const handleSaveNotes = async () => {
         setSaving(true);
-        // Simulate API call
-        await new Promise(resolve => setTimeout(resolve, 1500));
-        setSaving(false);
-        alert('Clinical records updated.');
+        try {
+            const res = await fetch(`/api/admin/customers/${params.id}`, {
+                method: 'PATCH',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ clinicalNotes: notes }),
+            });
+            if (!res.ok) throw new Error('Save failed');
+        } catch {
+            alert('Could not save clinical record.');
+        } finally {
+            setSaving(false);
+        }
     };
+
+    const formatDate = (d: string) => new Date(d).toLocaleDateString('en-GB', { year: 'numeric', month: 'short', day: 'numeric' });
 
     if (loading) return (
         <div className="min-h-screen bg-earth-950 flex items-center justify-center">
             <div className="text-secondary-500 animate-pulse font-bold tracking-widest uppercase">Accessing Secure Records...</div>
+        </div>
+    );
+
+    if (error || !customer) return (
+        <div className="min-h-screen bg-earth-950 flex items-center justify-center">
+            <div className="text-red-400 font-bold tracking-widest uppercase">{error || 'Customer not found'}</div>
         </div>
     );
 
@@ -72,7 +77,7 @@ export default function CustomerDetailPage() {
                             </div>
                             <div className="flex items-center gap-6 text-earth-400 text-sm">
                                 <span className="flex items-center gap-2"><Mail size={14} /> {customer.email}</span>
-                                <span className="flex items-center gap-2"><Calendar size={14} /> Member since {customer.joinDate}</span>
+                                <span className="flex items-center gap-2"><Calendar size={14} /> Member since {formatDate(customer.joinDate)}</span>
                                 <span className="flex items-center gap-2 text-secondary-400 font-bold"><Shield size={14} /> ID: {customer.id}</span>
                             </div>
                         </div>
@@ -121,7 +126,7 @@ export default function CustomerDetailPage() {
                                     </div>
                                     <div className="bg-earth-950/50 p-4 rounded-xl border border-earth-800">
                                         <label className="text-xs font-black text-earth-500 uppercase tracking-widest mb-2 block">Dietary Matrix</label>
-                                        <div className="text-white font-medium">{customer.bioProfile.dietType}</div>
+                                        <div className="text-white font-medium">{customer.bioProfile.dietType || '—'}</div>
                                     </div>
                                     <div className="bg-earth-950/50 p-4 rounded-xl border border-earth-800">
                                         <label className="text-xs font-black text-earth-500 uppercase tracking-widest mb-2 block">Known Sensitivities</label>
@@ -136,7 +141,7 @@ export default function CustomerDetailPage() {
                                     <div className="bg-earth-950/50 p-4 rounded-xl border border-earth-800">
                                         <label className="text-xs font-black text-earth-500 uppercase tracking-widest mb-2 block">Primary Condition</label>
                                         <div className="text-secondary-400 font-bold flex items-center gap-2">
-                                            <Syringe size={14} /> {customer.bioProfile.activeCondition}
+                                            <Syringe size={14} /> {customer.bioProfile.activeCondition || '—'}
                                         </div>
                                     </div>
                                 </div>
@@ -148,7 +153,9 @@ export default function CustomerDetailPage() {
                                     </label>
                                     <textarea
                                         className="w-full h-64 bg-earth-950/80 border border-earth-700 rounded-xl p-6 text-earth-300 focus:outline-none focus:border-secondary-500 transition-all font-mono text-sm leading-relaxed"
-                                        defaultValue={customer.bioProfile.clinicalNotes}
+                                        value={notes}
+                                        onChange={(e) => setNotes(e.target.value)}
+                                        placeholder="Private notes visible only to admins and herbalists…"
                                     />
                                     <div className="flex justify-end">
                                         <Button onClick={handleSaveNotes} disabled={saving} className="bg-primary-600 hover:bg-primary-500 text-white w-full md:w-auto">
@@ -168,23 +175,26 @@ export default function CustomerDetailPage() {
                                     </div>
                                     <div className="card p-6 border-earth-800 bg-earth-900/40">
                                         <div className="text-xs text-earth-500 font-black uppercase tracking-widest mb-2">Orders</div>
-                                        <div className="text-2xl font-bold text-white">12</div>
+                                        <div className="text-2xl font-bold text-white">{customer.ordersCount}</div>
                                     </div>
                                     <div className="card p-6 border-earth-800 bg-earth-900/40">
-                                        <div className="text-xs text-earth-500 font-black uppercase tracking-widest mb-2">Risk Score</div>
-                                        <div className="text-2xl font-bold text-emerald-400">Low</div>
+                                        <div className="text-xs text-earth-500 font-black uppercase tracking-widest mb-2">Loyalty Points</div>
+                                        <div className="text-2xl font-bold text-secondary-400">{customer.loyaltyPoints}</div>
                                     </div>
                                 </div>
 
                                 <div className="card p-8 border-earth-800 bg-earth-900/40">
-                                    <h3 className="font-bold text-white mb-4">Recent Activity Stream</h3>
+                                    <h3 className="font-bold text-white mb-4">Recent Orders</h3>
                                     <div className="space-y-4">
-                                        {[1, 2, 3].map(i => (
-                                            <div key={i} className="flex gap-4 p-4 bg-earth-950/50 rounded-xl border border-earth-800">
+                                        {customer.orders.length === 0 && (
+                                            <p className="text-earth-500 text-sm">No orders yet.</p>
+                                        )}
+                                        {customer.orders.slice(0, 3).map((o: any) => (
+                                            <div key={o.id} className="flex gap-4 p-4 bg-earth-950/50 rounded-xl border border-earth-800">
                                                 <div className="mt-1"><Clock size={16} className="text-earth-500" /></div>
                                                 <div>
-                                                    <p className="text-sm text-earth-300">User logged in from <span className="text-white font-bold">London, UK</span></p>
-                                                    <p className="text-xs text-earth-600">2 hours ago</p>
+                                                    <p className="text-sm text-earth-300"><span className="text-white font-bold">{o.id}</span> — {o.items}</p>
+                                                    <p className="text-xs text-earth-600">{formatDate(o.date)} · £{o.total.toFixed(2)} · {o.status}</p>
                                                 </div>
                                             </div>
                                         ))}
@@ -209,7 +219,7 @@ export default function CustomerDetailPage() {
                                         {customer.orders.map((o: any) => (
                                             <tr key={o.id} className="text-sm text-earth-300 hover:bg-earth-800/50 transition-colors">
                                                 <td className="px-6 py-4 font-bold text-white">{o.id}</td>
-                                                <td className="px-6 py-4">{o.date}</td>
+                                                <td className="px-6 py-4">{formatDate(o.date)}</td>
                                                 <td className="px-6 py-4">{o.items}</td>
                                                 <td className="px-6 py-4">£{o.total.toFixed(2)}</td>
                                                 <td className="px-6 py-4"><span className="badge-primary text-xs">{o.status}</span></td>
@@ -234,12 +244,9 @@ export default function CustomerDetailPage() {
                         </div>
 
                         <div className="card p-6 border-secondary-500/20 bg-secondary-900/10">
-                            <h3 className="font-bold text-secondary-400 mb-2">Membership Status</h3>
-                            <div className="text-3xl font-black text-white mb-1">VIP</div>
-                            <p className="text-xs text-earth-400 mb-4">Expires: Dec 2025</p>
-                            <div className="h-2 bg-earth-950 rounded-full overflow-hidden">
-                                <div className="h-full w-[75%] bg-secondary-500" />
-                            </div>
+                            <h3 className="font-bold text-secondary-400 mb-2">Standing</h3>
+                            <div className="text-3xl font-black text-white mb-1">{customer.status === 'VIP Authority' ? 'VIP' : 'Member'}</div>
+                            <p className="text-xs text-earth-400 mb-4">Lifetime spend: £{customer.spent.toFixed(2)}</p>
                         </div>
                     </div>
                 </div>

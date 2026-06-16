@@ -23,10 +23,11 @@ interface Video {
 export default function ContentHubPage() {
     const [view, setView] = useState<'AI' | 'LIBRARY'>('AI');
     const [topic, setTopic] = useState('');
-    const [persona, setPersona] = useState('Journalist');
+    const [persona, setPersona] = useState('DR_AMARA_WILLIAMS');
     const [generating, setGenerating] = useState(false);
     const [draft, setDraft] = useState<any>(null);
     const [deployed, setDeployed] = useState(false);
+    const [genError, setGenError] = useState('');
 
     // Library State
     const [blogs, setBlogs] = useState<BlogPost[]>([]);
@@ -71,68 +72,28 @@ export default function ContentHubPage() {
         fetchLibrary();
     };
 
-    // SIMULATED AI GENERATOR
-    // In a real production environment, this would call an OpenAI API route.
-    // For this demo/ MVP, we use highly sophisticated templates.
+    // Real AI generation via Claude, in the selected author persona's voice.
     const handleGenerate = async () => {
         setGenerating(true);
         setDeployed(false);
-
-        // Simulate "Thinking" time
-        await new Promise(resolve => setTimeout(resolve, 2000));
-
-        let title = '';
-        let content = '';
-        let category = 'Wellness';
-        let excerpt = '';
-
-        const t = topic.toLowerCase();
-
-        if (t.includes('sea moss')) {
-            title = 'The 92-Mineral Miracle: Why Sea Moss Is Taking Over';
-            category = 'Superfoods';
-            excerpt = 'From thyroid health to unlimited energy, sea moss is the biological reset button you have been looking for.';
-            content = `
-                <p>In the world of holistic health, few substances command the authority of Chondrus Crispus, commonly known as Sea Moss. It’s not just a trend; it’s a biological necessity.</p>
-                <h3>The Mineral Matrix</h3>
-                <p>The human body consists of 102 minerals. Sea Moss contains 92 of them. Think about that math for a second. By simply incorporating this marine gold into your routine, you are effectively refueling your cellular engine with almost every single building block it needs to function.</p>
-                <h3>Thyroid & Energy</h3>
-                <p>Feeling tired? That’s often a mineral deficiency, specifically Iodine. Sea Moss is packed with natural, bio-available iodine that supports the thyroid gland, the master regulator of your metabolism and energy.</p>
-                <h3>How To Use It</h3>
-                <p>Gel form is best. One to two tablespoons a day in your smoothie, tea, or straight off the spoon. It is the easiest adjustment with the highest return on investment for your health.</p>
-            `;
-        } else if (t.includes('immune') || t.includes('virus') || t.includes('flu')) {
-            title = 'Bulletproofing Your Biology: The Alkaline Immune Protocol';
-            category = 'Immune Health';
-            excerpt = 'Stop fighting sickness and start building resilience. Here are the top 3 herbs for immediate immune defense.';
-            content = `
-                <p>We are taught to fear the germ, but we should focus on the terrain. A strong, alkaline body is hostile to invaders. Immunity isn’t luck; it’s engineering.</p>
-                <h3>1. Elderberry (The Shield)</h3>
-                <p>Known as the "medicine chest," Elderberry stops viruses from replicating. It’s your first line of defense.</p>
-                <h3>2. Oregano Oil (The Weapon)</h3>
-                <p>Potent, anti-viral, and anti-bacterial. It’s nature’s antibiotic without the gut-destroying side effects.</p>
-                <h3>3. Vitamin C (The Fuel)</h3>
-                <p>Not from a packet of sugar powder. We mean Camu Camu or Acerola Cherry. Real, plant-based electric vitamin C that absorbs instantly.</p>
-                <p><strong>The Protocol:</strong> Combine these three daily during the winter months, and watch your resilience skyrocket.</p>
-            `;
-        } else {
-            // Generic Fallback - Dynamic
-            title = `The Truth About ${topic}: What They Don't Tell You`;
-            category = 'Herbal Wisdom';
-            excerpt = `An investigative look into ${topic} and how it plays a critical role in modern biological restoration.`;
-            content = `
-                <p>There is a lot of noise in the wellness space about <strong>${topic}</strong>. Today, we are cutting through the marketing and getting straight to the biology.</p>
-                <h3>The Root Cause</h3>
-                <p>Most modern ailments stem from inflammation and acidity. ${topic}, when utilized correctly, acts as a powerful alkalizing agent, helping to cool the system down and restore flow.</p>
-                <h3>Ancient Wisdom, Modern Science</h3>
-                <p>Our ancestors knew about the power of ${topic} for centuries. Modern science is just catching up. Studies now confirm what herbalists have said all along: nature provides the blueprint.</p>
-                <h3>Implementation</h3>
-                <p>Don’t overcomplicate it. Start small. Consistency is better than intensity. Listen to your body as you introduce this new protocol.</p>
-            `;
+        setGenError('');
+        try {
+            const res = await fetch('/api/admin/ai/generate', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ topic, persona }),
+            });
+            const data = await res.json();
+            if (!res.ok) {
+                setGenError(data.error || 'Generation failed.');
+                return;
+            }
+            setDraft({ ...data.content, persona });
+        } catch (e) {
+            setGenError('Network error during generation.');
+        } finally {
+            setGenerating(false);
         }
-
-        setDraft({ title, excerpt, content, category });
-        setGenerating(false);
     };
 
     const handleDeploy = async () => {
@@ -147,6 +108,7 @@ export default function ContentHubPage() {
                     content: draft.content,
                     excerpt: draft.excerpt,
                     category: draft.category,
+                    author: draft.persona,
                     published: true,
                     // Auto-slug generation handles the rest on the server
                 })
@@ -214,6 +176,22 @@ export default function ContentHubPage() {
                                             onKeyDown={(e) => e.key === 'Enter' && handleGenerate()}
                                         />
                                     </div>
+                                    <div>
+                                        <label className="block text-xs font-bold text-earth-500 uppercase tracking-widest mb-3">Author Persona</label>
+                                        <select
+                                            className="w-full bg-earth-950/50 border border-earth-800 rounded-2xl py-4 px-6 text-white text-sm focus:outline-none focus:border-secondary-500 transition-colors"
+                                            value={persona}
+                                            onChange={(e) => setPersona(e.target.value)}
+                                        >
+                                            <option value="DR_AMARA_WILLIAMS">Dr. Amara Williams — Clinical (she)</option>
+                                            <option value="MARCUS_ADEYEMI">Marcus Adeyemi — Alchemist (he)</option>
+                                            <option value="SISTER_IFE_OKONKWO">Sister Ife Okonkwo — Ancestral (she)</option>
+                                            <option value="DANIEL_CROSS">Daniel Cross — Lifestyle (he)</option>
+                                        </select>
+                                    </div>
+                                    {genError && (
+                                        <p className="text-red-400 text-xs leading-relaxed">{genError}</p>
+                                    )}
                                     <Button
                                         className="w-full h-16 rounded-2xl text-sm font-black uppercase tracking-widest shadow-xl overflow-hidden group relative bg-gradient-to-r from-primary-900 to-earth-900 hover:from-primary-800 hover:to-earth-800"
                                         onClick={handleGenerate}

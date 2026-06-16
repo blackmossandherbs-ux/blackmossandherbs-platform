@@ -50,6 +50,9 @@ export async function GET() {
 
         const mrr = activeSubscriptions.reduce((acc, sub) => acc + sub.plan.price, 0);
 
+        // Total non-cancelled orders (for average order value).
+        const totalOrders = await prisma.order.count({ where: { status: { not: 'CANCELLED' } } });
+
         // 5. Recent Transactions
         const recentOrders = await prisma.order.findMany({
             take: 5,
@@ -100,7 +103,8 @@ export async function GET() {
                 totalRevenue: totalRevenue._sum.total || 0,
                 activeOrders: activeOrdersCount,
                 totalCustomers,
-                mrr
+                mrr,
+                totalOrders
             },
             recentOrders: recentOrders.map(o => ({
                 id: o.orderNumber,

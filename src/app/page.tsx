@@ -9,6 +9,7 @@ import { ProductService } from '@/services/ProductService'
 import { BlogService } from '@/services/BlogService'
 import ProductCard from '@/components/ProductCard'
 import NewsletterForm from '@/components/NewsletterForm'
+import { SettingsService } from '@/lib/settings'
 
 // Renders at request time: the homepage reads featured products and posts from
 // the database, which is not available during a static build.
@@ -17,9 +18,15 @@ export const dynamic = 'force-dynamic'
 export default async function HomePage() {
     const featuredProducts = await ProductService.getFeaturedProducts(4);
     const latestBlogs = await BlogService.getLatestPosts(3);
+    const settings = await SettingsService.get();
 
     return (
         <div className="bg-earth-950 overflow-x-hidden">
+            {settings.announcementEnabled && settings.announcementText && (
+                <div className="bg-secondary-600 text-stone-950 text-center text-xs font-black uppercase tracking-widest py-3 px-4">
+                    {settings.announcementText}
+                </div>
+            )}
             {/* Premium Hero Section */}
             <section className="relative min-h-screen flex items-center pt-24 overflow-hidden">
                 {/* Abstract Background Elements */}
@@ -33,25 +40,25 @@ export default async function HomePage() {
                         <div className="animate-in fade-in slide-in-from-left-8 duration-1000">
                             <div className="inline-flex items-center gap-2 px-5 py-2 glass-premium rounded-full mb-10 border border-primary-500/20 shadow-lg">
                                 <Leaf className="w-4 h-4 text-primary-400" />
-                                <span className="text-[10px] font-black uppercase tracking-[0.2em] text-primary-300">Botanical Authority</span>
+                                <span className="text-[10px] font-black uppercase tracking-[0.2em] text-primary-300">{settings.heroBadge}</span>
                             </div>
                             <h1 className="text-6xl md:text-8xl font-serif font-bold text-white mb-8 leading-[0.9] tracking-tighter">
-                                Biological<br />
-                                <span className="text-secondary-400 italic">Restoration.</span>
+                                {settings.heroTitleLine1}<br />
+                                <span className="text-secondary-400 italic">{settings.heroTitleAccent}</span>
                             </h1>
                             <p className="text-xl text-stone-400 mb-12 max-w-lg leading-relaxed font-light italic">
-                                &quot;Where traditional herbal wisdom meets modern biological reality. We don&apos;t just sell products; we provide the framework for alkaline excellence.&quot;
+                                &quot;{settings.heroQuote}&quot;
                             </p>
                             <div className="flex flex-col sm:flex-row gap-6">
                                 <Link href="/shop">
                                     <button className="h-20 px-10 text-lg font-black uppercase tracking-widest bg-primary-600 hover:bg-primary-500 text-white rounded-2xl transition-all shadow-2xl shadow-primary-900/40 group flex items-center justify-center">
-                                        Manifest Wellness
+                                        {settings.heroPrimaryCta}
                                         <ArrowRight className="ml-3 w-5 h-5 group-hover:translate-x-2 transition-transform" />
                                     </button>
                                 </Link>
                                 <Link href="/consultations">
                                     <button className="h-20 px-10 text-lg font-black uppercase tracking-widest border border-earth-700 hover:border-earth-500 text-white rounded-2xl transition-all hover:bg-white/5">
-                                        Clinical Guidance
+                                        {settings.heroSecondaryCta}
                                     </button>
                                 </Link>
                             </div>
@@ -139,7 +146,7 @@ export default async function HomePage() {
                     <div className="flex flex-col md:flex-row justify-between items-end mb-24 gap-8">
                         <div>
                             <div className="text-[10px] font-black uppercase tracking-[0.4em] text-secondary-500 mb-4">The Manifest</div>
-                            <h2 className="text-6xl font-serif font-bold text-white tracking-tighter">Biological <span className="text-secondary-400 italic">Formulas.</span></h2>
+                            <h2 className="text-6xl font-serif font-bold text-white tracking-tighter">{settings.featuredHeading} <span className="text-secondary-400 italic">{settings.featuredAccent}</span></h2>
                         </div>
                         <Link href="/shop">
                             <button className="h-14 px-8 border border-earth-700 hover:border-earth-500 text-white font-bold text-xs uppercase tracking-widest rounded-xl transition-all group flex items-center justify-center">
@@ -226,10 +233,10 @@ export default async function HomePage() {
                     <div className="max-w-4xl mx-auto glass-premium p-16 md:p-24 rounded-[4rem] text-center border-white/5 relative group overflow-hidden">
                         <div className="absolute inset-0 bg-gradient-to-br from-primary-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-[3s]" />
                         <h2 className="text-4xl md:text-5xl font-serif font-bold text-white mb-6 tracking-tighter">
-                            Join the Alchemist <span className="text-primary-400 italic">Circle.</span>
+                            {settings.newsletterHeading} <span className="text-primary-400 italic">Circle.</span>
                         </h2>
                         <p className="text-lg text-stone-400 mb-12 max-w-xl mx-auto italic font-light leading-relaxed">
-                            Subscribe to receive alchemical protocols, botanical discoveries, and exclusive authority updates.
+                            {settings.newsletterSubtext}
                         </p>
                         <div className="max-w-lg mx-auto relative z-10">
                             <NewsletterForm

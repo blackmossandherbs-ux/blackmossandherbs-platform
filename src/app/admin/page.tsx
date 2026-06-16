@@ -107,6 +107,27 @@ export default async function AdminPage() {
                     <p className="text-earth-400 text-lg">HECTIC Authority Control Panel</p>
                 </div>
 
+                {/* Quick Navigation */}
+                <div className="flex flex-wrap gap-3 mb-12">
+                    {[
+                        { href: '/admin/products', label: 'Products' },
+                        { href: '/admin/orders', label: 'Orders' },
+                        { href: '/admin/customers', label: 'Customers' },
+                        { href: '/admin/content', label: 'AI Studio' },
+                        { href: '/admin/settings', label: 'Site Content' },
+                        { href: '/admin/analytics', label: 'Analytics' },
+                        { href: '/admin/system', label: 'System' },
+                    ].map((item) => (
+                        <Link
+                            key={item.href}
+                            href={item.href}
+                            className="px-5 py-2.5 rounded-xl bg-earth-900/50 border border-earth-800 text-earth-300 hover:text-white hover:border-secondary-500/50 text-xs font-bold uppercase tracking-widest transition-all"
+                        >
+                            {item.label}
+                        </Link>
+                    ))}
+                </div>
+
                 {/* Stats Grid */}
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
                     {data.stats.map((stat, index) => (

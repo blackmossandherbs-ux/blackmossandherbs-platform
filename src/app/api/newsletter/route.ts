@@ -3,6 +3,7 @@
  */
 import { NextResponse } from 'next/server'
 import { sendEmail } from '@/lib/mail'
+import { prisma } from '@/lib/prisma'
 
 export const dynamic = 'force-dynamic'
 
@@ -13,6 +14,17 @@ export async function POST(req: Request) {
 
         if (!email || !emailRegex.test(email)) {
             return NextResponse.json({ error: 'Please enter a valid email address.' }, { status: 400 })
+        }
+
+        // Persist the subscriber (idempotent on email).
+        try {
+            await prisma.newsletterSubscriber.upsert({
+                where: { email },
+                update: {},
+                create: { email },
+            })
+        } catch (e) {
+            console.error('[newsletter] could not persist subscriber:', e)
         }
 
         const destination = process.env.NEWSLETTER_INBOX || process.env.EMAIL_FROM

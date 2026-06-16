@@ -14,6 +14,9 @@ interface Product {
     active: boolean;
     type: 'PHYSICAL' | 'DIGITAL';
     therapeuticGoals: string[];
+    description?: string;
+    images?: string[];
+    compareAtPrice?: number | null;
 }
 
 export default function AdminProductsPage() {
@@ -98,7 +101,9 @@ export default function AdminProductsPage() {
             category: product.category,
             stock: product.stock.toString(),
             type: product.type,
-            active: product.active
+            active: product.active,
+            description: product.description ?? '',
+            images: product.images ?? [],
         });
         setIsManifesting(true);
     };

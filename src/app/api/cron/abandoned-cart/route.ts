@@ -6,6 +6,8 @@ import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 import { sendEmail } from '@/lib/mail';
 
+export const dynamic = 'force-dynamic';
+
 export async function GET(req: Request) {
     try {
         // Authenticate request (should be a secret CRON_SECRET)

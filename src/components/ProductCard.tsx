@@ -52,17 +52,12 @@ export default function ProductCard({
         <div className="bg-earth-900/40 backdrop-blur-md border border-earth-800/50 rounded-[2rem] overflow-hidden hover:border-primary-500/50 transition-all duration-700 group relative">
             <Link href={`/shop/${slug}`}>
                 <div className="relative h-80 overflow-hidden bg-earth-950">
-                    {images && images.length > 0 ? (
-                        <img
-                            src={images[0]}
-                            alt={name}
-                            className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-110 opacity-80 group-hover:opacity-100"
-                        />
-                    ) : (
-                        <div className="absolute inset-0 flex items-center justify-center bg-earth-950 text-earth-700 uppercase font-black text-[10px] tracking-widest">
-                            No Matrix Image
-                        </div>
-                    )}
+                    <img
+                        src={images?.[0] || '/images/product-placeholder.svg'}
+                        alt={name}
+                        onError={(e) => { e.currentTarget.src = '/images/product-placeholder.svg' }}
+                        className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-110 opacity-80 group-hover:opacity-100"
+                    />
 
                     {/* Botanical Hover Data */}
                     <div className="absolute inset-0 bg-earth-950/90 backdrop-blur-md opacity-0 group-hover:opacity-100 transition-opacity duration-500 flex flex-col justify-center p-8">

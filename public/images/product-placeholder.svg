@@ -1,0 +1,16 @@
+<svg width="800" height="800" viewBox="0 0 800 800" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Black Moss & Herbs">
+  <rect width="800" height="800" fill="url(#bg)"/>
+  <circle cx="400" cy="360" r="150" fill="#386645" fill-opacity="0.18"/>
+  <!-- Leaf mark -->
+  <path d="M400 250c-70 28-110 92-110 168 0 0 64-6 104-54 34-40 40-86 6-114z" fill="#d4af37" fill-opacity="0.85"/>
+  <path d="M400 250c0 50-16 104-56 144" stroke="#111f14" stroke-width="6" stroke-linecap="round" opacity="0.35"/>
+  <text x="400" y="580" text-anchor="middle" font-family="Playfair Display, Georgia, serif" font-size="44" font-weight="700" fill="#f5f5f4">Black Moss</text>
+  <text x="400" y="628" text-anchor="middle" font-family="Inter, system-ui, sans-serif" font-size="20" letter-spacing="10" font-weight="700" fill="#d4af37">&amp; HERBS</text>
+  <text x="400" y="690" text-anchor="middle" font-family="Inter, system-ui, sans-serif" font-size="14" letter-spacing="4" font-weight="600" fill="#888888">WILDCRAFTED · ALKALINE</text>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="800" y2="800" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#1a1a1a"/>
+      <stop offset="1" stop-color="#0c0a09"/>
+    </linearGradient>
+  </defs>
+</svg>

@@ -320,6 +320,23 @@ model Membership {
   @@map("memberships")
 }
 
+model SiteSetting {
+  id        String   @id @default(cuid())
+  key       String   @unique
+  value     Json
+  updatedAt DateTime @updatedAt
+
+  @@map("site_settings")
+}
+
+model NewsletterSubscriber {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  createdAt DateTime @default(now())
+
+  @@map("newsletter_subscribers")
+}
+
 model BiologicalProfile {
   id              String   @id @default(cuid())
   userId          String   @unique
