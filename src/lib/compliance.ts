@@ -1,48 +1,45 @@
 /**
- * Global Compliance Layer
- * Handles brand-safe content sanitization and region-aware disclaimers.
- * 
- * Objectives:
- * 1. Remove diagnostic language (No cure/treat/diagnose).
- * 2. Append FDA/Global disclaimers.
- * 3. Enforce "Educational Only" boundaries.
+ * UK compliance layer — content sanitisation and disclaimer text.
+ * All language is aligned with MHRA food supplement guidelines.
  */
 
-/**
- * HECTIC Intellectual Property - Copyright 2024
- * Black Moss & Herbs Platform - Compliance Layer
- */
-export const ALKALINE_KEYWORDS = [
+export const HIGH_RISK_TERMS = [
     'cure', 'treat', 'diagnose', 'healing', 'medicine',
-    'doctor', 'prescription', 'disease', 'chronic', 'cancer'
-];
+    'doctor', 'prescription', 'disease', 'chronic', 'cancer',
+]
 
+/** Replace high-risk medicinal verbs with compliant wellness language. */
 export function sanitizeWellnessContent(text: string): string {
-    let cleaned = text;
-
-    // Replace high-risk verbs with educational/wellness verbs
     const replacements: Record<string, string> = {
         'cure': 'support',
-        'treat': 'balance',
+        'treat': 'help maintain',
         'diagnose': 'assess',
-        'healing': 'rejuvenating',
-        'medicine': 'herbal tradition'
-    };
-
+        'healing': 'supporting',
+        'medicine': 'herbal tradition',
+    }
+    let cleaned = text
     Object.entries(replacements).forEach(([risk, safe]) => {
-        const regex = new RegExp(`\\b${risk}\\b`, 'gi');
-        cleaned = cleaned.replace(regex, safe);
-    });
-
-    return cleaned;
+        cleaned = cleaned.replace(new RegExp(`\\b${risk}\\b`, 'gi'), safe)
+    })
+    return cleaned
 }
 
-export function getGlobalDisclaimer(): string {
-    return "Disclaimer: These statements have not been evaluated by the FDA or any medical authority. Our products and protocols are for educational and traditional herbal purposes only. They are not intended to diagnose, treat, cure, or prevent any disease. Always consult with a qualified health professional regarding your biological roadmap.";
+/** Standard MHRA-aligned disclaimer for UK food supplements. */
+export function getUKDisclaimer(): string {
+    return 'These products are food supplements and have not been evaluated by the Medicines and Healthcare products Regulatory Agency (MHRA). They are intended for general wellbeing and traditional herbal use only. They are not intended to diagnose, treat, cure or prevent any disease. Always consult a qualified healthcare professional before starting any supplement, particularly if you are pregnant, breastfeeding or taking medication.'
 }
 
-export function enforceAlchemistBoundary(input: string): boolean {
-    // Check if input is asking for specific medical advice
-    const medicalStrings = ['should i take this for', 'will this fix my', 'can i stop taking my medication'];
-    return medicalStrings.some(s => input.toLowerCase().includes(s));
+/** Short inline disclaimer for product pages. */
+export const SHORT_DISCLAIMER = 'Food supplement. Not intended to diagnose, treat, cure or prevent any disease. Consult your GP before use.'
+
+/** Detect if a user message is asking for clinical/medical advice. */
+export function isMedicalAdviceRequest(input: string): boolean {
+    const patterns = [
+        'should i take this for',
+        'will this fix my',
+        'can i stop taking my medication',
+        'can this cure',
+        'does this treat',
+    ]
+    return patterns.some(p => input.toLowerCase().includes(p))
 }

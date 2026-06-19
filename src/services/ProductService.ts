@@ -29,6 +29,7 @@ export interface ProductFilters {
     minPrice?: number;
     maxPrice?: number;
     featured?: boolean;
+    search?: string;
 }
 
 export interface ProductSort {
@@ -59,6 +60,14 @@ export class ProductService {
                     gte: filters?.minPrice,
                     lte: filters?.maxPrice,
                 };
+            }
+
+            if (filters?.search) {
+                where.OR = [
+                    { name: { contains: filters.search, mode: 'insensitive' } },
+                    { description: { contains: filters.search, mode: 'insensitive' } },
+                    { category: { contains: filters.search, mode: 'insensitive' } },
+                ];
             }
 
             const orderBy: any = {};

@@ -8,7 +8,7 @@
 import { useState, useRef, useEffect } from 'react';
 import Link from 'next/link';
 import { Sparkles, X, Send, Bot, User, Stethoscope } from 'lucide-react';
-import { sanitizeWellnessContent, getGlobalDisclaimer, enforceAlchemistBoundary } from '@/lib/compliance';
+import { sanitizeWellnessContent, getUKDisclaimer, isMedicalAdviceRequest } from '@/lib/compliance';
 
 type GuideId = 'alchemist' | 'herbalist' | 'clinical';
 
@@ -91,10 +91,10 @@ export default function AIChatWidget() {
 
             let finalResponse = sanitizeWellnessContent(data.content);
             const lower = userMsg.toLowerCase();
-            const isHealthInquiry = enforceAlchemistBoundary(userMsg) || lower.includes('pain') || lower.includes('condition') || lower.includes('chronic');
+            const isHealthInquiry = isMedicalAdviceRequest(userMsg) || lower.includes('pain') || lower.includes('condition') || lower.includes('chronic');
 
             if (isHealthInquiry) {
-                finalResponse += "\n\n" + getGlobalDisclaimer();
+                finalResponse += "\n\n" + getUKDisclaimer();
             }
 
             setMessages(prev => [...prev, { role: 'assistant', content: finalResponse }]);

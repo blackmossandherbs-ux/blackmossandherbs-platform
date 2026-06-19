@@ -25,11 +25,12 @@ const PER_PAGE = 12
 export default async function ShopPage({
     searchParams,
 }: {
-    searchParams: { page?: string; category?: string; sort?: string }
+    searchParams: { page?: string; category?: string; sort?: string; q?: string }
 }) {
     const page = Math.max(1, parseInt(searchParams.page || '1', 10))
     const activeCategory = searchParams.category || 'All Products'
     const sortParam = searchParams.sort || 'featured'
+    const searchQuery = searchParams.q?.trim() || ''
 
     const sortMap: Record<string, { field: 'price' | 'createdAt' | 'name'; order: 'asc' | 'desc' }> = {
         featured: { field: 'createdAt', order: 'desc' },
@@ -39,7 +40,9 @@ export default async function ShopPage({
         name: { field: 'name', order: 'asc' },
     }
     const sort = sortMap[sortParam] || sortMap['featured']
-    const filters = activeCategory !== 'All Products' ? { category: activeCategory } : undefined
+    const filters: Parameters<typeof ProductService.getProducts>[0] = {}
+    if (activeCategory !== 'All Products') filters.category = activeCategory
+    if (searchQuery) filters.search = searchQuery
 
     const [{ products, total, pages }, categories] = await Promise.all([
         ProductService.getProducts(filters, sort, page, PER_PAGE),
@@ -53,6 +56,7 @@ export default async function ShopPage({
             page: String(page),
             category: activeCategory,
             sort: sortParam,
+            ...(searchQuery ? { q: searchQuery } : {}),
             ...Object.fromEntries(Object.entries(params).map(([k, v]) => [k, String(v)])),
         }
         const qs = new URLSearchParams(merged)
@@ -69,11 +73,20 @@ export default async function ShopPage({
                 {/* Header */}
                 <div className="mb-10 pt-8">
                     <h1 className="text-4xl md:text-5xl font-serif font-bold text-white mb-3">
-                        {activeCategory === 'All Products' ? 'All Products' : activeCategory}
+                        {searchQuery
+                            ? `Search: "${searchQuery}"`
+                            : activeCategory === 'All Products'
+                                ? 'All Products'
+                                : activeCategory}
                     </h1>
                     <p className="text-earth-400">
                         Premium wildcrafted herbs &amp; sea moss — free UK delivery over £40
                     </p>
+                    {searchQuery && (
+                        <Link href="/shop" className="mt-2 inline-flex items-center text-sm text-primary-400 hover:text-primary-300">
+                            ✕ Clear search
+                        </Link>
+                    )}
                 </div>
 
                 <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">

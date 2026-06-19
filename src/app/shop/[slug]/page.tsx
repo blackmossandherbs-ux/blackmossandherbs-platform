@@ -166,6 +166,11 @@ export default async function ProductPage({ params }: { params: { slug: string }
                             </div>
                         </div>
 
+                        {/* Disclaimer */}
+                        <p className="text-xs text-earth-600 italic mb-4 leading-relaxed">
+                            Food supplement. Not intended to diagnose, treat, cure or prevent any disease. Consult your GP before use, especially if pregnant, breastfeeding or on medication.
+                        </p>
+
                         {/* Action Buttons */}
                         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-12">
                             <AddToCartButton
