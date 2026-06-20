@@ -4,9 +4,10 @@
  */
 import { Metadata } from 'next'
 import { notFound } from 'next/navigation'
-import { Heart, Share2, Star, Check } from 'lucide-react'
-import Button from '@/components/Button'
+import { Star, Check } from 'lucide-react'
 import AddToCartButton from '@/components/AddToCartButton'
+import WishlistButton from '@/components/WishlistButton'
+import ShareButton from '@/components/ShareButton'
 import { formatPrice } from '@/lib/utils'
 import { ProductService } from '@/services/ProductService'
 
@@ -181,12 +182,8 @@ export default async function ProductPage({ params }: { params: { slug: string }
                                 disabled={product.stock === 0}
                             />
                             <div className="flex gap-4">
-                                <Button variant="outline" size="lg" className="h-20 flex-1 rounded-2xl border-earth-800 hover:border-earth-600">
-                                    <Heart className="w-6 h-6" />
-                                </Button>
-                                <Button variant="outline" size="lg" className="h-20 flex-1 rounded-2xl border-earth-800 hover:border-earth-600">
-                                    <Share2 className="w-6 h-6" />
-                                </Button>
+                                <WishlistButton slug={product.slug} />
+                                <ShareButton title={product.name} slug={product.slug} />
                             </div>
                         </div>
 

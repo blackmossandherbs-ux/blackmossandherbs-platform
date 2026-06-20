@@ -5,6 +5,8 @@
  * price tampering.
  */
 import { NextRequest, NextResponse } from 'next/server'
+import { getServerSession } from 'next-auth'
+import { authOptions } from '@/lib/auth'
 import { stripe } from '@/lib/stripe'
 import { prisma } from '@/lib/prisma'
 
@@ -31,16 +33,21 @@ export async function POST(req: NextRequest) {
             return NextResponse.json({ error: 'Cart is empty.' }, { status: 400 })
         }
 
+        const session = await getServerSession(authOptions)
+
         // Authoritative pricing: look up every product by slug from the DB.
         const slugs = lines.map(l => l.slug)
         const products = await prisma.product.findMany({
             where: { slug: { in: slugs }, active: true },
         })
 
+        const resolvedItems: Array<{ productId: string; slug: string; quantity: number; price: number }> = []
+
         const lineItems = lines.flatMap(line => {
             const product = products.find(p => p.slug === line.slug)
             const quantity = Math.max(1, Math.min(99, Math.floor(line.quantity || 1)))
             if (!product) return []
+            resolvedItems.push({ productId: product.id, slug: product.slug, quantity, price: Number(product.price) })
             return [{
                 quantity,
                 price_data: {
@@ -49,7 +56,6 @@ export async function POST(req: NextRequest) {
                         name: product.name,
                         images: product.images?.length ? [product.images[0]] : undefined,
                     },
-                    // Stripe expects the amount in the smallest currency unit (pence).
                     unit_amount: Math.round(Number(product.price) * 100),
                 },
             }]
@@ -64,17 +70,23 @@ export async function POST(req: NextRequest) {
             process.env.NEXTAUTH_URL ||
             req.nextUrl.origin
 
-        const session = await stripe.checkout.sessions.create({
+        const stripeSession = await stripe.checkout.sessions.create({
             mode: 'payment',
             line_items: lineItems,
             shipping_address_collection: { allowed_countries: ['GB', 'US', 'CA', 'IE', 'FR', 'DE'] },
             success_url: `${origin}/dashboard?checkout=success`,
             cancel_url: `${origin}/cart?checkout=cancelled`,
+            metadata: {
+                type: 'PRODUCT',
+                userId: session?.user?.id || '',
+                userEmail: session?.user?.email || '',
+                items: JSON.stringify(resolvedItems),
+            },
         })
 
-        return NextResponse.json({ url: session.url })
+        return NextResponse.json({ url: stripeSession.url })
     } catch (error) {
-        console.error('[checkout] FAILURE:', error)
+        console.error('[checkout] error:', error)
         return NextResponse.json({ error: 'Could not start checkout.' }, { status: 500 })
     }
 }

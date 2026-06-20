@@ -1,194 +1,149 @@
 /**
- * HECTIC Intellectual Property - Copyright 2024
  * Black Moss & Herbs Platform - Video Wisdom Library
  */
 import { Metadata } from 'next'
 import Link from 'next/link'
-import { Play, Clock, Eye } from 'lucide-react'
+import { Play, Clock, Eye, Film } from 'lucide-react'
+import { prisma } from '@/lib/prisma'
+
+export const dynamic = 'force-dynamic'
 
 export const metadata: Metadata = {
-    title: 'Video Hub - Black Moss & Herbs',
-    description: 'Educational videos about herbal wellness, product tutorials, and expert interviews.',
+    title: 'Video Library | Black Moss & Herbs',
+    description: 'Educational videos on herbal wellness, sea moss benefits, product tutorials, and expert interviews from the Black Moss & Herbs team.',
 }
 
-const videos = [
-    {
-        id: '1',
-        title: 'How to Use Sea Moss Gel Daily',
-        slug: 'how-to-use-sea-moss-gel',
-        description: 'Learn the best ways to incorporate sea moss gel into your daily routine for maximum benefits.',
-        category: 'Tutorials',
-        duration: 480, // seconds
-        views: 12500,
-        featured: true,
-    },
-    {
-        id: '2',
-        title: 'The Science Behind Adaptogens',
-        slug: 'science-behind-adaptogens',
-        description: 'Discover how adaptogenic herbs work in your body to combat stress and promote balance.',
-        category: 'Education',
-        duration: 720,
-        views: 8300,
-    },
-    {
-        id: '3',
-        title: 'Making Herbal Tea Blends at Home',
-        slug: 'making-herbal-tea-blends',
-        description: 'Step-by-step guide to creating your own custom herbal tea blends.',
-        category: 'DIY',
-        duration: 600,
-        views: 5600,
-    },
-    {
-        id: '4',
-        title: 'Interview: Herbalist Sarah Johnson',
-        slug: 'interview-herbalist-sarah',
-        description: 'Expert insights on traditional herbal medicine and modern wellness practices.',
-        category: 'Interviews',
-        duration: 1800,
-        views: 9200,
-    },
-    {
-        id: '5',
-        title: 'Turmeric Golden Milk Recipe',
-        slug: 'turmeric-golden-milk-recipe',
-        description: 'Create this anti-inflammatory drink that supports overall health and wellness.',
-        category: 'Recipes',
-        duration: 360,
-        views: 15000,
-    },
-    {
-        id: '6',
-        title: 'Building Your Herbal First Aid Kit',
-        slug: 'herbal-first-aid-kit',
-        description: 'Essential herbs and remedies every household should have on hand.',
-        category: 'Education',
-        duration: 900,
-        views: 6800,
-    },
-]
-
-const categories = ['All', 'Tutorials', 'Education', 'DIY', 'Interviews', 'Recipes']
-
-function formatDuration(seconds: number): string {
-    const minutes = Math.floor(seconds / 60)
-    const remainingSeconds = seconds % 60
-    return `${minutes}:${remainingSeconds.toString().padStart(2, '0')}`
+function formatDuration(seconds: number | null): string {
+    if (!seconds) return ''
+    const m = Math.floor(seconds / 60)
+    const s = seconds % 60
+    return `${m}:${s.toString().padStart(2, '0')}`
 }
 
 function formatViews(views: number): string {
-    if (views >= 1000) {
-        return `${(views / 1000).toFixed(1)}K`
-    }
-    return views.toString()
+    return views >= 1000 ? `${(views / 1000).toFixed(1)}K` : views.toString()
 }
 
-export default function VideosPage() {
+export default async function VideosPage() {
+    const videos = await prisma.video.findMany({
+        where: { published: true },
+        orderBy: [{ views: 'desc' }, { createdAt: 'desc' }],
+    })
+
+    const featured = videos[0] || null
+    const rest = videos.slice(1)
+
     return (
-        <div className="py-12">
-            <div className="container">
+        <div className="py-24 bg-earth-950 min-h-screen">
+            <div className="container pt-12">
                 {/* Header */}
-                <div className="mb-12">
-                    <h1 className="section-title">Video Hub</h1>
-                    <p className="section-subtitle">
-                        Educational content, tutorials, and expert insights on herbal wellness
+                <div className="mb-16 text-center">
+                    <span className="text-[10px] font-black uppercase tracking-[0.3em] text-primary-400 mb-4 block">Education</span>
+                    <h1 className="text-5xl md:text-6xl font-serif font-bold text-white mb-4 tracking-tighter">Video Library</h1>
+                    <p className="text-earth-400 text-lg max-w-xl mx-auto">
+                        Tutorials, expert insights, and practical guides on herbal wellness and our products.
                     </p>
                 </div>
 
-                {/* Categories */}
-                <div className="flex flex-wrap gap-3 mb-12">
-                    {categories.map((category) => (
-                        <button
-                            key={category}
-                            className={`px-6 py-2 rounded-full font-medium transition-all ${category === 'All'
-                                ? 'bg-primary-600 text-white'
-                                : 'bg-white text-earth-700 hover:bg-earth-100 border border-earth-200'
-                                }`}
-                        >
-                            {category}
-                        </button>
-                    ))}
-                </div>
-
-                {/* Featured Video */}
-                {videos.filter(v => v.featured).map((video) => (
-                    <Link key={video.id} href={`/videos/${video.slug}`}>
-                        <div className="card mb-12 overflow-hidden group hover:scale-[1.02] transition-transform">
-                            <div className="grid grid-cols-1 lg:grid-cols-2">
-                                <div className="relative h-64 lg:h-auto bg-gradient-to-br from-primary-600 to-secondary-600 flex items-center justify-center">
-                                    <div className="absolute inset-0 bg-black/20"></div>
-                                    <div className="relative z-10 w-20 h-20 bg-white/90 rounded-full flex items-center justify-center group-hover:scale-110 transition-transform">
-                                        <Play className="w-10 h-10 text-primary-600 ml-1" />
-                                    </div>
-                                    <div className="absolute bottom-4 right-4 bg-black/80 text-white px-3 py-1 rounded text-sm font-medium">
-                                        {formatDuration(video.duration)}
-                                    </div>
-                                    <div className="absolute top-4 left-4">
-                                        <span className="badge bg-red-600 text-white">Featured</span>
-                                    </div>
-                                </div>
-                                <div className="p-8 lg:p-12 flex flex-col justify-center">
-                                    <div className="mb-4">
-                                        <span className="badge-primary">{video.category}</span>
-                                    </div>
-                                    <h2 className="text-3xl lg:text-4xl font-serif font-bold text-earth-900 mb-4 group-hover:text-primary-600 transition-colors">
-                                        {video.title}
-                                    </h2>
-                                    <p className="text-earth-600 text-lg mb-6">
-                                        {video.description}
-                                    </p>
-                                    <div className="flex items-center gap-6 text-sm text-earth-500">
-                                        <div className="flex items-center gap-2">
-                                            <Eye className="w-4 h-4" />
-                                            {formatViews(video.views)} views
-                                        </div>
-                                        <div className="flex items-center gap-2">
-                                            <Clock className="w-4 h-4" />
-                                            {formatDuration(video.duration)}
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </Link>
-                ))}
-
-                {/* Video Grid */}
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                    {videos.filter(v => !v.featured).map((video) => (
-                        <Link key={video.id} href={`/videos/${video.slug}`}>
-                            <div className="card group overflow-hidden">
-                                <div className="relative h-48 bg-gradient-to-br from-earth-600 to-earth-700 flex items-center justify-center">
-                                    <div className="absolute inset-0 bg-black/10"></div>
-                                    <div className="relative z-10 w-16 h-16 bg-white/90 rounded-full flex items-center justify-center group-hover:scale-110 transition-transform">
-                                        <Play className="w-8 h-8 text-primary-600 ml-1" />
-                                    </div>
-                                    <div className="absolute bottom-3 right-3 bg-black/80 text-white px-2 py-1 rounded text-xs font-medium">
-                                        {formatDuration(video.duration)}
-                                    </div>
-                                </div>
-                                <div className="p-6">
-                                    <div className="mb-3">
-                                        <span className="badge-secondary text-xs">{video.category}</span>
-                                    </div>
-                                    <h3 className="font-serif text-xl font-bold text-earth-900 mb-3 group-hover:text-primary-600 transition-colors line-clamp-2">
-                                        {video.title}
-                                    </h3>
-                                    <p className="text-earth-600 text-sm mb-4 line-clamp-2">
-                                        {video.description}
-                                    </p>
-                                    <div className="flex items-center gap-4 text-xs text-earth-500">
-                                        <div className="flex items-center gap-1">
-                                            <Eye className="w-3 h-3" />
-                                            {formatViews(video.views)}
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
+                {videos.length === 0 ? (
+                    <div className="text-center py-24">
+                        <Film className="w-16 h-16 text-earth-700 mx-auto mb-6" />
+                        <h2 className="text-2xl font-serif font-bold text-white mb-3">Videos coming soon</h2>
+                        <p className="text-earth-500 mb-8">We&apos;re producing educational content on herbal wellness. Check back shortly.</p>
+                        <Link href="/shop" className="inline-block px-8 py-4 bg-secondary-500 hover:bg-secondary-400 text-stone-950 font-bold rounded-xl transition-colors">
+                            Shop Products
                         </Link>
-                    ))}
-                </div>
+                    </div>
+                ) : (
+                    <>
+                        {/* Featured Video */}
+                        {featured && (
+                            <Link href={`/videos/${featured.slug}`} className="block mb-16 group">
+                                <div className="premium-card overflow-hidden">
+                                    <div className="grid grid-cols-1 lg:grid-cols-2">
+                                        <div className="relative aspect-video lg:aspect-auto bg-gradient-to-br from-primary-900 to-earth-900 flex items-center justify-center min-h-64">
+                                            {featured.thumbnail ? (
+                                                <img src={featured.thumbnail} alt={featured.title} className="absolute inset-0 w-full h-full object-cover" />
+                                            ) : null}
+                                            <div className="absolute inset-0 bg-black/30" />
+                                            <div className="relative z-10 w-20 h-20 bg-white/90 rounded-full flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
+                                                <Play className="w-10 h-10 text-primary-700 ml-1" />
+                                            </div>
+                                            {featured.duration && (
+                                                <span className="absolute bottom-4 right-4 bg-black/80 text-white px-3 py-1 rounded text-sm font-medium">
+                                                    {formatDuration(featured.duration)}
+                                                </span>
+                                            )}
+                                            <span className="absolute top-4 left-4 px-4 py-1.5 bg-secondary-500 text-stone-950 text-[10px] font-black uppercase tracking-widest rounded-full">
+                                                Featured
+                                            </span>
+                                        </div>
+                                        <div className="p-10 lg:p-14 flex flex-col justify-center">
+                                            <span className="text-[10px] font-black uppercase tracking-[0.3em] text-primary-400 mb-4 block">{featured.category}</span>
+                                            <h2 className="text-3xl lg:text-4xl font-serif font-bold text-white mb-4 group-hover:text-secondary-400 transition-colors leading-tight">
+                                                {featured.title}
+                                            </h2>
+                                            <p className="text-earth-400 text-base mb-8 leading-relaxed line-clamp-3">
+                                                {featured.description}
+                                            </p>
+                                            <div className="flex items-center gap-6 text-sm text-earth-500">
+                                                <div className="flex items-center gap-2">
+                                                    <Eye className="w-4 h-4" />
+                                                    {formatViews(featured.views)} views
+                                                </div>
+                                                {featured.duration && (
+                                                    <div className="flex items-center gap-2">
+                                                        <Clock className="w-4 h-4" />
+                                                        {formatDuration(featured.duration)}
+                                                    </div>
+                                                )}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </Link>
+                        )}
+
+                        {/* Video Grid */}
+                        {rest.length > 0 && (
+                            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                                {rest.map((video) => (
+                                    <Link key={video.id} href={`/videos/${video.slug}`} className="group">
+                                        <div className="premium-card overflow-hidden h-full flex flex-col">
+                                            <div className="relative aspect-video bg-gradient-to-br from-earth-900 to-earth-800 flex items-center justify-center">
+                                                {video.thumbnail ? (
+                                                    <img src={video.thumbnail} alt={video.title} className="absolute inset-0 w-full h-full object-cover" />
+                                                ) : null}
+                                                <div className="absolute inset-0 bg-black/20" />
+                                                <div className="relative z-10 w-14 h-14 bg-white/90 rounded-full flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
+                                                    <Play className="w-7 h-7 text-primary-700 ml-0.5" />
+                                                </div>
+                                                {video.duration && (
+                                                    <span className="absolute bottom-3 right-3 bg-black/80 text-white px-2 py-0.5 rounded text-xs font-medium">
+                                                        {formatDuration(video.duration)}
+                                                    </span>
+                                                )}
+                                            </div>
+                                            <div className="p-6 flex flex-col flex-1">
+                                                <span className="text-[10px] font-black uppercase tracking-[0.2em] text-primary-400 mb-3 block">{video.category}</span>
+                                                <h3 className="font-serif text-lg font-bold text-white mb-3 group-hover:text-secondary-400 transition-colors line-clamp-2 flex-1">
+                                                    {video.title}
+                                                </h3>
+                                                <p className="text-earth-500 text-sm mb-4 line-clamp-2">{video.description}</p>
+                                                <div className="flex items-center gap-4 text-xs text-earth-600">
+                                                    <div className="flex items-center gap-1.5">
+                                                        <Eye className="w-3.5 h-3.5" />
+                                                        {formatViews(video.views)} views
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </Link>
+                                ))}
+                            </div>
+                        )}
+                    </>
+                )}
             </div>
         </div>
     )
