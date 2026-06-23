@@ -1,37 +1,37 @@
 /**
  * Black Moss & Herbs Platform - Subscription Checkout
- * Starts a Stripe subscription Checkout Session for a given plan. Plan keys are
- * mapped to Stripe Price IDs via environment variables so the catalogue can be
- * managed entirely from the Stripe dashboard.
+ * Creates a Stripe subscription session using the plan's stripePriceId from the DB.
  */
 import { NextRequest, NextResponse } from 'next/server'
+import { getServerSession } from 'next-auth'
+import { authOptions } from '@/lib/auth'
 import { stripe } from '@/lib/stripe'
+import { prisma } from '@/lib/prisma'
 
 export const dynamic = 'force-dynamic'
-
-const PRICE_ENV: Record<string, string | undefined> = {
-    starter: process.env.STRIPE_PRICE_STARTER,
-    plus: process.env.STRIPE_PRICE_PLUS,
-    pro: process.env.STRIPE_PRICE_PRO,
-}
 
 export async function POST(req: NextRequest) {
     if (!process.env.STRIPE_SECRET_KEY) {
         return NextResponse.json(
-            { error: 'Payments are not configured. Set STRIPE_SECRET_KEY to enable subscriptions.' },
+            { error: 'Payments are not configured.' },
             { status: 503 }
         )
     }
 
     try {
-        const { plan } = await req.json()
-        const priceId = PRICE_ENV[plan]
+        const session = await getServerSession(authOptions)
+        if (!session?.user?.id) {
+            return NextResponse.json({ error: 'Sign in to subscribe.', redirect: '/login' }, { status: 401 })
+        }
 
-        if (!priceId) {
-            return NextResponse.json(
-                { error: 'This plan is not available yet. Configure its Stripe Price ID to enable it.' },
-                { status: 503 }
-            )
+        const { planId } = await req.json()
+        if (!planId) {
+            return NextResponse.json({ error: 'Plan ID is required.' }, { status: 400 })
+        }
+
+        const plan = await prisma.subscriptionPlan.findUnique({ where: { id: planId, active: true } })
+        if (!plan) {
+            return NextResponse.json({ error: 'This plan is not currently available.' }, { status: 404 })
         }
 
         const origin =
@@ -39,16 +39,22 @@ export async function POST(req: NextRequest) {
             process.env.NEXTAUTH_URL ||
             req.nextUrl.origin
 
-        const session = await stripe.checkout.sessions.create({
+        const stripeSession = await stripe.checkout.sessions.create({
             mode: 'subscription',
-            line_items: [{ price: priceId, quantity: 1 }],
+            line_items: [{ price: plan.stripePriceId, quantity: 1 }],
+            customer_email: session.user.email || undefined,
             success_url: `${origin}/dashboard?subscription=success`,
-            cancel_url: `${origin}/subscriptions?subscription=cancelled`,
+            cancel_url: `${origin}/membership?subscription=cancelled`,
+            metadata: {
+                type: 'SUBSCRIPTION',
+                userId: session.user.id,
+                planId: plan.id,
+            },
         })
 
-        return NextResponse.json({ url: session.url })
+        return NextResponse.json({ url: stripeSession.url })
     } catch (error) {
-        console.error('[checkout/subscription] FAILURE:', error)
+        console.error('[checkout/subscription] error:', error)
         return NextResponse.json({ error: 'Could not start subscription checkout.' }, { status: 500 })
     }
 }

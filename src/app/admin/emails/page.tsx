@@ -1,86 +1,110 @@
-/**
- * HECTIC Intellectual Property - Copyright 2024
- * Black Moss & Herbs Platform - Email Archive
- */
-"use client";
+'use client'
 
-import { Mail, Send, Eye, RefreshCw, CheckCircle, AlertCircle, Clock } from 'lucide-react';
+import { useState } from 'react'
+import { Mail, Send, CheckCircle, AlertCircle, Info } from 'lucide-react'
 
 export default function EmailArchive() {
-    const historicalEmails = [
-        { id: 'EML-102', recipient: 'marcus@example.com', subject: 'Your Biological Gold is Dispatched', status: 'Delivered', time: '10 mins ago', type: 'Transactional' },
-        { id: 'EML-101', recipient: 'sarah.j@example.com', subject: 'Welcome to the Alchemist Circle', status: 'Sent', time: '2 hours ago', type: 'Onboarding' },
-        { id: 'EML-100', recipient: 'd.thorne@example.com', subject: 'Consultation Scheduled: Phase 1', status: 'Delayed', time: '5 hours ago', type: 'Booking' },
-        { id: 'EML-099', recipient: 'elena@example.com', subject: 'Reset Your Authority Credentials', status: 'Failed', time: '1 day ago', type: 'Security' },
-    ];
+    const [testEmail, setTestEmail] = useState('')
+    const [sending, setSending] = useState(false)
+    const [result, setResult] = useState<{ ok: boolean; message: string } | null>(null)
+
+    const sendTestEmail = async () => {
+        if (!testEmail.trim()) return
+        setSending(true)
+        setResult(null)
+        try {
+            const res = await fetch('/api/admin/test-email', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ email: testEmail }),
+            })
+            const data = await res.json()
+            setResult({ ok: res.ok, message: data.message || (res.ok ? 'Email sent successfully.' : 'Failed to send email.') })
+        } catch {
+            setResult({ ok: false, message: 'Network error. Check your SMTP configuration.' })
+        } finally {
+            setSending(false)
+        }
+    }
 
     return (
-        <div className="py-12 bg-earth-950 min-h-screen relative overflow-hidden text-earth-200 uppercase font-bold text-xs">
-            <div className="container relative z-10">
+        <div className="py-12 bg-earth-950 min-h-screen text-earth-200">
+            <div className="container relative z-10 max-w-4xl">
                 <div className="mb-12">
-                    <h1 className="font-serif text-5xl font-bold bg-gradient-to-r from-blue-400 to-indigo-400 bg-clip-text text-transparent mb-2 normal-case">
-                        Email Archive
-                    </h1>
-                    <p className="text-earth-400 text-lg normal-case font-medium">Audit the transactional communication stream.</p>
+                    <h1 className="font-serif text-4xl font-bold text-white mb-2">Email System</h1>
+                    <p className="text-earth-400">Test your transactional email configuration and verify delivery.</p>
                 </div>
 
-                {/* Stream Controls */}
-                <div className="flex gap-4 mb-8">
-                    <button className="h-12 px-6 bg-earth-900/50 border border-blue-500/30 rounded-xl text-blue-400 flex items-center gap-2 hover:bg-blue-900/20 transition-all">
-                        <RefreshCw size={14} className="animate-spin-slow" />
-                        Live Sync: Active
-                    </button>
-                    <button className="h-12 px-6 bg-earth-900/50 border border-earth-800 rounded-xl text-earth-400 flex items-center gap-2 hover:text-white transition-all">
-                        <Send size={14} />
-                        Test Transmission
-                    </button>
+                {/* SMTP status info */}
+                <div className="p-6 bg-earth-900/40 border border-earth-800 rounded-2xl mb-8 flex items-start gap-4">
+                    <Info className="w-5 h-5 text-blue-400 shrink-0 mt-0.5" />
+                    <div>
+                        <p className="text-sm font-semibold text-white mb-1">Email Log Tracking</p>
+                        <p className="text-sm text-earth-400 leading-relaxed">
+                            Real-time email logs require a provider like SendGrid, Resend, or Postmark with webhook delivery events.
+                            Configure your SMTP credentials in <code className="text-secondary-400 bg-earth-950 px-1.5 py-0.5 rounded text-xs">.env</code> to enable transactional emails (order confirmations, welcome emails, password resets).
+                        </p>
+                    </div>
                 </div>
 
-                {/* Email List */}
-                <div className="space-y-4">
-                    {historicalEmails.map((email) => (
-                        <div key={email.id} className="card p-6 border border-earth-800 bg-earth-900/40 backdrop-blur-md rounded-2xl flex flex-col md:flex-row md:items-center justify-between gap-6 hover:border-blue-500/40 transition-all cursor-pointer group">
-                            <div className="flex items-center gap-6">
-                                <div className={`w-12 h-12 rounded-xl flex items-center justify-center border ${email.status === 'Delivered' ? 'bg-emerald-900/20 border-emerald-500/30 text-emerald-400' :
-                                        email.status === 'Failed' ? 'bg-red-900/20 border-red-500/30 text-red-400' :
-                                            'bg-blue-900/20 border-blue-500/30 text-blue-400'
-                                    }`}>
-                                    <Mail size={20} />
-                                </div>
-                                <div>
-                                    <div className="text-[10px] text-earth-500 tracking-[0.2em] mb-1">{email.id} • {email.type}</div>
-                                    <div className="text-white text-sm normal-case group-hover:text-blue-400 transition-colors">{email.subject}</div>
-                                    <div className="text-earth-400 text-[10px] mt-1 tracking-widest">{email.recipient}</div>
-                                </div>
-                            </div>
-
-                            <div className="flex items-center gap-10">
-                                <div className="text-right">
-                                    <div className="flex items-center gap-2 justify-end mb-1">
-                                        {email.status === 'Delivered' && <CheckCircle size={12} className="text-emerald-500" />}
-                                        {email.status === 'Failed' && <AlertCircle size={12} className="text-red-500" />}
-                                        {email.status === 'Delayed' && <Clock size={12} className="text-amber-500" />}
-                                        <span className={
-                                            email.status === 'Delivered' ? 'text-emerald-400' :
-                                                email.status === 'Failed' ? 'text-red-400' :
-                                                    email.status === 'Delayed' ? 'text-amber-400' :
-                                                        'text-blue-400'
-                                        }>{email.status}</span>
-                                    </div>
-                                    <div className="text-earth-600 text-[8px] tracking-widest">{email.time}</div>
-                                </div>
-                                <button className="p-3 rounded-lg bg-earth-950/80 border border-earth-800 text-earth-500 hover:text-white transition-all">
-                                    <Eye size={16} />
-                                </button>
-                            </div>
+                {/* Test email form */}
+                <div className="p-8 bg-earth-900/40 border border-earth-800 rounded-2xl mb-8">
+                    <h2 className="text-lg font-bold text-white mb-6">Send Test Email</h2>
+                    <div className="flex gap-4">
+                        <input
+                            type="email"
+                            value={testEmail}
+                            onChange={(e) => setTestEmail(e.target.value)}
+                            onKeyDown={(e) => e.key === 'Enter' && sendTestEmail()}
+                            placeholder="recipient@example.com"
+                            className="flex-1 bg-earth-950 border border-earth-700 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-secondary-500 transition-colors text-sm"
+                        />
+                        <button
+                            onClick={sendTestEmail}
+                            disabled={sending || !testEmail.trim()}
+                            className="px-6 py-3 bg-secondary-500 hover:bg-secondary-400 disabled:opacity-50 text-stone-950 font-bold rounded-xl transition-colors flex items-center gap-2 text-sm"
+                        >
+                            <Send className="w-4 h-4" />
+                            {sending ? 'Sending...' : 'Send Test'}
+                        </button>
+                    </div>
+                    {result && (
+                        <div className={`mt-4 flex items-center gap-2 text-sm p-3 rounded-xl ${result.ok ? 'bg-emerald-900/30 border border-emerald-800 text-emerald-400' : 'bg-red-900/30 border border-red-800 text-red-400'}`}>
+                            {result.ok ? <CheckCircle className="w-4 h-4 shrink-0" /> : <AlertCircle className="w-4 h-4 shrink-0" />}
+                            {result.message}
                         </div>
-                    ))}
+                    )}
                 </div>
 
-                <div className="mt-12 p-8 border border-earth-800 bg-earth-900/20 rounded-[2rem] text-center">
-                    <p className="text-earth-500 text-[10px] tracking-[0.3em]">Encrypted Log Partition: 0x842-TRANS-ARCHIVE</p>
+                {/* Email types reference */}
+                <div className="p-8 bg-earth-900/40 border border-earth-800 rounded-2xl">
+                    <h2 className="text-lg font-bold text-white mb-6">Configured Email Types</h2>
+                    <div className="space-y-3">
+                        {[
+                            { name: 'Welcome Email', trigger: 'New user registration', status: 'active' },
+                            { name: 'Order Confirmation', trigger: 'Checkout completed (Stripe webhook)', status: 'active' },
+                            { name: 'Password Reset', trigger: 'Forgot password request', status: 'active' },
+                            { name: 'Consultation Request', trigger: 'Booking form submitted', status: 'active' },
+                        ].map((item) => (
+                            <div key={item.name} className="flex items-center justify-between p-4 bg-earth-950/50 rounded-xl border border-earth-800">
+                                <div className="flex items-center gap-3">
+                                    <div className="w-8 h-8 bg-primary-900/40 rounded-lg flex items-center justify-center">
+                                        <Mail className="w-4 h-4 text-primary-400" />
+                                    </div>
+                                    <div>
+                                        <p className="text-sm font-semibold text-white">{item.name}</p>
+                                        <p className="text-xs text-earth-500">{item.trigger}</p>
+                                    </div>
+                                </div>
+                                <span className="flex items-center gap-1.5 text-xs text-emerald-400 font-bold">
+                                    <CheckCircle className="w-3.5 h-3.5" />
+                                    Configured
+                                </span>
+                            </div>
+                        ))}
+                    </div>
                 </div>
             </div>
         </div>
-    );
+    )
 }

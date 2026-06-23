@@ -128,9 +128,9 @@ export default function ConsultationsPage() {
                     </div>
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
                         {[
-                            { name: 'Dr. Sarah Johnson', title: 'Master Herbalist', specialty: 'Womb Restoration & Hormones' },
-                            { name: 'Michael Chen', title: 'Clinical Herbalist', specialty: 'Digestive Alchemist & Immunity' },
-                            { name: 'Dr. Amara Williams', title: 'Holistic Practitioner', specialty: 'Stress Modulation & Adaptogens' },
+                            { name: 'Dr. Amara Williams', title: 'Lead Herbalist', specialty: 'Biological Terrain & Alkaline Protocols' },
+                            { name: 'Sister Ife Okonkwo', title: 'Master Herbalist', specialty: 'Womb Restoration & Hormonal Health' },
+                            { name: 'Marcus Adeyemi', title: 'Nutritional Herbalist', specialty: 'Digestive Health & Immunity' },
                         ].map((herbalist, index) => (
                             <div key={index} className="organic-glass p-10 text-center rounded-3xl border-stone-800/10 group hover:border-amber-500/20 transition-all duration-700">
                                 <div className="w-32 h-32 bg-stone-900 rounded-full mx-auto mb-8 flex items-center justify-center p-1 border border-stone-800 relative overflow-hidden group-hover:scale-105 transition-transform duration-700">
