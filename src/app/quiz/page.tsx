@@ -1,102 +1,194 @@
-/**
- * HECTIC Intellectual Property - Copyright 2024
- * Black Moss & Herbs Platform - Bio-Restoration Quiz
- */
-"use client";
+'use client'
 
-import { useState } from 'react';
-import { Sparkles, ArrowRight, ArrowLeft, CheckCircle2, FlaskConical, Droplet, Sun, Wind } from 'lucide-react';
-import Button from '@/components/Button';
+import { useState } from 'react'
+import { Sparkles, ArrowRight, ArrowLeft, CheckCircle2, FlaskConical, Sun, Wind, Leaf, ShoppingBag } from 'lucide-react'
+import Link from 'next/link'
 
 const steps = [
     {
         id: 'energy',
-        question: 'How would you describe your current biological energy levels?',
+        question: 'How would you describe your current energy levels?',
         options: [
             { label: 'Depleted', value: 'low', description: 'Constant fatigue, slow recovery.' },
             { label: 'Fluctuating', value: 'medium', description: 'Morning peaks, afternoon crashes.' },
             { label: 'Optimal', value: 'high', description: 'Consistent vitality throughout the day.' },
         ],
-        icon: Sun
+        icon: Sun,
     },
     {
         id: 'digestion',
-        question: 'Describe your digestive efficiency.',
+        question: 'How would you describe your digestion?',
         options: [
             { label: 'Sluggish', value: 'sluggish', description: 'Bloating, slow transit time.' },
             { label: 'Sensitive', value: 'sensitive', description: 'Reactive to many food types.' },
             { label: 'Efficient', value: 'efficient', description: 'Regular, comfortable digestion.' },
         ],
-        icon: FlaskConical
+        icon: FlaskConical,
     },
     {
         id: 'mental',
-        question: 'What is your current cognitive state?',
+        question: 'What is your current mental state?',
         options: [
             { label: 'Foggy', value: 'fog', description: 'Difficulty focusing, mental fatigue.' },
-            { label: 'Distracted', value: 'distracted', description: 'Overactive mind, anxious thoughts.' },
+            { label: 'Anxious', value: 'anxious', description: 'Overactive mind, stress-driven thoughts.' },
             { label: 'Sharp', value: 'sharp', description: 'Clear focus and quick recall.' },
         ],
-        icon: Wind
+        icon: Wind,
+    },
+    {
+        id: 'goal',
+        question: 'What is your primary wellness goal?',
+        options: [
+            { label: 'Immunity', value: 'immunity', description: 'Strengthen natural defences.' },
+            { label: 'Gut Health', value: 'gut', description: 'Improve digestion and absorption.' },
+            { label: 'Vitality', value: 'vitality', description: 'Restore energy and balance.' },
+        ],
+        icon: Leaf,
+    },
+]
+
+interface Recommendation {
+    title: string
+    tagline: string
+    reasoning: string
+    searchQuery: string
+    category: string
+}
+
+function getRecommendation(answers: Record<string, string>): Recommendation {
+    const { energy, digestion, mental, goal } = answers
+
+    // Primary goal overrides
+    if (goal === 'gut' || digestion === 'sluggish' || digestion === 'sensitive') {
+        return {
+            title: 'Sea Moss & Bladderwrack Blend',
+            tagline: 'Gut Restoration Protocol',
+            reasoning: 'Your answers indicate sluggish or sensitive digestion. Sea moss provides prebiotic fibres that feed beneficial gut bacteria, while bladderwrack supports thyroid function linked to metabolic rate and digestive efficiency.',
+            searchQuery: 'sea moss bladderwrack',
+            category: 'Digestion & Gut Health',
+        }
     }
-];
+
+    if (goal === 'immunity' || (energy === 'low' && mental === 'fog')) {
+        return {
+            title: 'Sea Moss Gold Matrix',
+            tagline: 'Immunity & Mineral Replenishment',
+            reasoning: 'Your markers suggest depleted mineral reserves affecting both energy and cognitive clarity. Sea Moss Gold provides 92 bioavailable trace minerals including iodine, zinc, and organic iron — foundational for immune function and cell oxygenation.',
+            searchQuery: 'sea moss',
+            category: 'Immunity & Energy',
+        }
+    }
+
+    if (mental === 'anxious' || (mental === 'fog' && energy === 'medium')) {
+        return {
+            title: 'Adaptogen & Stress Support Bundle',
+            tagline: 'Stress Modulation Protocol',
+            reasoning: 'Your cognitive profile suggests elevated cortisol and stress load. Adaptogenic herbs like ashwagandha, lion\'s mane, and reishi help regulate the HPA axis, reducing anxiety and restoring mental clarity over 4–8 weeks.',
+            searchQuery: 'adaptogen',
+            category: 'Stress & Cognitive Health',
+        }
+    }
+
+    if (goal === 'vitality' || energy === 'medium') {
+        return {
+            title: 'Burdock Root & Sea Moss Stack',
+            tagline: 'Vitality Restoration Protocol',
+            reasoning: 'Fluctuating energy typically indicates blood sugar instability or lymphatic congestion. Burdock root is a powerful lymphatic cleanser, while sea moss provides sustained mineral support for consistent energy throughout the day.',
+            searchQuery: 'burdock',
+            category: 'Vitality & Detox',
+        }
+    }
+
+    // Default — high energy, efficient digestion, sharp mind
+    return {
+        title: 'Sea Moss Maintenance Protocol',
+        tagline: 'Optimisation & Longevity',
+        reasoning: 'Your biological markers show strong baseline health. A daily sea moss maintenance dose supports longevity, sustained mineral density, and cellular hydration — keeping your system optimised.',
+        searchQuery: 'sea moss',
+        category: 'Maintenance & Longevity',
+    }
+}
 
 export default function BioRestorationQuiz() {
-    const [currentStep, setCurrentStep] = useState(0);
-    const [answers, setAnswers] = useState<Record<string, string>>({});
-    const [isComplete, setIsComplete] = useState(false);
+    const [currentStep, setCurrentStep] = useState(0)
+    const [answers, setAnswers] = useState<Record<string, string>>({})
+    const [isComplete, setIsComplete] = useState(false)
 
     const handleSelect = (value: string) => {
-        setAnswers({ ...answers, [steps[currentStep].id]: value });
+        const updated = { ...answers, [steps[currentStep].id]: value }
+        setAnswers(updated)
         if (currentStep < steps.length - 1) {
-            setCurrentStep(currentStep + 1);
+            setCurrentStep(currentStep + 1)
         } else {
-            setIsComplete(true);
+            setIsComplete(true)
         }
-    };
-
-    if (isComplete) {
-        return (
-            <div className="min-h-screen bg-earth-950 flex items-center justify-center p-6">
-                <div className="max-w-2xl w-full card p-12 border border-primary-500/30 bg-earth-900/60 backdrop-blur-2xl text-center rounded-[3rem]">
-                    <div className="w-20 h-20 bg-primary-900/40 border border-primary-500/50 rounded-full flex items-center justify-center mx-auto mb-8 animate-pulse">
-                        <CheckCircle2 className="w-10 h-10 text-primary-400" />
-                    </div>
-                    <h1 className="font-serif text-4xl font-bold text-white mb-4">Protocol Generated</h1>
-                    <p className="text-earth-400 text-lg mb-8">Based on your biological markers, we have identified a high-affinity protocol for your restoration.</p>
-
-                    <div className="bg-earth-950/50 border border-earth-800 rounded-2xl p-6 mb-8 text-left">
-                        <h3 className="text-secondary-400 font-black uppercase text-xs tracking-widest mb-4">Primary Restoration: Sea Moss Gold Matrix</h3>
-                        <p className="text-white text-sm leading-relaxed">Focus on intracellular hydration and mineral replenishment. Your markers suggest a need for high-density iodine and organic iron.</p>
-                    </div>
-
-                    <Button size="lg" className="w-full h-16 rounded-2xl text-lg font-bold">
-                        Access Your Full Protocol
-                    </Button>
-                </div>
-            </div>
-        );
     }
 
-    const StepIcon = steps[currentStep].icon;
+    if (isComplete) {
+        const rec = getRecommendation(answers)
+        return (
+            <div className="min-h-screen bg-earth-950 flex items-center justify-center p-6">
+                <div className="max-w-2xl w-full premium-card p-12 text-center">
+                    <div className="w-20 h-20 bg-primary-900/40 border border-primary-500/50 rounded-full flex items-center justify-center mx-auto mb-8">
+                        <CheckCircle2 className="w-10 h-10 text-primary-400" />
+                    </div>
+                    <span className="text-[10px] font-black uppercase tracking-[0.3em] text-secondary-400 mb-3 block">{rec.category}</span>
+                    <h1 className="font-serif text-4xl font-bold text-white mb-2">{rec.title}</h1>
+                    <p className="text-secondary-400 font-bold uppercase text-xs tracking-widest mb-8">{rec.tagline}</p>
+
+                    <div className="bg-earth-950/50 border border-earth-800 rounded-2xl p-6 mb-8 text-left">
+                        <h3 className="text-earth-500 font-black uppercase text-[10px] tracking-widest mb-3">Why this protocol</h3>
+                        <p className="text-earth-300 text-sm leading-relaxed">{rec.reasoning}</p>
+                    </div>
+
+                    <p className="text-xs text-earth-600 italic mb-8">
+                        Food supplement. Not intended to diagnose, treat, cure, or prevent any disease. Results vary. Consult your GP before use.
+                    </p>
+
+                    <div className="flex flex-col sm:flex-row gap-4">
+                        <Link
+                            href={`/shop?q=${encodeURIComponent(rec.searchQuery)}`}
+                            className="flex-1 py-4 bg-secondary-500 hover:bg-secondary-400 text-stone-950 font-black uppercase tracking-widest rounded-xl transition-all flex items-center justify-center gap-2"
+                        >
+                            <ShoppingBag className="w-4 h-4" />
+                            Shop This Protocol
+                        </Link>
+                        <button
+                            onClick={() => { setCurrentStep(0); setAnswers({}); setIsComplete(false) }}
+                            className="flex-1 py-4 border border-earth-700 hover:border-earth-500 text-earth-300 hover:text-white font-bold rounded-xl transition-all text-sm uppercase tracking-widest"
+                        >
+                            Retake Quiz
+                        </button>
+                    </div>
+                </div>
+            </div>
+        )
+    }
+
+    const StepIcon = steps[currentStep].icon
 
     return (
         <div className="min-h-screen bg-earth-950 flex items-center justify-center p-6 relative overflow-hidden">
-            {/* Background Glows */}
             <div className="absolute top-1/4 -left-20 w-80 h-80 bg-primary-600/10 blur-[120px] rounded-full" />
             <div className="absolute bottom-1/4 -right-20 w-80 h-80 bg-secondary-600/10 blur-[120px] rounded-full" />
 
             <div className="max-w-3xl w-full relative z-10">
-                <div className="mb-12 flex justify-between items-end">
-                    <div>
-                        <div className="flex items-center gap-2 text-primary-400 text-[10px] font-black uppercase tracking-[0.3em] mb-2">
+                {/* Progress */}
+                <div className="mb-12">
+                    <div className="flex justify-between items-end mb-4">
+                        <div className="flex items-center gap-2 text-primary-400 text-[10px] font-black uppercase tracking-[0.3em]">
                             <Sparkles size={14} />
-                            Biological Analysis
+                            Wellness Analysis
                         </div>
-                        <h2 className="text-4xl font-serif font-bold text-white">Step {currentStep + 1} of {steps.length}</h2>
+                        <div className="text-earth-500 font-mono text-sm">
+                            {currentStep + 1} / {steps.length}
+                        </div>
                     </div>
-                    <div className="text-earth-500 font-mono text-sm">
-                        {Math.round(((currentStep + 1) / steps.length) * 100)}% Complete
+                    <div className="w-full h-1 bg-earth-800 rounded-full overflow-hidden">
+                        <div
+                            className="h-full bg-gradient-to-r from-primary-600 to-secondary-500 rounded-full transition-all duration-500"
+                            style={{ width: `${((currentStep + 1) / steps.length) * 100}%` }}
+                        />
                     </div>
                 </div>
 
@@ -129,18 +221,19 @@ export default function BioRestorationQuiz() {
                         ))}
                     </div>
 
-                    <div className="flex justify-between items-center pt-8">
-                        <button
-                            disabled={currentStep === 0}
-                            onClick={() => setCurrentStep(prev => Math.max(0, prev - 1))}
-                            className="flex items-center gap-2 text-earth-500 hover:text-white disabled:opacity-0 transition-all font-bold text-xs uppercase tracking-widest"
-                        >
-                            <ArrowLeft size={16} />
-                            Back
-                        </button>
-                    </div>
+                    {currentStep > 0 && (
+                        <div className="flex justify-start pt-4">
+                            <button
+                                onClick={() => setCurrentStep(prev => Math.max(0, prev - 1))}
+                                className="flex items-center gap-2 text-earth-500 hover:text-white transition-all font-bold text-xs uppercase tracking-widest"
+                            >
+                                <ArrowLeft size={16} />
+                                Back
+                            </button>
+                        </div>
+                    )}
                 </div>
             </div>
         </div>
-    );
+    )
 }

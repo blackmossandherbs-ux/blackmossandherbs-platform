@@ -93,17 +93,15 @@ export default function HerbalMatrix() {
 
                             <div className="mt-8 pt-6 border-t border-earth-800 flex items-center justify-between">
                                 <span className="text-[10px] font-black uppercase tracking-widest text-earth-500">Affinity: {herb.affinity}</span>
-                                <button className="text-secondary-400 text-xs font-black uppercase tracking-widest hover:text-white transition-colors flex items-center gap-2">
-                                    Full Data Sheet
-                                </button>
+                                <a href={`/shop?q=${encodeURIComponent(herb.name)}`} className="text-secondary-400 text-xs font-black uppercase tracking-widest hover:text-white transition-colors flex items-center gap-2">
+                                    Shop {herb.name}
+                                </a>
                             </div>
                         </div>
                     ))}
                 </div>
 
-                <div className="mt-20 text-center">
-                    <p className="text-earth-600 font-mono text-xs tracking-widest uppercase">Biological Database 0x482-MATRIX • Last Sync: Today</p>
-                </div>
+                <p className="mt-20 text-center text-xs text-earth-700 italic">For educational purposes only. Not intended to diagnose, treat, cure, or prevent any disease.</p>
             </div>
         </div>
     );
