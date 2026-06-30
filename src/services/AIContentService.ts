@@ -2,10 +2,10 @@
  * Black Moss & Herbs Platform - AI Content Engine
  *
  * Generates SEO-style wellness articles in the voice of a chosen author persona
- * using Claude, then persists them as drafts for admin review.
+ * using the configured AI provider, then persists them as drafts for admin review.
  */
 import { prisma } from '@/lib/prisma'
-import { createMessage, isAIConfigured, firstText } from '@/lib/anthropic'
+import { chat, aiEnabled } from '@/lib/ai'
 import { getPersona, DEFAULT_PERSONA_KEY } from '@/lib/personas'
 import { sanitizeWellnessContent } from '@/lib/compliance'
 import { slugify } from '@/lib/utils'
@@ -73,8 +73,8 @@ export class AIContentService {
      * `personaKey` is one of the keys in src/lib/personas.ts.
      */
     static async generatePack(topic: string, personaKey: string = DEFAULT_PERSONA_KEY): Promise<GeneratedContent> {
-        if (!isAIConfigured()) {
-            throw new Error('AI is not configured. Set ANTHROPIC_API_KEY to enable article generation.')
+        if (!(await aiEnabled())) {
+            throw new Error('AI is not configured. Add a provider and API key in Admin → AI Settings to enable article generation.')
         }
 
         const persona = getPersona(personaKey) ?? getPersona(DEFAULT_PERSONA_KEY)!
@@ -87,16 +87,16 @@ Requirements:
 - A compelling title (no "Black Moss" prefix) and a one-sentence excerpt.
 - Pick the single best category from: Sea Moss, Herbal Wisdom, Alkaline Living, Superfoods, Wellness Science, Traditional Remedies.
 - Three short social captions (instagram, twitter, linkedin) promoting the article.
-- Stay strictly within the compliance rules.`
+- Stay strictly within the compliance rules.
+- Respond with ONLY a single JSON object matching this shape (no markdown, no commentary): {"title": string, "excerpt": string, "content": string (HTML), "category": string, "socials": {"instagram": string, "twitter": string, "linkedin": string}}.`
 
-        const response = await createMessage({
-            max_tokens: 8000,
+        const text = await chat({
+            maxTokens: 8000,
             system: persona.systemPrompt,
             messages: [{ role: 'user', content: userPrompt }],
-            extra: { output_config: { format: { type: 'json_schema', schema: OUTPUT_SCHEMA } } },
+            json: true,
         })
 
-        const text = firstText(response)
         if (!text) {
             throw new Error('AI returned no content.')
         }

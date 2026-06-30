@@ -7,10 +7,10 @@
 
 import { useState, useRef, useEffect } from 'react';
 import Link from 'next/link';
-import { Sparkles, X, Send, Bot, User, Stethoscope } from 'lucide-react';
+import { Sparkles, X, Send, Bot } from 'lucide-react';
 import { sanitizeWellnessContent, getUKDisclaimer, isMedicalAdviceRequest } from '@/lib/compliance';
 
-type GuideId = 'alchemist' | 'herbalist' | 'clinical';
+type GuideId = 'mr-moss';
 
 interface Guide {
     id: GuideId;
@@ -22,33 +22,19 @@ interface Guide {
 
 const GUIDES: Guide[] = [
     {
-        id: 'alchemist',
-        name: 'The Alchemist',
-        description: 'Scientific Herbalism',
+        id: 'mr-moss',
+        name: 'Mr. Moss',
+        description: 'Your Wellness Guide',
         icon: Bot,
-        initialMessage: "Peace, friend. I'm here to chat about health in a real way. No pressure, just honest wisdom about herbs and how they work with your body. What's been going on with you?"
-    },
-    {
-        id: 'herbalist',
-        name: 'The Herbalist',
-        description: 'Grounded Wisdom',
-        icon: User,
-        initialMessage: "Hey there. I focus on the rhythm of the body—hormones, rest, and recovery. Think of me as a friend who knows the plants. How are you feeling today?"
-    },
-    {
-        id: 'clinical',
-        name: 'The Clinical Lens',
-        description: 'Evidence-Neutral',
-        icon: Stethoscope,
-        initialMessage: "Hello. I look at herbs through a biological lens, but I keep it simple. If you have questions about specific conditions or just want to understand the 'why' behind a remedy, I'm here."
+        initialMessage: "Hello, I'm Mr. Moss — your friendly guide here at Black Moss & Herbs. Ask me anything about sea moss, our herbs, or natural wellbeing. How can I help you today?"
     }
 ];
 
 export default function AIChatWidget() {
     const [isOpen, setIsOpen] = useState(false);
-    const [view, setView] = useState<'selection' | 'chat'>('selection');
+    const [view, setView] = useState<'selection' | 'chat'>('chat');
     const [selectedGuide, setSelectedGuide] = useState<Guide>(GUIDES[0]);
-    const [messages, setMessages] = useState<any[]>([]);
+    const [messages, setMessages] = useState<any[]>([{ role: 'assistant', content: GUIDES[0].initialMessage }]);
     const [hasUsedFreeGift, setHasUsedFreeGift] = useState(false);
     const [userMessageCount, setUserMessageCount] = useState(0);
     const [input, setInput] = useState('');

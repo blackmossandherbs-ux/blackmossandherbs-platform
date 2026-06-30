@@ -7,7 +7,7 @@
 import { NextResponse } from 'next/server'
 import { requireAdmin } from '@/lib/api-auth'
 import { AIContentService } from '@/services/AIContentService'
-import { isAIConfigured } from '@/lib/anthropic'
+import { aiEnabled } from '@/lib/ai'
 import { PERSONAS, DEFAULT_PERSONA_KEY } from '@/lib/personas'
 
 export const dynamic = 'force-dynamic'
@@ -17,9 +17,9 @@ export async function POST(req: Request) {
     const denied = await requireAdmin()
     if (denied) return denied
 
-    if (!isAIConfigured()) {
+    if (!(await aiEnabled())) {
         return NextResponse.json(
-            { error: 'AI is not configured. Set ANTHROPIC_API_KEY to enable article generation.' },
+            { error: 'AI is not configured. Add a provider and API key in Admin → AI Settings to enable article generation.' },
             { status: 503 }
         )
     }

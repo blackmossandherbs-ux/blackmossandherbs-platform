@@ -114,6 +114,7 @@ export default async function AdminPage() {
                         { href: '/admin/orders', label: 'Orders' },
                         { href: '/admin/customers', label: 'Customers' },
                         { href: '/admin/content', label: 'AI Studio' },
+                        { href: '/admin/ai-settings', label: 'AI Settings' },
                         { href: '/admin/settings', label: 'Site Content' },
                         { href: '/admin/analytics', label: 'Analytics' },
                         { href: '/admin/system', label: 'System' },

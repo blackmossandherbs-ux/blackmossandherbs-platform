@@ -1,20 +1,23 @@
 /**
- * Black Moss & Herbs Platform - Botanical Guide Chat
+ * Black Moss & Herbs Platform - Mr. Moss Guide Chat
  *
- * Real Claude-powered chat. Each on-site guide maps to an author persona so the
- * voice is consistent with the rest of the brand. Falls back to a safe message
- * when AI is not configured.
+ * The on-site AI guide. Runs on whichever provider/keys are configured in the
+ * admin panel (free providers like Groq/OpenRouter/Gemini are supported), with
+ * key rotation and graceful fallback when AI is off or unavailable.
  */
 import { NextResponse } from 'next/server'
-import { createMessage, isAIConfigured, firstText } from '@/lib/anthropic'
-import { getPersona } from '@/lib/personas'
+import { chat, aiEnabled } from '@/lib/ai'
+import { getPersona, DEFAULT_PERSONA_KEY } from '@/lib/personas'
 
 export const dynamic = 'force-dynamic'
 
+// All on-site guides now speak as Mr. Moss; legacy ids still resolve cleanly.
 const GUIDE_TO_PERSONA: Record<string, string> = {
-    alchemist: 'MARCUS_ADEYEMI',
-    herbalist: 'SISTER_IFE_OKONKWO',
-    clinical: 'DR_AMARA_WILLIAMS',
+    'mr-moss': 'MR_MOSS',
+    moss: 'MR_MOSS',
+    alchemist: 'MR_MOSS',
+    herbalist: 'MR_MOSS',
+    clinical: 'MR_MOSS',
 }
 
 const CHAT_BEHAVIOUR = `
@@ -30,11 +33,14 @@ interface ChatMessage {
     content: string
 }
 
+const FRIENDLY_FALLBACK =
+    "I can't chat live just at the moment. Please explore our Wisdom archive, or book a consultation and a real herbalist will help you personally."
+
 export async function POST(req: Request) {
     try {
         const body = await req.json()
-        const guideId: string = body.guideId || 'alchemist'
-        const persona = getPersona(GUIDE_TO_PERSONA[guideId] || 'MARCUS_ADEYEMI')
+        const guideId: string = body.guideId || 'mr-moss'
+        const persona = getPersona(GUIDE_TO_PERSONA[guideId] || 'MR_MOSS') || getPersona(DEFAULT_PERSONA_KEY)
 
         // Accept either a single `message` or a full `messages` history.
         let history: ChatMessage[] = Array.isArray(body.messages) ? body.messages : []
@@ -48,7 +54,7 @@ export async function POST(req: Request) {
             return NextResponse.json({ error: 'No message provided.' }, { status: 400 })
         }
 
-        if (!isAIConfigured()) {
+        if (!(await aiEnabled())) {
             return NextResponse.json({
                 content:
                     "I'm just catching my breath at the moment and can't chat live. In the meantime, explore our Wisdom archive or book a consultation and a real herbalist will help you personally.",
@@ -56,26 +62,19 @@ export async function POST(req: Request) {
             })
         }
 
-        const response = await createMessage({
-            max_tokens: 1024,
+        const text = await chat({
+            maxTokens: 1024,
             system: `${persona?.systemPrompt ?? ''}\n\n${CHAT_BEHAVIOUR}`,
             messages: history.map((m) => ({ role: m.role, content: m.content })),
         })
-
-        const text = firstText(response)
 
         return NextResponse.json({
             content: text || "I'm here — could you say that another way?",
             status: 'success',
         })
     } catch (error) {
-        console.error('[AI Chat API] Error:', error)
-        // Degrade gracefully: never show the visitor a hard error. If every key is
-        // exhausted or unconfigured, point them to a real human instead.
-        return NextResponse.json({
-            content:
-                "I can't chat live just at the moment. Please explore our Wisdom archive, or book a consultation and a real herbalist will help you personally.",
-            status: 'error',
-        })
+        console.error('[Mr. Moss Chat] Error:', error)
+        // Degrade gracefully: never show the visitor a hard error.
+        return NextResponse.json({ content: FRIENDLY_FALLBACK, status: 'error' })
     }
 }
