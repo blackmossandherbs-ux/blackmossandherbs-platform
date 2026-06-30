@@ -5,7 +5,7 @@
  * using Claude, then persists them as drafts for admin review.
  */
 import { prisma } from '@/lib/prisma'
-import { getAnthropic, CLAUDE_MODEL } from '@/lib/anthropic'
+import { createMessage, isAIConfigured, firstText } from '@/lib/anthropic'
 import { getPersona, DEFAULT_PERSONA_KEY } from '@/lib/personas'
 import { sanitizeWellnessContent } from '@/lib/compliance'
 import { slugify } from '@/lib/utils'
@@ -44,14 +44,36 @@ const OUTPUT_SCHEMA = {
     required: ['title', 'excerpt', 'content', 'category', 'socials'],
 }
 
+/**
+ * Parse the model's JSON output defensively. Even with a JSON schema requested,
+ * a fallback model may wrap the object in ```json fences or add a stray sentence,
+ * so we strip fences and extract the outermost {...} before parsing.
+ */
+function parseJsonContent(text: string): GeneratedContent {
+    let cleaned = text.trim()
+    // Strip ```json ... ``` or ``` ... ``` fences if present.
+    const fence = cleaned.match(/```(?:json)?\s*([\s\S]*?)```/i)
+    if (fence) cleaned = fence[1].trim()
+    try {
+        return JSON.parse(cleaned) as GeneratedContent
+    } catch {
+        // Last resort: grab the outermost JSON object.
+        const first = cleaned.indexOf('{')
+        const last = cleaned.lastIndexOf('}')
+        if (first !== -1 && last > first) {
+            return JSON.parse(cleaned.slice(first, last + 1)) as GeneratedContent
+        }
+        throw new Error('AI returned content that could not be parsed as JSON.')
+    }
+}
+
 export class AIContentService {
     /**
      * Generate a full content pack for a topic in a persona's voice.
      * `personaKey` is one of the keys in src/lib/personas.ts.
      */
     static async generatePack(topic: string, personaKey: string = DEFAULT_PERSONA_KEY): Promise<GeneratedContent> {
-        const anthropic = getAnthropic()
-        if (!anthropic) {
+        if (!isAIConfigured()) {
             throw new Error('AI is not configured. Set ANTHROPIC_API_KEY to enable article generation.')
         }
 
@@ -67,20 +89,19 @@ Requirements:
 - Three short social captions (instagram, twitter, linkedin) promoting the article.
 - Stay strictly within the compliance rules.`
 
-        const response = await anthropic.messages.create({
-            model: CLAUDE_MODEL,
+        const response = await createMessage({
             max_tokens: 8000,
             system: persona.systemPrompt,
             messages: [{ role: 'user', content: userPrompt }],
-            output_config: { format: { type: 'json_schema', schema: OUTPUT_SCHEMA } },
-        } as any)
+            extra: { output_config: { format: { type: 'json_schema', schema: OUTPUT_SCHEMA } } },
+        })
 
-        const textBlock = response.content.find((b): b is Extract<typeof b, { type: 'text' }> => b.type === 'text')
-        if (!textBlock) {
+        const text = firstText(response)
+        if (!text) {
             throw new Error('AI returned no content.')
         }
 
-        const parsed = JSON.parse(textBlock.text) as GeneratedContent
+        const parsed = parseJsonContent(text)
 
         // Apply compliance sanitisation as a safety net on top of the prompt rules.
         parsed.content = sanitizeWellnessContent(parsed.content)

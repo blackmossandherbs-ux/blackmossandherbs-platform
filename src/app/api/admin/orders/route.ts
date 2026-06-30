@@ -42,6 +42,6 @@ export async function GET(req: Request) {
         return NextResponse.json(orders);
     } catch (error) {
         console.error('[Admin Orders GET] Error:', error);
-        return NextResponse.json({ error: 'Failed to retrieve logistics data.' }, { status: 500 });
+        return NextResponse.json({ error: 'Failed to load orders.' }, { status: 500 });
     }
 }

@@ -29,6 +29,6 @@ export async function PATCH(req: Request, { params }: { params: { id: string } }
         return NextResponse.json(order);
     } catch (error) {
         console.error('[Admin Order PATCH] Error:', error);
-        return NextResponse.json({ error: 'Failed to update logistics status.' }, { status: 500 });
+        return NextResponse.json({ error: 'Failed to update order status.' }, { status: 500 });
     }
 }

@@ -43,31 +43,31 @@ export async function GET(req: Request) {
         console.log(`[Cron] Found ${abandonedOrders.length} potential abandoned carts.`);
 
         for (const order of abandonedOrders) {
-            const userName = order.user.name || 'Alchemist';
+            const userName = order.user.name || 'there';
             const productNames = order.items.map(item => item.product.name).join(', ');
 
             await sendEmail({
                 to: order.user.email,
-                subject: 'Your Biological Gold is Waiting...',
+                subject: 'You left something in your cart',
                 html: `
                     <div style="font-family: serif; color: #1a1a1a; max-width: 600px; margin: 0 auto; padding: 40px; border: 1px solid #e2e8f0; border-radius: 20px;">
-                        <h1 style="color: #065f46; font-size: 24px;">Greetings, ${userName}</h1>
+                        <h1 style="color: #065f46; font-size: 24px;">Hi ${userName},</h1>
                         <p style="font-size: 16px; line-height: 1.6; color: #4b5563;">
-                            We noticed you left some powerful organic compounds behind. Your path to restoration is waiting for you to complete the final step.
+                            We noticed you left a few items in your cart. They're still saved for you — complete your order whenever you're ready.
                         </p>
                         <div style="background: #f8fafc; padding: 20px; border-radius: 12px; margin: 20px 0;">
-                            <strong style="color: #065f46; font-size: 14px; text-transform: uppercase;">In Your Matrix:</strong>
+                            <strong style="color: #065f46; font-size: 14px; text-transform: uppercase;">In your cart:</strong>
                             <p style="margin: 10px 0 0 0; font-weight: bold;">${productNames}</p>
                         </div>
                         <p style="font-size: 16px; line-height: 1.6; color: #4b5563;">
-                            Would you like to reclaim your cart and finalize your order?
+                            Would you like to return to your cart and finish checking out?
                         </p>
-                        <a href="${process.env.NEXTAUTH_URL}/checkout?orderId=${order.id}" 
+                        <a href="${process.env.NEXTAUTH_URL}/cart"
                            style="display: inline-block; background: #065f46; color: white; padding: 16px 32px; text-decoration: none; border-radius: 12px; font-weight: bold; margin-top: 20px;">
-                            Complete Your Restoration
+                            Return to Cart
                         </a>
                         <p style="font-size: 12px; color: #9ca3af; margin-top: 40px; border-top: 1px solid #e2e8f0; padding-top: 20px;">
-                            HECTIC Authority Control • Black Moss & Herbs
+                            Black Moss &amp; Herbs
                         </p>
                     </div>
                 `

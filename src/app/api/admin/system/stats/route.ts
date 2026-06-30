@@ -57,7 +57,7 @@ export async function GET() {
 
     } catch (error) {
         console.error('[Telemetry API] Error:', error);
-        return NextResponse.json({ error: 'Sentinel data stream interrupted.' }, { status: 500 });
+        return NextResponse.json({ error: 'Failed to load system stats.' }, { status: 500 });
     }
 }
 

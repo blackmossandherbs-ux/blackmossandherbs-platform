@@ -15,6 +15,6 @@ export async function DELETE(req: Request, { params }: { params: { id: string } 
         return NextResponse.json({ success: true });
     } catch (error) {
         console.error('[Admin Video DELETE] Error:', error);
-        return NextResponse.json({ error: 'Failed to purge visual record.' }, { status: 500 });
+        return NextResponse.json({ error: 'Failed to delete video.' }, { status: 500 });
     }
 }

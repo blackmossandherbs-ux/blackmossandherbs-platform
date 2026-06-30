@@ -9,6 +9,14 @@ import CredentialsProvider from "next-auth/providers/credentials";
 import { prisma } from "@/lib/prisma";
 import bcrypt from "bcryptjs";
 
+// The __Secure-/__Host- cookie name prefixes are REQUIRED by browsers to carry
+// the Secure attribute. Over plain HTTP (local dev) a __Secure-/__Host- cookie is
+// rejected outright, which silently breaks login. So only use the secure prefixes
+// (and the Secure flag) in production, and plain names + non-secure in dev.
+const useSecureCookies = process.env.NODE_ENV === "production"
+const securePrefix = useSecureCookies ? "__Secure-" : ""
+const hostPrefix = useSecureCookies ? "__Host-" : ""
+
 export const authOptions: NextAuthOptions = {
     adapter: PrismaAdapter(prisma),
     session: {
@@ -19,29 +27,29 @@ export const authOptions: NextAuthOptions = {
     },
     cookies: {
         sessionToken: {
-            name: `__Secure-blackmoss.session-token`,
+            name: `${securePrefix}blackmoss.session-token`,
             options: {
                 httpOnly: true,
                 sameSite: "lax",
                 path: "/",
-                secure: process.env.NODE_ENV === "production",
+                secure: useSecureCookies,
             },
         },
         callbackUrl: {
-            name: `__Secure-blackmoss.callback-url`,
+            name: `${securePrefix}blackmoss.callback-url`,
             options: {
                 sameSite: "lax",
                 path: "/",
-                secure: process.env.NODE_ENV === "production",
+                secure: useSecureCookies,
             },
         },
         csrfToken: {
-            name: `__Host-blackmoss.csrf-token`,
+            name: `${hostPrefix}blackmoss.csrf-token`,
             options: {
                 httpOnly: true,
                 sameSite: "lax",
                 path: "/",
-                secure: process.env.NODE_ENV === "production",
+                secure: useSecureCookies,
             },
         },
     },

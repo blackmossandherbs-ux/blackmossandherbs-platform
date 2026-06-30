@@ -16,7 +16,7 @@ export async function GET() {
         return NextResponse.json(videos);
     } catch (error) {
         console.error('[Admin Videos GET] Error:', error);
-        return NextResponse.json({ error: 'Failed to retrieve visual records.' }, { status: 500 });
+        return NextResponse.json({ error: 'Failed to load videos.' }, { status: 500 });
     }
 }
 
@@ -40,6 +40,6 @@ export async function POST(req: Request) {
         return NextResponse.json(video);
     } catch (error) {
         console.error('[Admin Videos POST] Error:', error);
-        return NextResponse.json({ error: 'Failed to manifest visual record.' }, { status: 500 });
+        return NextResponse.json({ error: 'Failed to create video.' }, { status: 500 });
     }
 }

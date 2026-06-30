@@ -33,7 +33,7 @@ export async function GET(req: Request) {
         return NextResponse.json(products);
     } catch (error) {
         console.error('[Admin Products GET] Error:', error);
-        return NextResponse.json({ error: 'Failed to retrieve manifest.' }, { status: 500 });
+        return NextResponse.json({ error: 'Failed to load products.' }, { status: 500 });
     }
 }
 
@@ -77,6 +77,6 @@ export async function POST(req: Request) {
         return NextResponse.json(product);
     } catch (error) {
         console.error('[Admin Products POST] Error:', error);
-        return NextResponse.json({ error: 'Failed to manifest new product.' }, { status: 500 });
+        return NextResponse.json({ error: 'Failed to create product.' }, { status: 500 });
     }
 }

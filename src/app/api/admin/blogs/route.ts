@@ -16,7 +16,7 @@ export async function GET() {
         return NextResponse.json(blogs);
     } catch (error) {
         console.error('[Admin Blogs GET] Error:', error);
-        return NextResponse.json({ error: 'Failed to retrieve wisdom records.' }, { status: 500 });
+        return NextResponse.json({ error: 'Failed to load blog posts.' }, { status: 500 });
     }
 }
 
@@ -33,13 +33,13 @@ export async function POST(req: Request) {
                 excerpt: data.excerpt,
                 coverImage: data.image || '/images/wisdom-placeholder.jpg',
                 category: data.category,
-                authorPersona: data.author || 'THE_ALCHEMIST',
+                authorPersona: data.author || 'MARCUS_ADEYEMI',
                 published: data.published ?? true
             }
         });
         return NextResponse.json(blog);
     } catch (error) {
         console.error('[Admin Blogs POST] Error:', error);
-        return NextResponse.json({ error: 'Failed to manifest wisdom record.' }, { status: 500 });
+        return NextResponse.json({ error: 'Failed to create blog post.' }, { status: 500 });
     }
 }

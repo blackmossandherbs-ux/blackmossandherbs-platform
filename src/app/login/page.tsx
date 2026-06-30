@@ -1,7 +1,7 @@
 "use client";
 
 import { Suspense, useState } from "react";
-import { signIn } from "next-auth/react";
+import { signIn, getSession } from "next-auth/react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { Lock, Mail, Loader2 } from "lucide-react";
 import Link from "next/link";
@@ -30,7 +30,14 @@ function LoginForm() {
             if (res?.error) {
                 setError("Incorrect email or password. Please try again.");
             } else {
-                router.push(callbackUrl);
+                // Send admins to the admin panel and customers to their dashboard,
+                // unless an explicit callbackUrl was provided.
+                let target = callbackUrl;
+                if (!searchParams.get("callbackUrl")) {
+                    const session = await getSession();
+                    target = (session?.user as any)?.role === "ADMIN" ? "/admin" : "/dashboard";
+                }
+                router.push(target);
                 router.refresh();
             }
         } catch {

@@ -100,7 +100,7 @@ export default function AIChatWidget() {
             setMessages(prev => [...prev, { role: 'assistant', content: finalResponse }]);
         } catch (error) {
             console.error('[AI Chat Widget] ERROR:', error);
-            setMessages(prev => [...prev, { role: 'assistant', content: "Our biological logic stream is currently undergoing maintenance. Please try again shortly." }]);
+            setMessages(prev => [...prev, { role: 'assistant', content: "Sorry — I'm having trouble responding right now. Please try again in a moment." }]);
         }
     };
 

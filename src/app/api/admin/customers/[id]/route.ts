@@ -29,7 +29,7 @@ export async function GET(req: Request, { params }: { params: { id: string } }) 
 
         return NextResponse.json({
             id: user.id,
-            name: user.name || 'Anonymous Entity',
+            name: user.name || user.email || 'Customer',
             email: user.email,
             joinDate: user.createdAt,
             loyaltyPoints: user.loyaltyPoints,

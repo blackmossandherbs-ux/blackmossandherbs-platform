@@ -19,7 +19,7 @@ export async function PATCH(req: Request, { params }: { params: { id: string } }
         return NextResponse.json(blog);
     } catch (error) {
         console.error('[Admin Blog PATCH] Error:', error);
-        return NextResponse.json({ error: 'Failed to update wisdom record.' }, { status: 500 });
+        return NextResponse.json({ error: 'Failed to update blog post.' }, { status: 500 });
     }
 }
 
@@ -32,6 +32,6 @@ export async function DELETE(req: Request, { params }: { params: { id: string } 
         return NextResponse.json({ success: true });
     } catch (error) {
         console.error('[Admin Blog DELETE] Error:', error);
-        return NextResponse.json({ error: 'Failed to purge wisdom record.' }, { status: 500 });
+        return NextResponse.json({ error: 'Failed to delete blog post.' }, { status: 500 });
     }
 }

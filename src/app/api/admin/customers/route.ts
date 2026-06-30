@@ -58,7 +58,7 @@ export async function GET(req: Request) {
             const spent = user.orders.reduce((acc, order) => acc + order.total, 0);
             return {
                 id: user.id,
-                name: user.name || 'Anonymous Entity',
+                name: user.name || user.email || 'Customer',
                 email: user.email,
                 ordersCount: user.orders.length,
                 spent,
@@ -71,6 +71,6 @@ export async function GET(req: Request) {
         return NextResponse.json(formattedUsers);
     } catch (error) {
         console.error('[Admin Customers GET] Error:', error);
-        return NextResponse.json({ error: 'Failed to retrieve entity matrix.' }, { status: 500 });
+        return NextResponse.json({ error: 'Failed to load customers.' }, { status: 500 });
     }
 }

@@ -6,7 +6,7 @@
  * when AI is not configured.
  */
 import { NextResponse } from 'next/server'
-import { getAnthropic, CLAUDE_MODEL } from '@/lib/anthropic'
+import { createMessage, isAIConfigured, firstText } from '@/lib/anthropic'
 import { getPersona } from '@/lib/personas'
 
 export const dynamic = 'force-dynamic'
@@ -48,8 +48,7 @@ export async function POST(req: Request) {
             return NextResponse.json({ error: 'No message provided.' }, { status: 400 })
         }
 
-        const anthropic = getAnthropic()
-        if (!anthropic) {
+        if (!isAIConfigured()) {
             return NextResponse.json({
                 content:
                     "I'm just catching my breath at the moment and can't chat live. In the meantime, explore our Wisdom archive or book a consultation and a real herbalist will help you personally.",
@@ -57,23 +56,26 @@ export async function POST(req: Request) {
             })
         }
 
-        const response = await anthropic.messages.create({
-            model: CLAUDE_MODEL,
+        const response = await createMessage({
             max_tokens: 1024,
             system: `${persona?.systemPrompt ?? ''}\n\n${CHAT_BEHAVIOUR}`,
             messages: history.map((m) => ({ role: m.role, content: m.content })),
         })
 
-        const textBlock = response.content.find(
-            (b): b is Extract<typeof b, { type: 'text' }> => b.type === 'text'
-        )
+        const text = firstText(response)
 
         return NextResponse.json({
-            content: textBlock?.text ?? "I'm here — could you say that another way?",
+            content: text || "I'm here — could you say that another way?",
             status: 'success',
         })
     } catch (error) {
         console.error('[AI Chat API] Error:', error)
-        return NextResponse.json({ error: 'The guide is momentarily unavailable. Please try again.' }, { status: 500 })
+        // Degrade gracefully: never show the visitor a hard error. If every key is
+        // exhausted or unconfigured, point them to a real human instead.
+        return NextResponse.json({
+            content:
+                "I can't chat live just at the moment. Please explore our Wisdom archive, or book a consultation and a real herbalist will help you personally.",
+            status: 'error',
+        })
     }
 }

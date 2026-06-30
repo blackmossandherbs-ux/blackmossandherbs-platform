@@ -25,6 +25,11 @@ export async function POST(req: NextRequest) {
             return NextResponse.json({ error: 'All fields are required.' }, { status: 400 })
         }
 
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+        if (!emailRegex.test(String(email).trim())) {
+            return NextResponse.json({ error: 'Please enter a valid email address.' }, { status: 400 })
+        }
+
         const session = await getServerSession(authOptions)
         const price = PRICES[type] || 0
         const typeName = TYPE_NAMES[type] || type

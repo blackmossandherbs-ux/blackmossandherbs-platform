@@ -27,7 +27,12 @@ export async function POST(req: NextRequest) {
             create: { identifier: email.toLowerCase(), token, expires },
         })
 
-        const resetUrl = `${process.env.NEXT_PUBLIC_APP_URL}/reset-password?token=${token}`
+        const origin = (
+            process.env.NEXT_PUBLIC_APP_URL ||
+            process.env.NEXTAUTH_URL ||
+            new URL(req.url).origin
+        ).replace(/\/$/, '')
+        const resetUrl = `${origin}/reset-password?token=${token}`
         await sendPasswordResetEmail(email, resetUrl)
 
         return NextResponse.json({ success: true })

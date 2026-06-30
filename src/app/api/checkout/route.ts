@@ -25,8 +25,14 @@ export async function POST(req: NextRequest) {
         )
     }
 
+    let body: any
     try {
-        const body = await req.json()
+        body = await req.json()
+    } catch {
+        return NextResponse.json({ error: 'Invalid request format.' }, { status: 400 })
+    }
+
+    try {
         const lines: CheckoutLine[] = Array.isArray(body?.items) ? body.items : []
 
         if (lines.length === 0) {

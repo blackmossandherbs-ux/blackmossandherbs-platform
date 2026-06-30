@@ -38,21 +38,30 @@ export async function POST(req: Request) {
         const consultationType = session?.metadata?.consultationType
 
         if (type === 'PRODUCT') {
-            await fulfillProductOrder(session, userId, userEmail)
+            const ok = await fulfillProductOrder(session, userId, userEmail)
+            if (!ok) {
+                return new NextResponse('Fulfillment error', { status: 500 })
+            }
         } else if (type === 'SUBSCRIPTION' && planId) {
             if (!userId) {
                 console.error('[Stripe Webhook] Missing userId for subscription')
                 return new NextResponse('Missing userId', { status: 400 })
             }
+            const subscriptionId = typeof session.subscription === 'string' ? session.subscription : null
+            if (!subscriptionId) {
+                console.error('[Stripe Webhook] Missing subscription id on completed session')
+                return new NextResponse('Missing subscription id', { status: 400 })
+            }
             try {
+                const { start, end } = await getSubscriptionPeriod(subscriptionId)
                 await prisma.subscription.create({
                     data: {
                         userId,
                         planId,
-                        stripeSubscriptionId: session.subscription as string,
+                        stripeSubscriptionId: subscriptionId,
                         status: 'ACTIVE',
-                        currentPeriodStart: new Date(),
-                        currentPeriodEnd: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000),
+                        currentPeriodStart: start,
+                        currentPeriodEnd: end,
                     }
                 })
                 console.log(`[Stripe Webhook] Subscription created for user ${userId}`)
@@ -89,11 +98,12 @@ export async function POST(req: Request) {
             try {
                 const sub = await prisma.subscription.findUnique({ where: { stripeSubscriptionId: subscriptionId } })
                 if (sub) {
+                    const { start, end } = await getSubscriptionPeriod(subscriptionId)
                     await prisma.subscription.update({
                         where: { id: sub.id },
                         data: {
-                            currentPeriodStart: new Date(),
-                            currentPeriodEnd: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000),
+                            currentPeriodStart: start,
+                            currentPeriodEnd: end,
                             status: 'ACTIVE',
                         },
                     })
@@ -119,45 +129,80 @@ export async function POST(req: Request) {
     return new NextResponse('OK', { status: 200 })
 }
 
+/**
+ * Read the true billing period from the Stripe subscription so the DB matches
+ * the customer's actual renewal date (monthly vs yearly). Falls back to a 30-day
+ * window only if Stripe can't be reached.
+ */
+async function getSubscriptionPeriod(subscriptionId: string): Promise<{ start: Date; end: Date }> {
+    try {
+        const sub = await stripe.subscriptions.retrieve(subscriptionId)
+        const start = sub.current_period_start ? new Date(sub.current_period_start * 1000) : new Date()
+        const end = sub.current_period_end
+            ? new Date(sub.current_period_end * 1000)
+            : new Date(Date.now() + 30 * 24 * 60 * 60 * 1000)
+        return { start, end }
+    } catch (error) {
+        console.error('[Stripe Webhook] Could not retrieve subscription period, using 30-day fallback:', error)
+        return { start: new Date(), end: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000) }
+    }
+}
+
+/**
+ * Fulfil a product purchase. Returns false only on a DB write failure that
+ * Stripe should retry. Order creation is idempotent on the payment intent, so a
+ * retry never produces a duplicate order. Email failures are non-fatal.
+ */
 async function fulfillProductOrder(
     session: Stripe.Checkout.Session,
     userId: string,
     userEmail: string
-) {
+): Promise<boolean> {
+    const rawItems = session?.metadata?.items
+    if (!rawItems) {
+        console.error('[Stripe Webhook] No items in product order metadata')
+        return true // nothing to fulfil; don't ask Stripe to retry
+    }
+
+    let items: Array<{ productId: string; slug: string; quantity: number; price: number }>
     try {
-        const rawItems = session?.metadata?.items
-        if (!rawItems) {
-            console.error('[Stripe Webhook] No items in product order metadata')
-            return
+        items = JSON.parse(rawItems)
+    } catch {
+        console.error('[Stripe Webhook] Malformed items metadata')
+        return true
+    }
+    if (!items.length) return true
+
+    const paymentIntentId = typeof session.payment_intent === 'string' ? session.payment_intent : null
+    const subtotal = items.reduce((sum, i) => sum + i.price * i.quantity, 0)
+    const shipping = subtotal >= 40 ? 0 : 3.99
+    const total = subtotal + shipping
+    const orderNumber = `BMH-${Date.now()}-${Math.floor(Math.random() * 1000).toString().padStart(3, '0')}`
+
+    const shippingAddress = session.shipping_details?.address
+        ? {
+            line1: session.shipping_details.address.line1,
+            line2: session.shipping_details.address.line2,
+            city: session.shipping_details.address.city,
+            postcode: session.shipping_details.address.postal_code,
+            country: session.shipping_details.address.country,
         }
+        : {}
 
-        const items: Array<{ productId: string; slug: string; quantity: number; price: number }> = JSON.parse(rawItems)
-        if (!items.length) return
+    const customerName = session.shipping_details?.name || session.customer_details?.name || 'Customer'
+    const email = userEmail || session.customer_details?.email || ''
 
-        const productIds = items.map(i => i.productId)
-        const products = await prisma.product.findMany({ where: { id: { in: productIds } } })
-
-        const subtotal = items.reduce((sum, i) => sum + i.price * i.quantity, 0)
-        const shipping = subtotal >= 40 ? 0 : 3.99
-        const total = subtotal + shipping
-
-        const orderNumber = `BMH-${Date.now()}-${Math.floor(Math.random() * 1000).toString().padStart(3, '0')}`
-
-        const shippingAddress = session.shipping_details?.address
-            ? {
-                line1: session.shipping_details.address.line1,
-                line2: session.shipping_details.address.line2,
-                city: session.shipping_details.address.city,
-                postcode: session.shipping_details.address.postal_code,
-                country: session.shipping_details.address.country,
-            }
-            : {}
-
-        const customerName = session.shipping_details?.name || session.customer_details?.name || 'Customer'
-        const email = userEmail || session.customer_details?.email || ''
-
-        // Only create DB order if we have a userId
+    // Persist the order (critical path — retry on failure).
+    try {
         if (userId) {
+            // Idempotency: if this payment already produced an order, don't duplicate it.
+            if (paymentIntentId) {
+                const existing = await prisma.order.findFirst({ where: { stripePaymentId: paymentIntentId } })
+                if (existing) {
+                    console.log(`[Stripe Webhook] Order already exists for payment ${paymentIntentId}, skipping`)
+                    return true
+                }
+            }
             const order = await prisma.order.create({
                 data: {
                     userId,
@@ -167,7 +212,7 @@ async function fulfillProductOrder(
                     subtotal,
                     tax: 0,
                     shipping,
-                    stripePaymentId: session.payment_intent as string,
+                    stripePaymentId: paymentIntentId,
                     shippingAddress,
                     billingAddress: shippingAddress,
                     items: {
@@ -183,16 +228,25 @@ async function fulfillProductOrder(
         } else {
             console.log(`[Stripe Webhook] Guest order ${orderNumber} — no userId, skipping DB record`)
         }
+    } catch (error) {
+        console.error('[Stripe Webhook] Product order DB write failed (will retry):', error)
+        return false
+    }
 
-        if (email) {
+    // Send the confirmation email (non-critical — never trigger a retry for this).
+    if (email) {
+        try {
+            const products = await prisma.product.findMany({ where: { id: { in: items.map(i => i.productId) } } })
             const emailItems = items.map(i => {
                 const product = products.find(p => p.id === i.productId)
                 return { name: product?.name || i.slug, quantity: i.quantity, price: i.price }
             })
             await sendOrderConfirmationEmail(email, customerName, orderNumber, emailItems, total)
             console.log(`[Stripe Webhook] Order confirmation sent to ${email}`)
+        } catch (error) {
+            console.error('[Stripe Webhook] Order confirmation email failed (non-fatal):', error)
         }
-    } catch (error) {
-        console.error('[Stripe Webhook] Product order fulfillment error:', error)
     }
+
+    return true
 }
