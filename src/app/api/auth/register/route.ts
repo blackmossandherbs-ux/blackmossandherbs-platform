@@ -5,10 +5,14 @@ import { sendWelcomeEmail } from '@/lib/mail'
 
 export async function POST(req: NextRequest) {
     try {
-        const { name, email, password } = await req.json()
+        const { name, email, password, acceptedTerms } = await req.json()
 
         if (!name?.trim() || !email?.trim() || !password) {
             return NextResponse.json({ error: 'All fields are required.' }, { status: 400 })
+        }
+
+        if (acceptedTerms !== true) {
+            return NextResponse.json({ error: 'You must accept the Terms of Service and Privacy Policy.' }, { status: 400 })
         }
 
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
@@ -31,6 +35,7 @@ export async function POST(req: NextRequest) {
                 name: name.trim(),
                 email: email.toLowerCase().trim(),
                 password: hashed,
+                termsAcceptedAt: new Date(),
             },
         })
 

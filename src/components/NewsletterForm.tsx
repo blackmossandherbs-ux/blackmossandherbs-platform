@@ -1,6 +1,7 @@
 'use client'
 
 import { useState, FormEvent } from 'react'
+import Link from 'next/link'
 import { Mail } from 'lucide-react'
 
 interface NewsletterFormProps {
@@ -23,18 +24,24 @@ export default function NewsletterForm({
     showMailIcon = false,
 }: NewsletterFormProps) {
     const [email, setEmail] = useState('')
+    const [consent, setConsent] = useState(false)
     const [status, setStatus] = useState<'idle' | 'loading' | 'done' | 'error'>('idle')
     const [message, setMessage] = useState('')
 
     const handleSubmit = async (e: FormEvent) => {
         e.preventDefault()
+        if (!consent) {
+            setStatus('error')
+            setMessage('Please tick the box to confirm you consent to receiving emails.')
+            return
+        }
         setStatus('loading')
         setMessage('')
         try {
             const res = await fetch('/api/newsletter', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ email }),
+                body: JSON.stringify({ email, consent }),
             })
             const data = await res.json()
             if (!res.ok) {
@@ -73,6 +80,18 @@ export default function NewsletterForm({
                     {status === 'loading' ? 'Sending…' : buttonLabel}
                 </button>
             </form>
+            <label className="flex items-start gap-2 mt-3 cursor-pointer">
+                <input
+                    type="checkbox"
+                    checked={consent}
+                    onChange={(e) => setConsent(e.target.checked)}
+                    className="mt-0.5 h-4 w-4 rounded accent-primary-500 shrink-0"
+                />
+                <span className="text-[11px] leading-relaxed text-earth-400">
+                    I agree to receive marketing emails from Black Moss &amp; Herbs and accept the{' '}
+                    <Link href="/legal/privacy" className="underline hover:text-earth-200">Privacy Policy</Link>. You can unsubscribe at any time.
+                </span>
+            </label>
             {message && (
                 <p className={`text-xs mt-2 ${status === 'error' ? 'text-red-400' : 'text-primary-400'}`}>
                     {message}

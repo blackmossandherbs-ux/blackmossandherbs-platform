@@ -9,19 +9,24 @@ export const dynamic = 'force-dynamic'
 
 export async function POST(req: Request) {
     try {
-        const { email } = await req.json()
+        const { email, consent } = await req.json()
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
 
         if (!email || !emailRegex.test(email)) {
             return NextResponse.json({ error: 'Please enter a valid email address.' }, { status: 400 })
         }
 
-        // Persist the subscriber (idempotent on email).
+        // PECR: marketing emails require explicit prior consent.
+        if (consent !== true) {
+            return NextResponse.json({ error: 'Please confirm your consent to receive marketing emails.' }, { status: 400 })
+        }
+
+        // Persist the subscriber with a consent timestamp (idempotent on email).
         try {
             await prisma.newsletterSubscriber.upsert({
                 where: { email },
-                update: {},
-                create: { email },
+                update: { consentedAt: new Date(), source: 'website' },
+                create: { email, consentedAt: new Date(), source: 'website' },
             })
         } catch (e) {
             console.error('[newsletter] could not persist subscriber:', e)

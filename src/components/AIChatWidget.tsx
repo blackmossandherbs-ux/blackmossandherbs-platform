@@ -183,6 +183,10 @@ export default function AIChatWidget() {
                                         <Send size={18} />
                                     </button>
                                 </div>
+                                <p className="px-3 pb-3 -mt-1 bg-earth-950 text-[9px] leading-snug text-earth-600">
+                                    Messages are processed by an AI service to generate replies. Please don&apos;t share sensitive health information. General wellness guidance only — not medical advice. See our{' '}
+                                    <Link href="/legal/privacy" className="underline hover:text-earth-400">Privacy Policy</Link>.
+                                </p>
                             </>
                         )}
                     </div>

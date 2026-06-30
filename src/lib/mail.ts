@@ -29,6 +29,7 @@ function emailWrapper(content: string): string {
         <tr><td style="background:#f9f9f9;padding:20px 32px;border-top:1px solid #eee;">
           <p style="margin:0;font-size:11px;color:#888;line-height:1.5;">
             © ${new Date().getFullYear()} Black Moss &amp; Herbs · <a href="${SITE_URL}" style="color:#888;">blackmossandherbs.com</a><br>
+            <a href="mailto:support@blackmossandherbs.com?subject=Unsubscribe" style="color:#888;">Unsubscribe from marketing emails</a> · <a href="${SITE_URL}/legal/privacy" style="color:#888;">Privacy Policy</a><br>
             Food supplements. Not intended to diagnose, treat, cure or prevent any disease. Consult your GP before use.
           </p>
         </td></tr>

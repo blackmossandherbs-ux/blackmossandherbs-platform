@@ -11,6 +11,7 @@ export default function RegisterPage() {
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
     const [showPassword, setShowPassword] = useState(false)
+    const [agreed, setAgreed] = useState(false)
     const [error, setError] = useState('')
     const [loading, setLoading] = useState(false)
     const router = useRouter()
@@ -24,12 +25,17 @@ export default function RegisterPage() {
             return
         }
 
+        if (!agreed) {
+            setError('Please accept the Terms of Service and Privacy Policy to continue.')
+            return
+        }
+
         setLoading(true)
         try {
             const res = await fetch('/api/auth/register', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ name, email, password }),
+                body: JSON.stringify({ name, email, password, acceptedTerms: agreed }),
             })
             const data = await res.json()
 
@@ -132,12 +138,20 @@ export default function RegisterPage() {
                             <p className="text-xs text-earth-600 mt-1.5">At least 8 characters</p>
                         </div>
 
-                        <p className="text-xs text-earth-500 leading-relaxed">
-                            By creating an account you agree to our{' '}
-                            <Link href="/legal/terms" className="text-primary-400 hover:underline">Terms of Service</Link>
-                            {' '}and{' '}
-                            <Link href="/legal/privacy" className="text-primary-400 hover:underline">Privacy Policy</Link>.
-                        </p>
+                        <label className="flex items-start gap-2 cursor-pointer">
+                            <input
+                                type="checkbox"
+                                checked={agreed}
+                                onChange={(e) => setAgreed(e.target.checked)}
+                                className="mt-0.5 h-4 w-4 rounded accent-primary-500 shrink-0"
+                            />
+                            <span className="text-xs text-earth-500 leading-relaxed">
+                                I agree to the{' '}
+                                <Link href="/legal/terms" className="text-primary-400 hover:underline">Terms of Service</Link>
+                                {' '}and{' '}
+                                <Link href="/legal/privacy" className="text-primary-400 hover:underline">Privacy Policy</Link>.
+                            </span>
+                        </label>
 
                         <button
                             type="submit"

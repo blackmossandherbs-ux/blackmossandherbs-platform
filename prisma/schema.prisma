@@ -22,6 +22,7 @@ model User {
   image         String?
   password      String?
   role          UserRole  @default(CUSTOMER)
+  termsAcceptedAt DateTime? // when the user accepted the Terms & Privacy Policy at signup
   createdAt     DateTime  @default(now())
   updatedAt     DateTime  @updatedAt
 
@@ -330,9 +331,11 @@ model SiteSetting {
 }
 
 model NewsletterSubscriber {
-  id        String   @id @default(cuid())
-  email     String   @unique
-  createdAt DateTime @default(now())
+  id          String    @id @default(cuid())
+  email       String    @unique
+  consentedAt DateTime? // when explicit marketing consent was given (PECR)
+  source      String? // where they signed up, e.g. "footer"
+  createdAt   DateTime  @default(now())
 
   @@map("newsletter_subscribers")
 }

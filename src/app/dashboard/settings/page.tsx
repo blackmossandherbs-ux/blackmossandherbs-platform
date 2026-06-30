@@ -1,10 +1,10 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { useSession } from 'next-auth/react'
+import { useSession, signOut } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
-import { ArrowLeft, Save, User, Lock, Check } from 'lucide-react'
+import { ArrowLeft, Save, User, Lock, Check, Shield, Download, Trash2 } from 'lucide-react'
 
 export default function DashboardSettingsPage() {
     const { data: session, status, update } = useSession()
@@ -20,6 +20,8 @@ export default function DashboardSettingsPage() {
     const [profileError, setProfileError] = useState('')
     const [passwordError, setPasswordError] = useState('')
     const [loading, setLoading] = useState(false)
+    const [deleting, setDeleting] = useState(false)
+    const [deleteError, setDeleteError] = useState('')
 
     useEffect(() => {
         if (status === 'unauthenticated') router.push('/login')
@@ -84,6 +86,30 @@ export default function DashboardSettingsPage() {
             setPasswordError(err.message)
         } finally {
             setLoading(false)
+        }
+    }
+
+    const handleDeleteAccount = async () => {
+        setDeleteError('')
+        const confirmed = window.confirm(
+            'This will permanently delete your account and all associated data (orders, subscriptions, consultations). This cannot be undone. Continue?'
+        )
+        if (!confirmed) return
+        setDeleting(true)
+        try {
+            const res = await fetch('/api/user/delete', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ confirm: 'DELETE' }),
+            })
+            if (!res.ok) {
+                const d = await res.json()
+                throw new Error(d.error || 'Could not delete account.')
+            }
+            await signOut({ callbackUrl: '/' })
+        } catch (err: any) {
+            setDeleteError(err.message)
+            setDeleting(false)
         }
     }
 
@@ -188,6 +214,33 @@ export default function DashboardSettingsPage() {
                             {passwordSaved ? <><Check className="w-4 h-4" /> Updated</> : <><Save className="w-4 h-4" /> Update Password</>}
                         </button>
                     </form>
+                </div>
+
+                {/* Data & Privacy (GDPR) */}
+                <div className="card border border-earth-800 bg-earth-900/40 p-8 mt-6">
+                    <h2 className="font-serif text-2xl font-bold text-white flex items-center gap-3 mb-3">
+                        <Shield className="text-secondary-400 w-6 h-6" /> Data &amp; Privacy
+                    </h2>
+                    <p className="text-earth-400 text-sm mb-8">
+                        Under UK GDPR you can download a copy of your personal data or permanently delete your account at any time.
+                    </p>
+
+                    <div className="flex flex-col sm:flex-row gap-4">
+                        <a
+                            href="/api/user/export"
+                            className="flex items-center justify-center gap-2 px-6 py-3 border border-earth-700 hover:border-secondary-500 text-earth-200 hover:text-white font-bold uppercase tracking-widest text-xs rounded-xl transition-colors"
+                        >
+                            <Download className="w-4 h-4" /> Download My Data
+                        </a>
+                        <button
+                            onClick={handleDeleteAccount}
+                            disabled={deleting}
+                            className="flex items-center justify-center gap-2 px-6 py-3 border border-red-900/60 bg-red-900/10 hover:bg-red-900/30 text-red-400 font-bold uppercase tracking-widest text-xs rounded-xl transition-colors disabled:opacity-60"
+                        >
+                            <Trash2 className="w-4 h-4" /> {deleting ? 'Deleting…' : 'Delete My Account'}
+                        </button>
+                    </div>
+                    {deleteError && <p className="text-red-400 text-sm mt-4">{deleteError}</p>}
                 </div>
             </div>
         </div>
