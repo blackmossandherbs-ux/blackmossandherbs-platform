@@ -67,9 +67,9 @@ export const metadata: Metadata = {
             'max-snippet': -1,
         },
     },
-    verification: {
-        google: 'add-your-google-site-verification-token-here',
-    },
+    ...(process.env.GOOGLE_SITE_VERIFICATION
+        ? { verification: { google: process.env.GOOGLE_SITE_VERIFICATION } }
+        : {}),
 }
 
 const organizationSchema = {

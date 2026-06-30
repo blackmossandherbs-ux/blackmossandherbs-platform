@@ -11,6 +11,7 @@ export const dynamic = 'force-dynamic'
 export const metadata: Metadata = {
     title: 'Video Library | Black Moss & Herbs',
     description: 'Educational videos on herbal wellness, sea moss benefits, product tutorials, and expert interviews from the Black Moss & Herbs team.',
+    alternates: { canonical: 'https://blackmossandherbs.com/videos' },
 }
 
 function formatDuration(seconds: number | null): string {

@@ -15,6 +15,7 @@ import { VideoService } from '@/services/VideoService'
 export const metadata: Metadata = {
     title: 'Wisdom Hub | Black Moss & Herbs',
     description: 'Educational articles and videos on herbal wellness, sea moss, and natural living from the Black Moss & Herbs team.',
+    alternates: { canonical: 'https://blackmossandherbs.com/wisdom' },
 }
 
 export default async function WisdomPage() {

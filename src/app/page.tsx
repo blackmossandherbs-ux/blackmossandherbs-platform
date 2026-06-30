@@ -2,6 +2,7 @@
  * HECTIC Intellectual Property - Copyright 2024
  * Black Moss & Herbs Platform - Home Page
  */
+import { Metadata } from 'next'
 import Link from 'next/link'
 import { ArrowRight, Leaf, Heart, Shield, Star, ShoppingCart, Play, CheckCircle2 } from 'lucide-react'
 import Button from '@/components/Button'
@@ -10,6 +11,18 @@ import { BlogService } from '@/services/BlogService'
 import ProductCard from '@/components/ProductCard'
 import NewsletterForm from '@/components/NewsletterForm'
 import { SettingsService } from '@/lib/settings'
+
+export const metadata: Metadata = {
+    title: 'Black Moss & Herbs | Premium Wildcrafted Sea Moss UK',
+    description: 'Premium wildcrafted sea moss, herbal blends and wellness subscriptions, delivered across the UK. Food supplements to complement a balanced lifestyle.',
+    alternates: { canonical: 'https://blackmossandherbs.com' },
+    openGraph: {
+        title: 'Black Moss & Herbs | Premium Wildcrafted Sea Moss UK',
+        description: 'Premium wildcrafted sea moss and herbal blends, delivered across the UK.',
+        url: 'https://blackmossandherbs.com',
+        images: [{ url: '/og-image.jpg', width: 1200, height: 630, alt: 'Black Moss & Herbs' }],
+    },
+}
 
 // Renders at request time: the homepage reads featured products and posts from
 // the database, which is not available during a static build.

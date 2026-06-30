@@ -7,6 +7,7 @@ import { prisma } from '@/lib/prisma'
 export const dynamic = 'force-dynamic'
 
 export const metadata: Metadata = {
+    alternates: { canonical: 'https://blackmossandherbs.com/wisdom/blogs' },
     title: 'Wisdom Library | Black Moss & Herbs',
     description: 'In-depth herbal wellness guides, protocols, and research from the Black Moss & Herbs practitioner team.',
 }

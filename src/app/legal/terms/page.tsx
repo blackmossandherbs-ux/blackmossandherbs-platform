@@ -1,3 +1,11 @@
+import { Metadata } from 'next'
+
+export const metadata: Metadata = {
+    title: 'Terms of Service | Black Moss & Herbs',
+    description: 'The terms governing your use of the Black Moss & Herbs website and the purchase of our food supplement products.',
+    alternates: { canonical: 'https://blackmossandherbs.com/legal/terms' },
+}
+
 export default function TermsPage() {
     return (
         <div className="py-20 bg-earth-50 min-h-screen">
