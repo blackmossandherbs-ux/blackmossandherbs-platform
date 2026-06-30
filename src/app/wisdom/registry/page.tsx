@@ -5,6 +5,7 @@
 "use client";
 
 import { useState } from 'react';
+import Link from 'next/link';
 import { Leaf, XCircle, Search, Apple, Coffee, Waves, Soup, Info } from 'lucide-react';
 
 const foodCategories = [
@@ -89,7 +90,7 @@ export default function NutritionalRegistry() {
                         <Search className="absolute left-6 top-1/2 -translate-y-1/2 text-earth-500" size={20} />
                         <input
                             type="text"
-                            placeholder="Identify a compound..."
+                            placeholder="Search for a food..."
                             className="w-full h-20 bg-earth-900/50 border border-earth-800 rounded-3xl pl-16 pr-8 text-white text-xl focus:outline-none focus:border-primary-500/50 transition-all font-medium"
                             value={search}
                             onChange={(e) => setSearch(e.target.value)}
@@ -149,13 +150,13 @@ export default function NutritionalRegistry() {
 
                 <div className="mt-32 p-12 card border border-primary-500/20 bg-primary-950/10 rounded-[3rem] text-center max-w-3xl mx-auto relative overflow-hidden">
                     <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-primary-500/50 to-transparent" />
-                    <h2 className="text-3xl font-serif font-bold text-white mb-4">Intracellular Cleansing</h2>
+                    <h2 className="text-3xl font-serif font-bold text-white mb-4">About the Alkaline Approach</h2>
                     <p className="text-earth-400 leading-relaxed mb-8">
-                        The Dr. Sebi-inspired approach focuses on removing acidity and mucous from the cellular environment to allow the body's natural restorative functions to prevail.
+                        The alkaline eating approach emphasises whole, plant-based, naturally non-hybrid foods. It&apos;s a dietary framework many people follow as part of a balanced lifestyle — not a medical treatment.
                     </p>
-                    <button className="text-primary-400 font-black text-xs uppercase tracking-widest hover:text-white transition-colors">
-                        View Full Biological Protocol
-                    </button>
+                    <Link href="/blog" className="text-primary-400 font-black text-xs uppercase tracking-widest hover:text-white transition-colors">
+                        Read More on the Blog
+                    </Link>
                 </div>
             </div>
         </div>

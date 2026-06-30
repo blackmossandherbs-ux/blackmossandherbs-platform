@@ -13,8 +13,8 @@ import { BlogService } from '@/services/BlogService'
 import { VideoService } from '@/services/VideoService'
 
 export const metadata: Metadata = {
-    title: 'The Alchemist\'s Wisdom - Black Moss & Herbs',
-    description: 'Scientific and Organic Knowledge. The home of alkaline facts.',
+    title: 'Wisdom Hub | Black Moss & Herbs',
+    description: 'Educational articles and videos on herbal wellness, sea moss, and natural living from the Black Moss & Herbs team.',
 }
 
 export default async function WisdomPage() {
@@ -40,7 +40,7 @@ export default async function WisdomPage() {
                 <div className="max-w-4xl mx-auto mb-24 text-center">
                     <div className="inline-flex items-center gap-2 px-6 py-2 glass-premium rounded-full mb-8 border border-amber-500/20">
                         <BookOpen className="w-4 h-4 text-amber-500" />
-                        <span className="text-[10px] font-black uppercase tracking-[0.3em] text-amber-400">The Alchemist&apos;s Reserve</span>
+                        <span className="text-[10px] font-black uppercase tracking-[0.3em] text-amber-400">Knowledge Library</span>
                     </div>
                     <h1 className="text-6xl md:text-8xl font-serif font-bold text-stone-50 mb-8 leading-[0.9] tracking-tighter">
                         Botanical <br />
@@ -57,14 +57,14 @@ export default async function WisdomPage() {
                     {featuredVideo && (
                         <div className="mb-24">
                             <div className="flex items-center gap-6 mb-12">
-                                <h2 className="text-4xl font-serif font-bold text-stone-50 tracking-tighter">Visual Authority.</h2>
+                                <h2 className="text-4xl font-serif font-bold text-stone-50 tracking-tighter">Featured Video.</h2>
                                 <div className="h-[1px] flex-1 bg-stone-800/50"></div>
                             </div>
 
                             <div className="group relative rounded-[4rem] overflow-hidden aspect-video glass-premium p-4 border-white/5 shadow-3xl">
                                 <div className="h-full w-full rounded-[3rem] overflow-hidden relative">
                                     <img
-                                        src={featuredVideo.thumbnail || "https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?auto=format&fit=crop&q=80"}
+                                        src={featuredVideo.thumbnail || "/images/sea_moss_gold.webp"}
                                         alt={featuredVideo.title}
                                         className="w-full h-full object-cover transition-transform duration-[4s] group-hover:scale-105 opacity-40 group-hover:opacity-70"
                                     />
@@ -127,18 +127,18 @@ export default async function WisdomPage() {
                                 <div className="w-24 h-24 bg-amber-500/10 border border-amber-500/20 rounded-full flex items-center justify-center mx-auto mb-10 shadow-2xl">
                                     <Lock className="text-amber-400 w-10 h-10" />
                                 </div>
-                                <h2 className="text-4xl md:text-5xl font-serif font-bold text-stone-50 mb-6 leading-tight">Wisdom is Earned.</h2>
+                                <h2 className="text-4xl md:text-5xl font-serif font-bold text-stone-50 mb-6 leading-tight">Members-Only Library.</h2>
                                 <p className="text-lg text-stone-400 mb-12 italic leading-relaxed font-light">
-                                    &quot;Access to biological truth is reserved for the committed. Join the Alchemist Circle to unlock the full library.&quot;
+                                    &quot;Our full library of guides and videos is available to members. Join to unlock everything.&quot;
                                 </p>
                                 <div className="flex flex-col gap-6">
                                     <Link href="/subscriptions">
                                         <Button size="lg" className="w-full h-20 text-lg font-black uppercase tracking-widest rounded-2xl bg-amber-600 hover:bg-amber-500 text-stone-950">
-                                            Become an Alchemist
+                                            View Membership Plans
                                         </Button>
                                     </Link>
                                     <p className="text-stone-500 text-[10px] font-black uppercase tracking-widest">
-                                        Existing Authority? <Link href="/login" className="text-amber-500 hover:text-white transition-colors ml-2 underline underline-offset-4">Identify Self</Link>
+                                        Already a member? <Link href="/login" className="text-amber-500 hover:text-white transition-colors ml-2 underline underline-offset-4">Sign In</Link>
                                     </p>
                                 </div>
                             </div>

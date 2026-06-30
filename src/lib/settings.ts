@@ -25,19 +25,19 @@ export interface SiteSettings {
 
 export const DEFAULT_SETTINGS: SiteSettings = {
     announcementEnabled: false,
-    announcementText: 'Free UK shipping on orders over £50 — wildcrafted, alkaline-aligned.',
-    heroBadge: 'Botanical Authority',
-    heroTitleLine1: 'Biological',
-    heroTitleAccent: 'Restoration.',
+    announcementText: 'Free UK delivery on orders over £40 — wildcrafted & lab-verified.',
+    heroBadge: 'Wildcrafted Wellness',
+    heroTitleLine1: 'Rooted in Nature,',
+    heroTitleAccent: 'Grounded in Science.',
     heroQuote:
-        'Where traditional herbal wisdom meets modern biological reality. We don’t just sell products; we provide the framework for alkaline excellence.',
-    heroPrimaryCta: 'Manifest Wellness',
-    heroSecondaryCta: 'Clinical Guidance',
-    featuredHeading: 'Biological',
-    featuredAccent: 'Formulas.',
-    newsletterHeading: 'Join the Alchemist',
+        'Where traditional herbal wisdom meets modern quality standards. Premium wildcrafted sea moss and herbs to complement a balanced lifestyle.',
+    heroPrimaryCta: 'Shop Wellness',
+    heroSecondaryCta: 'Book a Consultation',
+    featuredHeading: 'Wellness',
+    featuredAccent: 'Essentials.',
+    newsletterHeading: 'Join Our Community',
     newsletterSubtext:
-        'Subscribe to receive alchemical protocols, botanical discoveries, and exclusive authority updates.',
+        'Subscribe for botanical guides, wellness tips, and exclusive offers — straight to your inbox.',
 }
 
 const SETTINGS_KEY = 'site'

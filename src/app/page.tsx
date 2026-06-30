@@ -69,14 +69,14 @@ export default async function HomePage() {
                             <div className="relative aspect-[4/5] rounded-[2.5rem] overflow-hidden glass-premium p-3 border border-white/10 shadow-3xl">
                                 <div className="h-full w-full rounded-[2rem] overflow-hidden relative">
                                     <img
-                                        src="/images/sea-moss-gold.jpg"
-                                        alt="Sea Moss Gold Matrix"
+                                        src="/images/sea_moss_gold.webp"
+                                        alt="Wildcrafted gold sea moss gel"
                                         className="w-full h-full object-cover transition-all duration-1000 group-hover:scale-105"
                                     />
                                     <div className="absolute inset-0 bg-gradient-to-t from-earth-950 via-earth-950/20 to-transparent"></div>
                                     <div className="absolute bottom-10 left-10">
                                         <div className="text-[10px] font-black uppercase tracking-[0.3em] text-secondary-400 mb-2">Wildcrafted Source</div>
-                                        <h3 className="text-4xl font-serif font-bold text-white">Biological Gold.</h3>
+                                        <h3 className="text-4xl font-serif font-bold text-white">Gold Sea Moss.</h3>
                                     </div>
                                 </div>
                             </div>
@@ -92,17 +92,17 @@ export default async function HomePage() {
                     <div className="grid grid-cols-1 lg:grid-cols-2 gap-0 items-stretch overflow-hidden rounded-[4rem] shadow-2xl border border-earth-800/10">
                         <div className="bg-white p-12 md:p-24 flex flex-col justify-center">
                             <h2 className="text-5xl md:text-6xl font-serif font-bold text-earth-950 mb-10 tracking-tighter leading-[0.9]">
-                                The Path of <br />
-                                <span className="text-primary-700 italic">Alkaline Mastery.</span>
+                                The Black Moss <br />
+                                <span className="text-primary-700 italic">Difference.</span>
                             </h2>
                             <p className="text-xl text-stone-600 mb-12 leading-relaxed font-light italic">
-                                Our protocols are rooted in the biological reality that an alkaline environment is the fundamental state of health.
+                                We believe in nature done properly — wildcrafted sourcing, honest labelling, and quality you can trust as part of a balanced lifestyle.
                             </p>
                             <ul className="space-y-8">
                                 {[
-                                    { title: 'Wildcrafted Integrity', desc: 'No farm-raised moss. Only wild, ocean-grown minerals.' },
-                                    { title: 'Biological Iron', desc: 'Sourcing cellular oxygenation through organic plant based iron.' },
-                                    { title: 'Cellular Cleansing', desc: 'Removing the acidic load to allow for natural restoration.' }
+                                    { title: 'Wildcrafted Integrity', desc: 'No farm-raised moss. Only wild, ocean-grown sources.' },
+                                    { title: 'Naturally Mineral-Rich', desc: 'Our sea moss naturally contains 92 trace minerals.' },
+                                    { title: 'Lab-Verified Quality', desc: 'Every batch checked for purity before it reaches you.' }
                                 ].map((step, idx) => (
                                     <li key={idx} className="flex gap-6 group">
                                         <div className="w-12 h-12 rounded-2xl bg-primary-100 flex items-center justify-center flex-shrink-0 text-primary-700 font-bold text-sm italic group-hover:bg-primary-600 group-hover:text-white transition-all transform group-hover:rotate-12">
@@ -119,15 +119,15 @@ export default async function HomePage() {
                         <div className="bg-earth-950 p-12 md:p-24 relative overflow-hidden group">
                             <div className="absolute inset-0 opacity-40 group-hover:scale-110 transition-transform duration-[4s]">
                                 <img
-                                    src="https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?auto=format&fit=crop&q=80"
+                                    src="/images/sea_moss_purple.webp"
                                     className="w-full h-full object-cover grayscale"
-                                    alt="Botanical background"
+                                    alt=""
                                 />
                             </div>
                             <div className="relative z-10 h-full flex flex-col justify-center">
                                 <div className="mb-12 w-24 h-[2px] bg-secondary-500"></div>
-                                <h3 className="text-5xl font-serif font-bold text-white mb-8 leading-tight">Dr. Sebi Inspired. <br /><span className="text-secondary-400">Biological Proven.</span></h3>
-                                <p className="text-xl text-stone-400 mb-12 italic font-light leading-relaxed">&quot;If you put the right things in the body, the body will take care of itself. It is the alchemist within.&quot;</p>
+                                <h3 className="text-5xl font-serif font-bold text-white mb-8 leading-tight">Rooted in Nature. <br /><span className="text-secondary-400">Backed by Science.</span></h3>
+                                <p className="text-xl text-stone-400 mb-12 italic font-light leading-relaxed">&quot;Give the body the right natural foods, and you give it the best foundation to thrive.&quot;</p>
                                 <Link href="/wisdom">
                                     <button className="h-16 px-10 bg-secondary-600 hover:bg-secondary-500 text-stone-950 font-black uppercase tracking-widest text-sm rounded-xl transition-all flex items-center justify-center group w-full sm:w-auto">
                                         Enter the Wisdom Archive
@@ -145,7 +145,7 @@ export default async function HomePage() {
                 <div className="container">
                     <div className="flex flex-col md:flex-row justify-between items-end mb-24 gap-8">
                         <div>
-                            <div className="text-[10px] font-black uppercase tracking-[0.4em] text-secondary-500 mb-4">The Manifest</div>
+                            <div className="text-[10px] font-black uppercase tracking-[0.4em] text-secondary-500 mb-4">Bestsellers</div>
                             <h2 className="text-6xl font-serif font-bold text-white tracking-tighter">{settings.featuredHeading} <span className="text-secondary-400 italic">{settings.featuredAccent}</span></h2>
                         </div>
                         <Link href="/shop">
@@ -226,22 +226,22 @@ export default async function HomePage() {
                 </div>
             </section>
 
-            {/* Newsletter Manifestation */}
+            {/* Newsletter */}
             <section className="py-32 relative overflow-hidden">
                 <div className="absolute inset-0 bg-primary-900/10 pointer-events-none" />
                 <div className="container relative z-10">
                     <div className="max-w-4xl mx-auto glass-premium p-16 md:p-24 rounded-[4rem] text-center border-white/5 relative group overflow-hidden">
                         <div className="absolute inset-0 bg-gradient-to-br from-primary-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-[3s]" />
                         <h2 className="text-4xl md:text-5xl font-serif font-bold text-white mb-6 tracking-tighter">
-                            {settings.newsletterHeading} <span className="text-primary-400 italic">Circle.</span>
+                            {settings.newsletterHeading}
                         </h2>
                         <p className="text-lg text-stone-400 mb-12 max-w-xl mx-auto italic font-light leading-relaxed">
                             {settings.newsletterSubtext}
                         </p>
                         <div className="max-w-lg mx-auto relative z-10">
                             <NewsletterForm
-                                placeholder="Identification (Email)"
-                                buttonLabel="Authenticate"
+                                placeholder="Your email address"
+                                buttonLabel="Subscribe"
                                 formClassName="flex flex-col sm:flex-row gap-4"
                                 inputClassName="flex-1 h-16 px-8 rounded-2xl bg-earth-950/80 border border-earth-800 text-white placeholder-earth-600 focus:outline-none focus:border-primary-500 transition-all font-medium"
                                 buttonClassName="h-16 px-10 bg-primary-600 hover:bg-primary-500 text-white font-black uppercase tracking-widest text-xs rounded-2xl transition-all shadow-xl shadow-primary-900/20 disabled:opacity-60 inline-flex items-center justify-center"
