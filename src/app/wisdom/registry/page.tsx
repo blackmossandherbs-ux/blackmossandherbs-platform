@@ -15,7 +15,7 @@ const foodCategories = [
         items: [
             { name: 'Amaranth', status: 'Approved', note: 'Rich in fiber and protein.' },
             { name: 'Bell Peppers', status: 'Approved', note: 'Preferably baby bells.' },
-            { name: 'Cucumber', status: 'Approved', note: 'Excellent for intracellular hydration.' },
+            { name: 'Cucumber', status: 'Approved', note: 'Naturally high in water content.' },
             { name: 'Kale', status: 'Approved' },
             { name: 'Mushrooms', status: 'Approved', note: 'Except Shiitake.' },
             { name: 'Potatoes', status: 'Avoid', note: 'High starch, acidic residue.' },

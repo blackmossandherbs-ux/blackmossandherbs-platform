@@ -34,8 +34,8 @@ const values = [
 const team = [
     {
         name: 'Dr. Amara Williams',
-        role: 'Clinical Herbalist & Co-founder',
-        bio: 'BSc Biomedical Science, Diploma in Herbal Medicine. 12 years clinical practice in integrative wellness. Specialist in thyroid support and gut health.',
+        role: 'Lead Herbalist & Co-founder',
+        bio: 'BSc Biomedical Science, Diploma in Herbal Medicine. 12+ years in herbal wellness and nutrition education. Passionate about sea moss and alkaline-style eating.',
         emoji: '🌿',
     },
     {

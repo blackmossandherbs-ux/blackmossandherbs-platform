@@ -39,9 +39,9 @@ const steps = [
         id: 'goal',
         question: 'What is your primary wellness goal?',
         options: [
-            { label: 'Immunity', value: 'immunity', description: 'Strengthen natural defences.' },
-            { label: 'Gut Health', value: 'gut', description: 'Improve digestion and absorption.' },
-            { label: 'Vitality', value: 'vitality', description: 'Restore energy and balance.' },
+            { label: 'Everyday Wellbeing', value: 'immunity', description: 'Mineral-rich seaweeds and herbs.' },
+            { label: 'Digestion', value: 'gut', description: 'Herbs traditionally enjoyed for gut wellbeing.' },
+            { label: 'Vitality', value: 'vitality', description: 'Nutrient-rich botanicals for a balanced routine.' },
         ],
         icon: Leaf,
     },
@@ -58,54 +58,55 @@ interface Recommendation {
 function getRecommendation(answers: Record<string, string>): Recommendation {
     const { energy, digestion, mental, goal } = answers
 
-    // Primary goal overrides
+    // Suggestions are based on the topics you told us you're interested in —
+    // they are product ideas to explore, not health assessments.
     if (goal === 'gut' || digestion === 'sluggish' || digestion === 'sensitive') {
         return {
             title: 'Sea Moss & Bladderwrack Blend',
-            tagline: 'Gut Restoration Protocol',
-            reasoning: 'Your answers indicate sluggish or sensitive digestion. Sea moss provides prebiotic fibres that feed beneficial gut bacteria, while bladderwrack supports thyroid function linked to metabolic rate and digestive efficiency.',
+            tagline: 'A popular everyday pairing',
+            reasoning: 'You said digestion and gut wellbeing are on your mind. Many people enjoy our Sea Moss & Bladderwrack blend as part of a balanced daily routine. Both are nutrient-rich seaweeds with a long history of traditional use.',
             searchQuery: 'sea moss bladderwrack',
-            category: 'Digestion & Gut Health',
+            category: 'Sea Moss Blends',
         }
     }
 
     if (goal === 'immunity' || (energy === 'low' && mental === 'fog')) {
         return {
-            title: 'Sea Moss Gold Matrix',
-            tagline: 'Immunity & Mineral Replenishment',
-            reasoning: 'Your markers suggest depleted mineral reserves affecting both energy and cognitive clarity. Sea Moss Gold provides 92 bioavailable trace minerals including iodine, zinc, and organic iron — foundational for immune function and cell oxygenation.',
+            title: 'Sea Moss Gold',
+            tagline: 'Naturally mineral-rich',
+            reasoning: 'You told us everyday energy and wellbeing matter to you. Sea Moss Gold is a favourite — a nutrient-dense seaweed that naturally contains a wide range of trace minerals, including iodine, zinc and iron, to enjoy as part of a balanced lifestyle.',
             searchQuery: 'sea moss',
-            category: 'Immunity & Energy',
+            category: 'Sea Moss',
         }
     }
 
     if (mental === 'anxious' || (mental === 'fog' && energy === 'medium')) {
         return {
-            title: 'Adaptogen & Stress Support Bundle',
-            tagline: 'Stress Modulation Protocol',
-            reasoning: 'Your cognitive profile suggests elevated cortisol and stress load. Adaptogenic herbs like ashwagandha, lion\'s mane, and reishi help regulate the HPA axis, reducing anxiety and restoring mental clarity over 4–8 weeks.',
+            title: 'Adaptogen & Calm Bundle',
+            tagline: 'For your wind-down routine',
+            reasoning: 'You mentioned a busy mind. Many customers enjoy adaptogenic herbs like ashwagandha, lion\'s mane and reishi as part of a calming daily ritual. These have a long history of traditional use in herbal wellbeing.',
             searchQuery: 'adaptogen',
-            category: 'Stress & Cognitive Health',
+            category: 'Herbal Blends',
         }
     }
 
     if (goal === 'vitality' || energy === 'medium') {
         return {
-            title: 'Burdock Root & Sea Moss Stack',
-            tagline: 'Vitality Restoration Protocol',
-            reasoning: 'Fluctuating energy typically indicates blood sugar instability or lymphatic congestion. Burdock root is a powerful lymphatic cleanser, while sea moss provides sustained mineral support for consistent energy throughout the day.',
+            title: 'Burdock Root & Sea Moss',
+            tagline: 'A traditional botanical pairing',
+            reasoning: 'You said overall vitality is your focus. Burdock root and sea moss are both long-loved in traditional herbal practice, and many people enjoy them together as part of a balanced everyday routine.',
             searchQuery: 'burdock',
-            category: 'Vitality & Detox',
+            category: 'Herbs & Sea Moss',
         }
     }
 
-    // Default — high energy, efficient digestion, sharp mind
+    // Default
     return {
-        title: 'Sea Moss Maintenance Protocol',
-        tagline: 'Optimisation & Longevity',
-        reasoning: 'Your biological markers show strong baseline health. A daily sea moss maintenance dose supports longevity, sustained mineral density, and cellular hydration — keeping your system optimised.',
+        title: 'Daily Sea Moss',
+        tagline: 'A simple everyday favourite',
+        reasoning: 'A daily serving of nutrient-rich sea moss is a simple, popular way to complement a balanced lifestyle. It naturally contains a wide range of trace minerals and has a long history of traditional use.',
         searchQuery: 'sea moss',
-        category: 'Maintenance & Longevity',
+        category: 'Sea Moss',
     }
 }
 
@@ -137,7 +138,7 @@ export default function BioRestorationQuiz() {
                     <p className="text-secondary-400 font-bold uppercase text-xs tracking-widest mb-8">{rec.tagline}</p>
 
                     <div className="bg-earth-950/50 border border-earth-800 rounded-2xl p-6 mb-8 text-left">
-                        <h3 className="text-earth-500 font-black uppercase text-[10px] tracking-widest mb-3">Why this protocol</h3>
+                        <h3 className="text-earth-500 font-black uppercase text-[10px] tracking-widest mb-3">Why we picked this</h3>
                         <p className="text-earth-300 text-sm leading-relaxed">{rec.reasoning}</p>
                     </div>
 
@@ -151,7 +152,7 @@ export default function BioRestorationQuiz() {
                             className="flex-1 py-4 bg-secondary-500 hover:bg-secondary-400 text-stone-950 font-black uppercase tracking-widest rounded-xl transition-all flex items-center justify-center gap-2"
                         >
                             <ShoppingBag className="w-4 h-4" />
-                            Shop This Protocol
+                            Shop This Pick
                         </Link>
                         <button
                             onClick={() => { setCurrentStep(0); setAnswers({}); setIsComplete(false) }}

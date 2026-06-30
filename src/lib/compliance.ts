@@ -6,22 +6,52 @@
 export const HIGH_RISK_TERMS = [
     'cure', 'treat', 'diagnose', 'healing', 'medicine',
     'doctor', 'prescription', 'disease', 'chronic', 'cancer',
+    'detox', 'cleanse', 'antiviral', 'antibacterial', 'antimicrobial',
+    'diuretic', 'laxative', 'inflammation', 'immune system',
 ]
 
-/** Replace high-risk medicinal verbs with compliant wellness language. */
+/**
+ * Replace high-risk medicinal language with compliant wellness phrasing.
+ * Order matters: multi-word phrases are handled before single words.
+ */
 export function sanitizeWellnessContent(text: string): string {
-    const replacements: Record<string, string> = {
-        'cure': 'support',
-        'treat': 'help maintain',
-        'diagnose': 'assess',
-        'healing': 'supporting',
-        'medicine': 'herbal tradition',
-    }
+    const replacements: Array<[RegExp, string]> = [
+        // Drug-class and detox language (whole words / phrases first).
+        [/\bcleanses?\b/gi, 'refreshes'],
+        [/\bcleansing\b/gi, 'refreshing'],
+        [/\bdetox(es|ifies|ification)?\b/gi, 'supports everyday wellbeing'],
+        [/\bdiuretic\b/gi, 'herbal'],
+        [/\blaxative\b/gi, 'herbal'],
+        [/\bantimicrobial\b/gi, 'botanical'],
+        [/\bantiviral\b/gi, 'botanical'],
+        [/\bantibacterial\b/gi, 'botanical'],
+        [/\bprescriptions?\b/gi, 'recommendations'],
+        [/\bprotocols?\b/gi, 'plans'],
+        [/\brestoration\b/gi, 'wellbeing'],
+        [/\bclinical\b/gi, 'wellness'],
+        // Medicinal verbs.
+        [/\bcure[sd]?\b/gi, 'support'],
+        [/\btreats?\b/gi, 'help maintain'],
+        [/\btreating\b/gi, 'helping maintain'],
+        [/\bdiagnos(e|es|ed|ing|is)\b/gi, 'assess'],
+        [/\bheal(s|ing|ed)?\b/gi, 'support'],
+        [/\bmedicine\b/gi, 'herbal tradition'],
+    ]
     let cleaned = text
-    Object.entries(replacements).forEach(([risk, safe]) => {
-        cleaned = cleaned.replace(new RegExp(`\\b${risk}\\b`, 'gi'), safe)
-    })
+    for (const [pattern, safe] of replacements) {
+        cleaned = cleaned.replace(pattern, safe)
+    }
     return cleaned
+}
+
+/**
+ * Returns true if the text still contains language that breaks UK MHRA rules
+ * (named diseases, drug classes, cure/treat claims). Use to flag content before
+ * publishing.
+ */
+export function hasRiskyClaims(text: string): boolean {
+    const RISKY = /\b(cure|treats?|diagnos|heals?|disease|cancer|diabet\w*|arthrit\w*|diuretic|laxative|antimicrobial|antiviral|antibacterial|detox|immune (system|boost|defen[cs]e)|thyroid (support|function)|kidney stone)\b/i
+    return RISKY.test(text)
 }
 
 /** Standard MHRA-aligned disclaimer for UK food supplements. */

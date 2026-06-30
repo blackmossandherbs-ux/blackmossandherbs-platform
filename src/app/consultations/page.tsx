@@ -10,27 +10,27 @@ import ConsultationBookingForm from '@/components/ConsultationBookingForm'
 const consultationTypes = [
     {
         id: 'initial',
-        name: 'Initial Bio-Assessment',
+        name: 'Initial Wellness Consultation',
         price: 150,
         duration: 60,
-        description: 'Comprehensive evaluation of your biological terrain and alkaline transition path.',
-        features: ['Full Health History Review', 'Alkaline Protocol Design', 'Herbal Prescription', 'Follow-up Plan'],
+        description: 'A relaxed conversation about your wellness goals, lifestyle and interest in herbs and natural nutrition.',
+        features: ['Wellness goals discussion', 'Lifestyle & nutrition chat', 'Herbal product guidance', 'Follow-up suggestions'],
     },
     {
         id: 'follow-up',
         name: 'Follow-up Session',
         price: 85,
         duration: 30,
-        description: 'Progress review and protocol adjustments for ongoing biological restoration.',
-        features: ['Results Analysis', 'Formula Fine-tuning', 'Q&A Support', 'Next Steps'],
+        description: 'A catch-up to review how you are getting on and adjust your product choices.',
+        features: ['Progress catch-up', 'Product guidance', 'Q&A support', 'Next steps'],
     },
     {
         id: 'intensive',
-        name: 'Intensive Protocol',
+        name: 'Extended Wellness Session',
         price: 250,
         duration: 90,
-        description: 'Deep dive for complex requirements and thorough biological optimization.',
-        features: ['Advanced Terrain Analysis', 'Extended Support', 'Custom Master Formulas', 'Priority Support'],
+        description: 'A longer, in-depth conversation for those who want more time to explore their wellness routine.',
+        features: ['Extended discussion', 'Tailored product guidance', 'Recipes & routines', 'Priority support'],
     },
 ]
 
@@ -55,14 +55,17 @@ export default function ConsultationsPage() {
                 <div className="max-w-4xl mx-auto mb-24 text-center">
                     <div className="inline-flex items-center gap-2 px-4 py-2 organic-glass rounded-full mb-8 border-green-500/20">
                         <Video className="w-4 h-4 text-green-500" />
-                        <span className="text-[10px] font-black uppercase tracking-[0.2em] text-green-400">Biological Support</span>
+                        <span className="text-[10px] font-black uppercase tracking-[0.2em] text-green-400">Wellness Guidance</span>
                     </div>
                     <h1 className="text-5xl md:text-8xl font-serif font-bold text-stone-50 mb-8 leading-[0.9] tracking-tighter">
-                        Clinical <br />
+                        Herbal <br />
                         <span className="text-amber-500 italic">Guidance.</span>
                     </h1>
                     <p className="text-xl text-stone-400 max-w-2xl mx-auto leading-relaxed font-light">
-                        Personalized alkaline protocols with master practitioners. Verify your biological restoration path with experienced herbal authority.
+                        Friendly, personalised guidance on herbs and natural nutrition from experienced herbalists. A wellness conversation — not a medical service.
+                    </p>
+                    <p className="text-xs text-stone-500 max-w-2xl mx-auto mt-6 italic leading-relaxed">
+                        Our team offers general wellness and lifestyle guidance only. They are not medical doctors and do not diagnose, treat or prescribe. Always consult your GP about health concerns or before changing any medication.
                     </p>
                 </div>
 
@@ -123,14 +126,14 @@ export default function ConsultationsPage() {
                 {/* Practitioners */}
                 <div className="mt-40">
                     <div className="text-center mb-20">
-                        <h2 className="text-stone-500 text-[10px] font-black uppercase tracking-[0.4em] mb-4">Master Authority</h2>
-                        <h2 className="text-5xl font-serif font-bold text-stone-50">Our Practitioners.</h2>
+                        <h2 className="text-stone-500 text-[10px] font-black uppercase tracking-[0.4em] mb-4">Our Team</h2>
+                        <h2 className="text-5xl font-serif font-bold text-stone-50">Our Herbalists.</h2>
                     </div>
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
                         {[
-                            { name: 'Dr. Amara Williams', title: 'Lead Herbalist', specialty: 'Biological Terrain & Alkaline Protocols' },
-                            { name: 'Sister Ife Okonkwo', title: 'Master Herbalist', specialty: 'Womb Restoration & Hormonal Health' },
-                            { name: 'Marcus Adeyemi', title: 'Nutritional Herbalist', specialty: 'Digestive Health & Immunity' },
+                            { name: 'Dr. Amara Williams', title: 'Lead Herbalist', specialty: 'Sea moss & alkaline nutrition' },
+                            { name: 'Sister Ife Okonkwo', title: 'Herbalist', specialty: "Traditional herbs & women's wellness" },
+                            { name: 'Marcus Adeyemi', title: 'Nutritional Herbalist', specialty: 'Everyday wellbeing & nutrition' },
                         ].map((herbalist, index) => (
                             <div key={index} className="organic-glass p-10 text-center rounded-3xl border-stone-800/10 group hover:border-amber-500/20 transition-all duration-700">
                                 <div className="w-32 h-32 bg-stone-900 rounded-full mx-auto mb-8 flex items-center justify-center p-1 border border-stone-800 relative overflow-hidden group-hover:scale-105 transition-transform duration-700">

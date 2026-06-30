@@ -41,8 +41,8 @@ const faqs = [
         a: 'Our products are food supplements and do not require MHRA approval. They are produced to UK food safety standards and are not medicines. They are not intended to diagnose, treat, cure or prevent any disease.',
     },
     {
-        q: 'What are the benefits of Sea Moss?',
-        a: 'Wildcrafted sea moss contains up to 92 of the 102 minerals the human body needs, including iodine, iron, magnesium, potassium and zinc. Many customers use it to support thyroid health, digestion, skin hydration, energy levels, and immune function.',
+        q: 'What is Sea Moss?',
+        a: 'Wildcrafted sea moss is a nutrient-dense seaweed that naturally contains a wide range of trace minerals, including iodine, iron, magnesium, potassium and zinc. It has a long history of traditional use and is enjoyed by many people as part of a balanced lifestyle. As a food supplement, it is not intended to diagnose, treat, cure or prevent any disease.',
     },
     {
         q: 'Can I cancel or pause my subscription?',
