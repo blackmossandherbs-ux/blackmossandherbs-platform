@@ -2,33 +2,28 @@
 
 ## For Your Server
 
-### 1. Fresh Server Setup
+### 1. Fresh Server Setup + Deploy
+
+`auto-deploy.sh` bootstraps a fresh Ubuntu server (Node, PostgreSQL, Nginx, PM2), clones the repo, configures `.env`, and deploys — all in one interactive run:
 
 ```bash
 # SSH into your server
 ssh root@your-server-ip
 
-# Download and run server setup
-wget https://raw.githubusercontent.com/richhabits/blackmossandherbs-platform/main/setup-server.sh
-chmod +x setup-server.sh
-./setup-server.sh
+# Download and run
+wget https://raw.githubusercontent.com/richhabits/blackmossandherbs-platform/main/auto-deploy.sh
+chmod +x auto-deploy.sh
+./auto-deploy.sh
 ```
 
-### 2. Clone and Deploy
+### 2. Redeploying Later
+
+For an existing deployment (pull latest code, rebuild, restart — auto-detects Docker vs PM2):
 
 ```bash
-# Clone repository
-cd /var/www
-git clone https://github.com/richhabits/blackmossandherbs-platform.git
-cd blackmossandherbs-platform
-
-# Configure environment
-cp .env.example .env
-nano .env  # Edit with your credentials
-
-# Run deployment
-chmod +x deploy.sh
-./deploy.sh
+cd /var/www/blackmossandherbs-platform
+chmod +x fix-server.sh
+./fix-server.sh
 ```
 
 ### 3. Setup SSL

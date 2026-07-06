@@ -1,9 +1,15 @@
 #!/bin/bash
 
-# One-Command Server Setup for 213.199.45.126
-# This script does EVERYTHING automatically
+# One-Command Fresh Server Setup + Deploy
+# For provisioning a NEW server only. To redeploy the existing production
+# server, use fix-server.sh instead (that's what CI runs).
+# This script does EVERYTHING automatically.
 
-SERVER="213.199.45.126"
+read -p "Server IP or hostname to provision: " SERVER
+if [ -z "$SERVER" ]; then
+    echo "No server specified, aborting."
+    exit 1
+fi
 
 echo "🚀 Black Moss & Herbs - Automated Server Setup"
 echo "Server: $SERVER"

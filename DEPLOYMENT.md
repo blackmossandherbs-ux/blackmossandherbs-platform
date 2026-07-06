@@ -211,17 +211,11 @@ npx prisma generate
 npx prisma db push
 ```
 
-## Deployment Script
+## Deployment Scripts
 
-Use the provided deploy script:
-
-```bash
-# Make executable
-chmod +x deploy.sh
-
-# Deploy
-./deploy.sh
-```
+- **Fresh server** (installs Node/PostgreSQL/Nginx/PM2, clones, configures `.env`, deploys): `./auto-deploy.sh`
+- **Redeploy existing server** (pulls latest, rebuilds, restarts — auto-detects Docker vs PM2): `./fix-server.sh`
+- **SSL certificate**: `./setup-ssl.sh`
 
 ## Monitoring & Maintenance
 
