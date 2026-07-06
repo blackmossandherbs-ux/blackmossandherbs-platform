@@ -11,6 +11,7 @@ import {
     Users,
     BarChart3,
     TrendingUp,
+    TrendingDown,
     Package,
     Search,
     ChevronRight,
@@ -24,26 +25,58 @@ export const metadata: Metadata = {
     description: 'Manage your store, orders, and customers.',
 }
 
+// Real period-over-period change (last 30 days vs the 30 days before that),
+// rather than a fabricated percentage.
+function formatChange(current: number, previous: number): { text: string; positive: boolean } {
+    if (previous === 0) {
+        return current > 0 ? { text: 'New', positive: true } : { text: '—', positive: true };
+    }
+    const pct = ((current - previous) / previous) * 100;
+    return { text: `${pct >= 0 ? '+' : ''}${pct.toFixed(1)}%`, positive: pct >= 0 };
+}
+
 async function getAdminData() {
+    const now = new Date();
+    const periodStart = new Date(now.getTime() - 30 * 24 * 60 * 60 * 1000);
+    const prevPeriodStart = new Date(now.getTime() - 60 * 24 * 60 * 60 * 1000);
+
     // 1. Stats
     const totalRevenue = await prisma.order.aggregate({
         _sum: { total: true },
         where: { status: { not: 'CANCELLED' } }
     });
 
+    const revenuePeriod = await prisma.order.aggregate({
+        _sum: { total: true },
+        where: { status: { not: 'CANCELLED' }, createdAt: { gte: periodStart } }
+    });
+    const revenuePrevPeriod = await prisma.order.aggregate({
+        _sum: { total: true },
+        where: { status: { not: 'CANCELLED' }, createdAt: { gte: prevPeriodStart, lt: periodStart } }
+    });
+
     const activeOrdersCount = await prisma.order.count({
         where: { status: { in: ['PENDING', 'PROCESSING', 'SHIPPED'] } }
     });
+    const ordersPeriod = await prisma.order.count({ where: { createdAt: { gte: periodStart } } });
+    const ordersPrevPeriod = await prisma.order.count({ where: { createdAt: { gte: prevPeriodStart, lt: periodStart } } });
 
     const totalCustomers = await prisma.user.count({
         where: { role: 'CUSTOMER' }
     });
+    const customersPeriod = await prisma.user.count({ where: { role: 'CUSTOMER', createdAt: { gte: periodStart } } });
+    const customersPrevPeriod = await prisma.user.count({ where: { role: 'CUSTOMER', createdAt: { gte: prevPeriodStart, lt: periodStart } } });
 
     const activeSubscriptions = await prisma.subscription.findMany({
         where: { status: 'ACTIVE' },
         include: { plan: true }
     });
     const mrr = activeSubscriptions.reduce((acc, sub) => acc + sub.plan.price, 0);
+    // Approximation: MRR contributed by subscriptions that already existed
+    // before the current 30-day period, vs the full current MRR.
+    const mrrPrevPeriod = activeSubscriptions
+        .filter(sub => sub.createdAt < periodStart)
+        .reduce((acc, sub) => acc + sub.plan.price, 0);
 
     // 2. Recent Transactions
     const recentOrders = await prisma.order.findMany({
@@ -70,16 +103,15 @@ async function getAdminData() {
             name: product?.name || 'Unknown Compound',
             sales: tp._count.id,
             revenue: tp._sum.price || 0,
-            trending: true // Placeholder for now
         };
     }));
 
     return {
         stats: [
-            { label: 'Total Revenue', value: `£${(totalRevenue._sum.total || 0).toLocaleString()}`, change: '+12.5%', icon: DollarSign, color: 'secondary' },
-            { label: 'Active Orders', value: activeOrdersCount.toString(), change: '+8.2%', icon: ShoppingBag, color: 'primary' },
-            { label: 'Total Customers', value: totalCustomers.toLocaleString(), change: '+15.3%', icon: Users, color: 'earth' },
-            { label: 'Consultation MRR', value: `£${mrr.toLocaleString()}`, change: '+22.1%', icon: BarChart3, color: 'secondary' },
+            { label: 'Total Revenue', value: `£${(totalRevenue._sum.total || 0).toLocaleString()}`, ...formatChange(revenuePeriod._sum.total || 0, revenuePrevPeriod._sum.total || 0), icon: DollarSign, color: 'secondary' },
+            { label: 'Active Orders', value: activeOrdersCount.toString(), ...formatChange(ordersPeriod, ordersPrevPeriod), icon: ShoppingBag, color: 'primary' },
+            { label: 'Total Customers', value: totalCustomers.toLocaleString(), ...formatChange(customersPeriod, customersPrevPeriod), icon: Users, color: 'earth' },
+            { label: 'Consultation MRR', value: `£${mrr.toLocaleString()}`, ...formatChange(mrr, mrrPrevPeriod), icon: BarChart3, color: 'secondary' },
         ],
         recentOrders: recentOrders.map(o => ({
             id: o.orderNumber,
@@ -136,9 +168,9 @@ export default async function AdminPage() {
                                 <div className={`w-14 h-14 bg-${stat.color}-900/20 rounded-2xl flex items-center justify-center border border-${stat.color}-700/30 group-hover:scale-110 transition-transform`}>
                                     <stat.icon className={`w-7 h-7 text-${stat.color}-400`} />
                                 </div>
-                                <div className="flex items-center gap-1 text-primary-400 text-sm font-bold bg-primary-950/30 px-3 py-1 rounded-full border border-primary-800/50">
-                                    <TrendingUp className="w-4 h-4" />
-                                    {stat.change}
+                                <div className={`flex items-center gap-1 text-sm font-bold px-3 py-1 rounded-full border ${stat.positive ? 'text-primary-400 bg-primary-950/30 border-primary-800/50' : 'text-red-400 bg-red-950/30 border-red-800/50'}`}>
+                                    {stat.positive ? <TrendingUp className="w-4 h-4" /> : <TrendingDown className="w-4 h-4" />}
+                                    {stat.text}
                                 </div>
                             </div>
                             <div className="text-4xl font-bold text-white mb-1 tracking-tight">{stat.value}</div>
@@ -202,7 +234,6 @@ export default async function AdminPage() {
                                         <div>
                                             <div className="font-bold text-white flex items-center gap-2">
                                                 {product.name}
-                                                {product.trending && <TrendingUp className="w-3 h-3 text-emerald-400" />}
                                             </div>
                                             <div className="text-sm text-earth-500">{product.sales} batches sold</div>
                                         </div>
