@@ -5,6 +5,7 @@
 import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 import { requireAdmin } from '@/lib/api-auth';
+import { sanitizeWellnessContent } from '@/lib/compliance';
 
 export async function GET(req: Request) {
     const denied = await requireAdmin();
@@ -61,7 +62,7 @@ export async function POST(req: Request) {
             data: {
                 name,
                 slug,
-                description,
+                description: description ? sanitizeWellnessContent(description) : description,
                 price: parseFloat(price),
                 compareAtPrice: compareAtPrice ? parseFloat(compareAtPrice) : null,
                 category,

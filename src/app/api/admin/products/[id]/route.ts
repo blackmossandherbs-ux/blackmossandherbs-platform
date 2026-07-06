@@ -5,6 +5,7 @@
 import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 import { requireAdmin } from '@/lib/api-auth';
+import { sanitizeWellnessContent } from '@/lib/compliance';
 
 export async function PATCH(req: Request, { params }: { params: { id: string } }) {
     const denied = await requireAdmin();
@@ -17,6 +18,7 @@ export async function PATCH(req: Request, { params }: { params: { id: string } }
             where: { id },
             data: {
                 ...body,
+                description: body.description !== undefined ? sanitizeWellnessContent(body.description) : undefined,
                 price: body.price !== undefined ? parseFloat(body.price) : undefined,
                 compareAtPrice: body.compareAtPrice !== undefined ? parseFloat(body.compareAtPrice) : undefined,
                 stock: body.stock !== undefined ? parseInt(body.stock) : undefined

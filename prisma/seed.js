@@ -111,7 +111,7 @@ const products = [
 
     createVariant('Batana Oil', 'Raw', 34.99, '/images/herbal_oil.webp', 'Oils', 'Hair growth miracle from Honduras.'),
     createVariant('Batana Oil', 'Infused', 39.99, '/images/herbal_oil.webp', 'Oils', 'Infused with Rosemary for extra growth.'),
-    createVariant('Black Seed Oil', 'Premium', 29.99, '/images/herbal_oil.webp', 'Oils', 'Cold pressed cure-all.'),
+    createVariant('Black Seed Oil', 'Premium', 29.99, '/images/herbal_oil.webp', 'Oils', 'Cold pressed wellness oil.'),
     createVariant('Black Seed Oil', 'Capsules', 27.99, '/images/herbal_capsules.webp', 'Oils', 'Oil in convenient vegan caps.'),
     createVariant('Hemp Seed Oil', 'Organic', 24.99, '/images/herbal_oil.webp', 'Oils', 'Omega fatty acid rich oil.'),
     createVariant('Castor Oil', 'Black', 19.99, '/images/herbal_oil.webp', 'Oils', 'Thickening oil for hair and lashes.'),
@@ -141,7 +141,7 @@ const products = [
 const extraHerbs = ['Chaparral', 'Nopal', 'Sage', 'Thyme', 'Oregano', 'Basil', 'Dill', 'Cilantro', 'Parsley', 'Savory', 'Tarragon', 'Marjoram'];
 extraHerbs.forEach(herb => {
     products.push(createVariant(herb, 'Capsules', 21.99, '/images/herbal_capsules.webp', 'Herbs', 'Alkaline herbal support.'));
-    products.push(createVariant(herb, 'Tea', 18.99, '/images/herbal_tea.webp', 'Herbs', 'Healing herbal tea.'));
+    products.push(createVariant(herb, 'Tea', 18.99, '/images/herbal_tea.webp', 'Herbs', 'Rejuvenating herbal tea.'));
 });
 
 async function main() {
