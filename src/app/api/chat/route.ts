@@ -8,6 +8,7 @@
 import { NextResponse } from 'next/server'
 import { getAnthropic, CLAUDE_MODEL } from '@/lib/anthropic'
 import { getPersona } from '@/lib/personas'
+import { checkRateLimit, getClientIp } from '@/lib/rate-limit'
 
 export const dynamic = 'force-dynamic'
 
@@ -31,6 +32,12 @@ interface ChatMessage {
 }
 
 export async function POST(req: Request) {
+    // This calls a paid, per-token API with no login required, so it's a
+    // direct cost-exhaustion target without a rate limit.
+    if (!checkRateLimit(`chat:${getClientIp(req)}`, 15, 60 * 1000)) {
+        return NextResponse.json({ error: 'Too many messages. Please slow down.' }, { status: 429 })
+    }
+
     try {
         const body = await req.json()
         const guideId: string = body.guideId || 'alchemist'

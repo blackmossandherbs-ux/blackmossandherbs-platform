@@ -4,10 +4,15 @@
 import { NextResponse } from 'next/server'
 import { sendEmail } from '@/lib/mail'
 import { prisma } from '@/lib/prisma'
+import { checkRateLimit, getClientIp } from '@/lib/rate-limit'
 
 export const dynamic = 'force-dynamic'
 
 export async function POST(req: Request) {
+    if (!checkRateLimit(`newsletter:${getClientIp(req)}`, 5, 60 * 1000)) {
+        return NextResponse.json({ error: 'Too many requests. Please try again shortly.' }, { status: 429 })
+    }
+
     try {
         const { email } = await req.json()
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/

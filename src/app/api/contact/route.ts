@@ -4,10 +4,16 @@
 import { NextResponse } from 'next/server'
 import { sendEmail } from '@/lib/mail'
 import { verifyRecaptcha } from '@/lib/recaptcha'
+import { checkRateLimit, getClientIp } from '@/lib/rate-limit'
 
 export const dynamic = 'force-dynamic'
 
 export async function POST(req: Request) {
+    // Defense in depth alongside reCAPTCHA - still useful when that isn't configured.
+    if (!checkRateLimit(`contact:${getClientIp(req)}`, 5, 60 * 1000)) {
+        return NextResponse.json({ error: 'Too many requests. Please try again shortly.' }, { status: 429 })
+    }
+
     try {
         const { name, email, message, recaptchaToken } = await req.json()
 

@@ -36,6 +36,21 @@ const nextConfig = {
           {
             key: 'Referrer-Policy',
             value: 'origin-when-cross-origin'
+          },
+          {
+            key: 'Content-Security-Policy',
+            value: [
+              "default-src 'self'",
+              "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://www.googletagmanager.com https://www.google.com https://www.gstatic.com https://js.stripe.com",
+              "style-src 'self' 'unsafe-inline'",
+              "img-src 'self' data: blob: https:",
+              "font-src 'self' data:",
+              "connect-src 'self' https://www.google-analytics.com https://api.stripe.com",
+              "frame-src 'self' https://js.stripe.com https://www.google.com",
+              "object-src 'none'",
+              "base-uri 'self'",
+              "frame-ancestors 'self'"
+            ].join('; ')
           }
         ]
       }

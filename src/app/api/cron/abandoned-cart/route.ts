@@ -3,16 +3,25 @@
  * Black Moss & Herbs Platform - Abandoned Cart Recovery Logic
  */
 import { NextResponse } from 'next/server';
+import { timingSafeEqual } from 'crypto';
 import { prisma } from '@/lib/prisma';
 import { sendEmail } from '@/lib/mail';
 
 export const dynamic = 'force-dynamic';
 
+function isValidCronSecret(provided: string | null): boolean {
+    const expected = process.env.CRON_SECRET;
+    if (!expected || !provided) return false;
+    const a = Buffer.from(provided);
+    const b = Buffer.from(expected);
+    return a.length === b.length && timingSafeEqual(a, b);
+}
+
 export async function GET(req: Request) {
     try {
-        // Authenticate request (should be a secret CRON_SECRET)
-        const { searchParams } = new URL(req.url);
-        if (searchParams.get('secret') !== process.env.CRON_SECRET) {
+        // Secret via header, not a URL query param, so it never lands in
+        // access logs / proxy logs / browser history.
+        if (!isValidCronSecret(req.headers.get('x-cron-secret'))) {
             return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
         }
 

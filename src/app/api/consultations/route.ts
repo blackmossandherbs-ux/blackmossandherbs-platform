@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { sendEmail } from '@/lib/mail'
 import { prisma } from '@/lib/prisma'
+import { checkRateLimit, getClientIp } from '@/lib/rate-limit'
 
 export const dynamic = 'force-dynamic'
 
@@ -17,6 +18,10 @@ const TYPE_NAMES: Record<string, string> = {
 }
 
 export async function POST(req: NextRequest) {
+    if (!checkRateLimit(`consultations:${getClientIp(req)}`, 5, 60 * 1000)) {
+        return NextResponse.json({ error: 'Too many requests. Please try again shortly.' }, { status: 429 })
+    }
+
     try {
         const { name, email, type, date, time, objectives } = await req.json()
 
