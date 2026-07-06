@@ -3,6 +3,7 @@
  * Black Moss & Herbs Platform - Home Page
  */
 import Link from 'next/link'
+import Image from 'next/image'
 import { ArrowRight, Leaf, Heart, Shield, Star, ShoppingCart, Play, CheckCircle2 } from 'lucide-react'
 import Button from '@/components/Button'
 import { ProductService } from '@/services/ProductService'
@@ -68,10 +69,13 @@ export default async function HomePage() {
                             <div className="absolute -inset-4 bg-gradient-to-r from-primary-500/20 to-secondary-500/20 rounded-[3rem] blur-2xl opacity-50 group-hover:opacity-100 transition-opacity duration-1000"></div>
                             <div className="relative aspect-[4/5] rounded-[2.5rem] overflow-hidden glass-premium p-3 border border-white/10 shadow-3xl">
                                 <div className="h-full w-full rounded-[2rem] overflow-hidden relative">
-                                    <img
-                                        src="/images/sea-moss-gold.jpg"
+                                    <Image
+                                        src="/images/sea_moss_gold.webp"
                                         alt="Sea Moss Gold Matrix"
-                                        className="w-full h-full object-cover transition-all duration-1000 group-hover:scale-105"
+                                        fill
+                                        sizes="(max-width: 1024px) 100vw, 50vw"
+                                        priority
+                                        className="object-cover transition-all duration-1000 group-hover:scale-105"
                                     />
                                     <div className="absolute inset-0 bg-gradient-to-t from-earth-950 via-earth-950/20 to-transparent"></div>
                                     <div className="absolute bottom-10 left-10">
@@ -118,9 +122,11 @@ export default async function HomePage() {
                         </div>
                         <div className="bg-earth-950 p-12 md:p-24 relative overflow-hidden group">
                             <div className="absolute inset-0 opacity-40 group-hover:scale-110 transition-transform duration-[4s]">
-                                <img
+                                <Image
                                     src="https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?auto=format&fit=crop&q=80"
-                                    className="w-full h-full object-cover grayscale"
+                                    fill
+                                    sizes="100vw"
+                                    className="object-cover grayscale"
                                     alt="Botanical background"
                                 />
                             </div>
@@ -195,11 +201,13 @@ export default async function HomePage() {
                         {latestBlogs.length > 0 ? latestBlogs.map((post) => (
                             <Link key={post.id} href={`/wisdom/blogs/${post.slug}`} className="group block">
                                 <article className="premium-card h-full bg-earth-950/50 border-earth-800 group-hover:border-primary-500/30 transition-all duration-700 overflow-hidden relative">
-                                    <div className="aspect-video overflow-hidden">
-                                        <img
-                                            src={post.coverImage || "/images/wisdom-placeholder.jpg"}
+                                    <div className="aspect-video overflow-hidden relative">
+                                        <Image
+                                            src={post.coverImage || "/images/wisdom/alkaline-diet.png"}
                                             alt={post.title}
-                                            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-[2s] opacity-70 group-hover:opacity-100"
+                                            fill
+                                            sizes="(max-width: 768px) 100vw, 33vw"
+                                            className="object-cover group-hover:scale-105 transition-transform duration-[2s] opacity-70 group-hover:opacity-100"
                                         />
                                     </div>
                                     <div className="p-10">

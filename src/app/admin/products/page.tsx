@@ -67,7 +67,7 @@ export default function AdminProductsPage() {
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
                     ...formData,
-                    images: formData.images.length > 0 ? formData.images : ['/images/placeholder.jpg']
+                    images: formData.images.length > 0 ? formData.images : ['/images/product-placeholder.svg']
                 })
             });
 

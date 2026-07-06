@@ -31,7 +31,7 @@ export async function POST(req: Request) {
                 slug: data.slug || data.title.toLowerCase().replace(/ /g, '-').replace(/[^\w-]+/g, ''),
                 description: data.description,
                 videoUrl: data.url,
-                thumbnail: data.thumbnail || '/images/placeholder.jpg',
+                thumbnail: data.thumbnail || '/images/product-placeholder.svg',
                 category: data.category,
                 // duration is stored as seconds (Int); coerce or leave null
                 duration: data.duration ? parseInt(data.duration, 10) || null : null

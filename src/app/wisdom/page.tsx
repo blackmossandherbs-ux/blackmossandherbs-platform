@@ -5,6 +5,7 @@
 import { Metadata } from 'next'
 import { Play, BookOpen, Search, Lock, ArrowRight, Video } from 'lucide-react'
 import Link from 'next/link'
+import Image from 'next/image'
 import Button from '@/components/Button'
 import { getServerSession } from 'next-auth'
 import { authOptions } from '@/lib/auth'
@@ -63,10 +64,12 @@ export default async function WisdomPage() {
 
                             <div className="group relative rounded-[4rem] overflow-hidden aspect-video glass-premium p-4 border-white/5 shadow-3xl">
                                 <div className="h-full w-full rounded-[3rem] overflow-hidden relative">
-                                    <img
+                                    <Image
                                         src={featuredVideo.thumbnail || "https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?auto=format&fit=crop&q=80"}
                                         alt={featuredVideo.title}
-                                        className="w-full h-full object-cover transition-transform duration-[4s] group-hover:scale-105 opacity-40 group-hover:opacity-70"
+                                        fill
+                                        sizes="100vw"
+                                        className="object-cover transition-transform duration-[4s] group-hover:scale-105 opacity-40 group-hover:opacity-70"
                                     />
                                     <div className="absolute inset-0 bg-gradient-to-t from-stone-950 via-stone-950/40 to-transparent flex flex-col justify-end p-12 md:p-20">
                                         <div className="flex items-center gap-4 mb-6">
@@ -98,7 +101,7 @@ export default async function WisdomPage() {
                                 <Link key={post.id} href={`/wisdom/blogs/${post.slug}`} className="group">
                                     <article className="glass-premium p-8 rounded-[2.5rem] border-stone-800 group-hover:border-green-500/20 transition-all duration-700 h-full flex flex-col">
                                         <div className="aspect-square rounded-2xl overflow-hidden mb-8 relative">
-                                            <img src={post.coverImage || "/images/wisdom-placeholder.jpg"} className="w-full h-full object-cover opacity-40 group-hover:opacity-80 transition-all duration-[2s] group-hover:scale-110" alt={post.title} />
+                                            <Image src={post.coverImage || "/images/wisdom/alkaline-diet.png"} fill sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw" className="object-cover opacity-40 group-hover:opacity-80 transition-all duration-[2s] group-hover:scale-110" alt={post.title} />
                                             <div className="absolute top-4 left-4">
                                                 <span className="px-3 py-1 bg-green-500/20 backdrop-blur-md border border-green-500/30 text-[10px] font-black text-green-400 uppercase rounded-lg">
                                                     {post.category}

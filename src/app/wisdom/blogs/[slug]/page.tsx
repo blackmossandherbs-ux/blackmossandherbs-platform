@@ -1,6 +1,7 @@
 import { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 import Link from 'next/link'
+import Image from 'next/image'
 import { prisma } from '@/lib/prisma'
 import { ArrowLeft, Calendar, Clock, Share2 } from 'lucide-react'
 import { formatDate } from '@/lib/utils'
@@ -55,7 +56,7 @@ export default async function WisdomBlogPostPage({ params }: Props) {
             <div className="relative h-[60vh] overflow-hidden">
                 {post.coverImage ? (
                     <>
-                        <img src={post.coverImage} alt={post.title} className="absolute inset-0 w-full h-full object-cover opacity-30" />
+                        <Image src={post.coverImage} alt={post.title} fill sizes="100vw" priority className="object-cover opacity-30" />
                         <div className="absolute inset-0 bg-gradient-to-t from-stone-950 via-stone-950/60 to-stone-950/20" />
                     </>
                 ) : (

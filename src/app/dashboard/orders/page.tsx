@@ -4,6 +4,7 @@ import { authOptions } from '@/lib/auth'
 import { redirect } from 'next/navigation'
 import { prisma } from '@/lib/prisma'
 import Link from 'next/link'
+import Image from 'next/image'
 import { Package, ArrowLeft, Clock } from 'lucide-react'
 
 export const dynamic = 'force-dynamic'
@@ -90,9 +91,11 @@ export default async function DashboardOrdersPage() {
                                         <div key={item.id} className="flex items-center gap-4 p-5">
                                             <div className="w-14 h-14 bg-earth-800 rounded-xl overflow-hidden shrink-0">
                                                 {item.product?.images?.[0] ? (
-                                                    <img
+                                                    <Image
                                                         src={item.product.images[0]}
                                                         alt={item.product.name}
+                                                        width={56}
+                                                        height={56}
                                                         className="w-full h-full object-cover"
                                                     />
                                                 ) : (

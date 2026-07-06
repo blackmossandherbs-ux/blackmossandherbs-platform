@@ -3,6 +3,7 @@
  * Black Moss & Herbs Platform - Product Detail View
  */
 import { Metadata } from 'next'
+import Image from 'next/image'
 import { notFound } from 'next/navigation'
 import { Heart, Share2, Star, Check } from 'lucide-react'
 import Button from '@/components/Button'
@@ -47,10 +48,13 @@ export default async function ProductPage({ params }: { params: { slug: string }
                     <div className="space-y-6">
                         <div className="premium-card overflow-hidden group">
                             <div className="aspect-square bg-earth-900 flex items-center justify-center relative">
-                                <img
+                                <Image
                                     src={product.images[0] || "/images/product-placeholder.svg"}
                                     alt={product.name}
-                                    className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-105"
+                                    fill
+                                    sizes="(max-width: 1024px) 100vw, 50vw"
+                                    priority
+                                    className="object-cover transition-transform duration-1000 group-hover:scale-105"
                                 />
                                 {discount > 0 && (
                                     <div className="absolute top-8 left-8">
@@ -63,8 +67,8 @@ export default async function ProductPage({ params }: { params: { slug: string }
                         </div>
                         <div className="grid grid-cols-4 gap-4">
                             {product.images.slice(1).map((img, i) => (
-                                <div key={i} className="premium-card overflow-hidden cursor-pointer hover:border-primary-500/50 transition-all aspect-square">
-                                    <img src={img} alt={`${product.name} detail ${i}`} className="w-full h-full object-cover" />
+                                <div key={i} className="premium-card overflow-hidden cursor-pointer hover:border-primary-500/50 transition-all aspect-square relative">
+                                    <Image src={img} alt={`${product.name} detail ${i}`} fill sizes="25vw" className="object-cover" />
                                 </div>
                             ))}
                         </div>

@@ -128,7 +128,7 @@ export default function ContentHubPage() {
     return (
         <div className="py-12 bg-earth-950 min-h-screen relative overflow-hidden">
             {/* Background Texture */}
-            <div className="absolute inset-0 bg-[url('/patterns/noise.png')] opacity-5 pointer-events-none" />
+            <div className="absolute inset-0 bg-[url('/patterns/sea-moss-pattern.svg')] bg-repeat opacity-5 pointer-events-none" />
 
             <div className="container relative z-10">
                 <div className="mb-12 flex flex-col md:flex-row md:items-end justify-between gap-6">

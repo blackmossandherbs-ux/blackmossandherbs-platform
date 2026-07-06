@@ -5,6 +5,7 @@
  */
 import { useState } from 'react'
 import Link from 'next/link'
+import Image from 'next/image'
 import { Trash2, Plus, Minus, ArrowRight } from 'lucide-react'
 import Button from '@/components/Button'
 import { formatPrice } from '@/lib/utils'
@@ -68,9 +69,9 @@ export default function CartPage() {
                             {items.map((item) => (
                                 <div key={item.slug} className="card p-6">
                                     <div className="flex gap-6">
-                                        <div className="w-24 h-24 bg-gradient-to-br from-primary-100 to-secondary-100 rounded-lg flex items-center justify-center flex-shrink-0 overflow-hidden">
+                                        <div className="w-24 h-24 bg-gradient-to-br from-primary-100 to-secondary-100 rounded-lg flex items-center justify-center flex-shrink-0 overflow-hidden relative">
                                             {item.image ? (
-                                                <img src={item.image} alt={item.name} className="w-full h-full object-cover" />
+                                                <Image src={item.image} alt={item.name} fill sizes="96px" className="object-cover" />
                                             ) : (
                                                 <span className="text-4xl">🌿</span>
                                             )}

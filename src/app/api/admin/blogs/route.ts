@@ -31,7 +31,7 @@ export async function POST(req: Request) {
                 slug: data.slug || data.title.toLowerCase().replace(/ /g, '-'),
                 content: data.content,
                 excerpt: data.excerpt,
-                coverImage: data.image || '/images/wisdom-placeholder.jpg',
+                coverImage: data.image || '/images/wisdom/alkaline-diet.png',
                 category: data.category,
                 authorPersona: data.author || 'THE_ALCHEMIST',
                 published: data.published ?? true

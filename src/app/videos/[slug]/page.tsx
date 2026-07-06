@@ -1,6 +1,7 @@
 import { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 import Link from 'next/link'
+import Image from 'next/image'
 import { prisma } from '@/lib/prisma'
 import { ArrowLeft, Eye, Clock, Play } from 'lucide-react'
 
@@ -64,7 +65,7 @@ export default async function VideoPage({ params }: Props) {
                     ) : (
                         <div className="w-full h-full flex flex-col items-center justify-center gap-6">
                             {video.thumbnail && (
-                                <img src={video.thumbnail} alt={video.title} className="absolute inset-0 w-full h-full object-cover opacity-30" />
+                                <Image src={video.thumbnail} alt={video.title} fill sizes="(max-width: 1024px) 100vw, 66vw" className="object-cover opacity-30" />
                             )}
                             <div className="relative z-10 w-24 h-24 bg-white/10 backdrop-blur-md border border-white/20 rounded-full flex items-center justify-center">
                                 <Play className="w-12 h-12 text-white ml-1" fill="white" />
@@ -111,7 +112,7 @@ export default async function VideoPage({ params }: Props) {
                                         <div className="flex gap-4 p-4 rounded-2xl border border-earth-800 bg-earth-900/40 hover:border-earth-700 transition-colors group">
                                             <div className="w-20 h-14 bg-earth-800 rounded-xl overflow-hidden shrink-0 relative">
                                                 {v.thumbnail ? (
-                                                    <img src={v.thumbnail} alt={v.title} className="w-full h-full object-cover" />
+                                                    <Image src={v.thumbnail} alt={v.title} fill sizes="80px" className="object-cover" />
                                                 ) : (
                                                     <div className="w-full h-full flex items-center justify-center">
                                                         <Play className="w-5 h-5 text-earth-600" />
