@@ -3,6 +3,7 @@
  * Black Moss & Herbs Platform - Email Authority System
  */
 import nodemailer from 'nodemailer';
+import { prisma } from '@/lib/prisma';
 
 const transporter = nodemailer.createTransport({
     host: process.env.EMAIL_SERVER_HOST,
@@ -13,7 +14,7 @@ const transporter = nodemailer.createTransport({
     },
 });
 
-export const sendEmail = async ({ to, subject, html }: { to: string, subject: string, html: string }) => {
+export const sendEmail = async ({ to, subject, html, type = 'Transactional' }: { to: string, subject: string, html: string, type?: string }) => {
     try {
         const info = await transporter.sendMail({
             from: `"Black Moss & Herbs" <${process.env.EMAIL_FROM}>`,
@@ -22,9 +23,12 @@ export const sendEmail = async ({ to, subject, html }: { to: string, subject: st
             html,
         });
         console.log(`[Email System] Message sent: ${info.messageId}`);
+        await prisma.emailLog.create({ data: { to, subject, type, status: 'SENT' } }).catch((e) => console.error('[Email System] Failed to log email:', e));
         return { success: true, messageId: info.messageId };
     } catch (error) {
         console.error('[Email System] CRITICAL_FAILURE:', error);
+        const errorMessage = error instanceof Error ? error.message : String(error);
+        await prisma.emailLog.create({ data: { to, subject, type, status: 'FAILED', error: errorMessage } }).catch((e) => console.error('[Email System] Failed to log email:', e));
         return { success: false, error };
     }
 };
@@ -35,6 +39,7 @@ export const sendEmail = async ({ to, subject, html }: { to: string, subject: st
 export const sendWelcomeEmail = async (email: string, name: string) => {
     return sendEmail({
         to: email,
+        type: 'Onboarding',
         subject: 'Welcome to the Black Moss & Herbs Circle',
         html: `
             <div style="font-family: serif; color: #1a1a1a; padding: 40px; background-color: #f2f9f4;">

@@ -48,6 +48,7 @@ export async function GET(req: Request) {
 
             await sendEmail({
                 to: order.user.email,
+                type: 'Transactional',
                 subject: 'Your Biological Gold is Waiting...',
                 html: `
                     <div style="font-family: serif; color: #1a1a1a; max-width: 600px; margin: 0 auto; padding: 40px; border: 1px solid #e2e8f0; border-radius: 20px;">

@@ -32,6 +32,7 @@ export async function POST(req: Request) {
         if (process.env.EMAIL_SERVER_HOST && destination) {
             await sendEmail({
                 to: destination,
+                type: 'Newsletter',
                 subject: 'New newsletter subscriber',
                 html: `<p>New subscriber: <strong>${email}</strong></p>`,
             })

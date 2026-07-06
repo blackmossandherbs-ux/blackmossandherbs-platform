@@ -26,6 +26,7 @@ export async function POST(req: Request) {
         if (process.env.EMAIL_SERVER_HOST && destination) {
             await sendEmail({
                 to: destination,
+                type: 'Enquiry',
                 subject: `New contact enquiry from ${name}`,
                 html: `
                     <h2>New Contact Enquiry</h2>

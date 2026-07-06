@@ -35,6 +35,7 @@ export async function POST(req: NextRequest) {
         if (inbox) {
             await sendEmail({
                 to: inbox,
+                type: 'Booking',
                 subject: `New Consultation Request: ${typeName}`,
                 html: `
                     <div style="font-family: serif; color: #1a1a1a; padding: 40px; background: #f9f6f0;">
@@ -60,6 +61,7 @@ export async function POST(req: NextRequest) {
         // Confirmation to client
         await sendEmail({
             to: email,
+            type: 'Booking',
             subject: 'Consultation Request Received — Black Moss & Herbs',
             html: `
                 <div style="font-family: serif; color: #1a1a1a; padding: 40px; background: #f9f6f0;">

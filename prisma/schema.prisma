@@ -337,6 +337,24 @@ model NewsletterSubscriber {
   @@map("newsletter_subscribers")
 }
 
+model EmailLog {
+  id        String      @id @default(cuid())
+  to        String
+  subject   String
+  type      String      // Transactional, Onboarding, Booking, Newsletter, Security, etc.
+  status    EmailStatus @default(SENT)
+  error     String?
+  createdAt DateTime    @default(now())
+
+  @@index([createdAt])
+  @@map("email_logs")
+}
+
+enum EmailStatus {
+  SENT
+  FAILED
+}
+
 model BiologicalProfile {
   id              String   @id @default(cuid())
   userId          String   @unique
