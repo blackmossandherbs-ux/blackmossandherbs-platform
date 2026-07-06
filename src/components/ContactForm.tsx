@@ -1,21 +1,48 @@
 'use client'
 
 import { useState, FormEvent } from 'react'
+import Script from 'next/script'
+
+declare global {
+    interface Window {
+        grecaptcha?: {
+            ready: (cb: () => void) => void
+            execute: (siteKey: string, options: { action: string }) => Promise<string>
+        }
+    }
+}
+
+const RECAPTCHA_SITE_KEY = process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY
 
 export default function ContactForm() {
     const [form, setForm] = useState({ name: '', email: '', message: '' })
     const [status, setStatus] = useState<'idle' | 'loading' | 'done' | 'error'>('idle')
     const [error, setError] = useState('')
 
+    const getRecaptchaToken = async (): Promise<string | undefined> => {
+        if (!RECAPTCHA_SITE_KEY || !window.grecaptcha) return undefined
+        return new Promise((resolve) => {
+            window.grecaptcha!.ready(async () => {
+                try {
+                    const token = await window.grecaptcha!.execute(RECAPTCHA_SITE_KEY, { action: 'contact' })
+                    resolve(token)
+                } catch {
+                    resolve(undefined)
+                }
+            })
+        })
+    }
+
     const handleSubmit = async (e: FormEvent) => {
         e.preventDefault()
         setStatus('loading')
         setError('')
         try {
+            const recaptchaToken = await getRecaptchaToken()
             const res = await fetch('/api/contact', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(form),
+                body: JSON.stringify({ ...form, recaptchaToken }),
             })
             const data = await res.json()
             if (!res.ok) {
@@ -42,7 +69,11 @@ export default function ContactForm() {
     }
 
     return (
-        <form onSubmit={handleSubmit} className="space-y-6 bg-earth-900/20 p-8 rounded-3xl border border-earth-800">
+        <>
+            {RECAPTCHA_SITE_KEY && (
+                <Script src={`https://www.google.com/recaptcha/api.js?render=${RECAPTCHA_SITE_KEY}`} strategy="afterInteractive" />
+            )}
+            <form onSubmit={handleSubmit} className="space-y-6 bg-earth-900/20 p-8 rounded-3xl border border-earth-800">
             <div>
                 <label className="block text-sm font-bold text-earth-400 mb-2">Name</label>
                 <input
@@ -84,6 +115,7 @@ export default function ContactForm() {
             >
                 {status === 'loading' ? 'Sending…' : 'Send Message'}
             </button>
-        </form>
+            </form>
+        </>
     )
 }

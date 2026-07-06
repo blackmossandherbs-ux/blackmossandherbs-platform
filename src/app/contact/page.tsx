@@ -1,4 +1,5 @@
 import ContactForm from '@/components/ContactForm'
+import GoogleMapEmbed from '@/components/GoogleMapEmbed'
 
 export const metadata = {
     title: 'Contact Us - Black Moss & Herbs',
@@ -23,6 +24,9 @@ export default function ContactPage() {
                             <h3 className="font-bold text-white mb-2">Wholesale Inquiries</h3>
                             <p className="text-earth-400">wholesale@blackmossandherbs.com</p>
                         </div>
+                    </div>
+                    <div className="mt-6">
+                        <GoogleMapEmbed />
                     </div>
                 </div>
                 <ContactForm />
