@@ -169,6 +169,48 @@ async function main() {
         });
     }
 
+    // Subscription plans mirror the static display data on /subscriptions —
+    // keep name/price/features in sync with src/app/subscriptions/page.tsx.
+    const subscriptionPlans = [
+        {
+            stripePriceId: process.env.STRIPE_PRICE_STARTER,
+            name: 'Wellness Starter',
+            description: 'Perfect for those beginning their herbal wellness journey',
+            price: 29.99,
+            interval: 'month',
+            features: ['1 premium product per month', '10% discount on all purchases', 'Free shipping on subscription', 'Access to member-only content', 'Monthly wellness newsletter'],
+        },
+        {
+            stripePriceId: process.env.STRIPE_PRICE_PLUS,
+            name: 'Wellness Plus',
+            description: 'Our most popular plan for dedicated wellness enthusiasts',
+            price: 54.99,
+            interval: 'month',
+            features: ['2 premium products per month', '20% discount on all purchases', 'Free shipping on all orders', 'Priority customer support', 'Access to exclusive products', 'Monthly wellness consultation', 'Member-only workshops'],
+        },
+        {
+            stripePriceId: process.env.STRIPE_PRICE_PRO,
+            name: 'Wellness Pro',
+            description: 'Complete wellness solution for optimal health',
+            price: 89.99,
+            interval: 'month',
+            features: ['4 premium products per month', '30% discount on all purchases', 'Free express shipping', 'Dedicated wellness advisor', 'Custom product recommendations', 'Quarterly health assessments', 'VIP access to new products', 'Exclusive community access'],
+        },
+    ];
+
+    console.log('Seeding subscription plans...');
+    for (const plan of subscriptionPlans) {
+        if (!plan.stripePriceId) {
+            console.warn(`⚠ Skipping "${plan.name}" — its STRIPE_PRICE_* env var is not set.`);
+            continue;
+        }
+        await prisma.subscriptionPlan.upsert({
+            where: { stripePriceId: plan.stripePriceId },
+            update: plan,
+            create: plan,
+        });
+    }
+
     console.log(`Seeding ${products.length} products...`);
 
     try {

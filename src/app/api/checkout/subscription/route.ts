@@ -5,7 +5,10 @@
  * managed entirely from the Stripe dashboard.
  */
 import { NextRequest, NextResponse } from 'next/server'
+import { getServerSession } from 'next-auth'
+import { authOptions } from '@/lib/auth'
 import { stripe } from '@/lib/stripe'
+import { prisma } from '@/lib/prisma'
 
 export const dynamic = 'force-dynamic'
 
@@ -23,6 +26,11 @@ export async function POST(req: NextRequest) {
         )
     }
 
+    const session_ = await getServerSession(authOptions)
+    if (!session_?.user?.id) {
+        return NextResponse.json({ error: 'Please log in to subscribe.' }, { status: 401 })
+    }
+
     try {
         const { plan } = await req.json()
         const priceId = PRICE_ENV[plan]
@@ -30,6 +38,17 @@ export async function POST(req: NextRequest) {
         if (!priceId) {
             return NextResponse.json(
                 { error: 'This plan is not available yet. Configure its Stripe Price ID to enable it.' },
+                { status: 503 }
+            )
+        }
+
+        // The webhook needs our internal SubscriptionPlan id, not the Stripe price id.
+        const subscriptionPlan = await prisma.subscriptionPlan.findUnique({
+            where: { stripePriceId: priceId },
+        })
+        if (!subscriptionPlan) {
+            return NextResponse.json(
+                { error: 'This plan has not been set up in the database yet.' },
                 { status: 503 }
             )
         }
@@ -42,6 +61,8 @@ export async function POST(req: NextRequest) {
         const session = await stripe.checkout.sessions.create({
             mode: 'subscription',
             line_items: [{ price: priceId, quantity: 1 }],
+            customer_email: session_.user.email ?? undefined,
+            metadata: { type: 'SUBSCRIPTION', userId: session_.user.id, planId: subscriptionPlan.id },
             success_url: `${origin}/dashboard?subscription=success`,
             cancel_url: `${origin}/subscriptions?subscription=cancelled`,
         })

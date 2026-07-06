@@ -32,7 +32,7 @@ export async function POST(req: Request) {
 
     if (event.type === 'checkout.session.completed') {
         const userId = session?.metadata?.userId;
-        const type = session?.metadata?.type; // 'SUBSCRIPTION' or 'CONSULTATION'
+        const type = session?.metadata?.type; // 'ORDER', 'SUBSCRIPTION', or 'CONSULTATION'
         const planId = session?.metadata?.planId;
         const consultationType = session?.metadata?.consultationType;
 
@@ -42,7 +42,62 @@ export async function POST(req: Request) {
         }
 
         try {
-            if (type === 'SUBSCRIPTION' && planId) {
+            if (type === 'ORDER') {
+                // Fulfill a product order. Line items are re-fetched from Stripe
+                // (not trusted from the client) and matched back to our Product
+                // rows via the productId metadata set at checkout creation time.
+                const lineItems = await stripe.checkout.sessions.listLineItems(session.id, {
+                    expand: ['data.price.product'],
+                });
+
+                const orderItemsData = lineItems.data.flatMap((item) => {
+                    const product = item.price?.product as Stripe.Product | undefined;
+                    const productId = product?.metadata?.productId;
+                    const quantity = item.quantity || 1;
+                    if (!productId) return [];
+                    return [{
+                        productId,
+                        quantity,
+                        price: (item.amount_subtotal ?? 0) / 100 / quantity,
+                    }];
+                });
+
+                if (orderItemsData.length === 0) {
+                    console.error('[Stripe Webhook] CRITICAL: No resolvable line items for order, session', session.id);
+                } else {
+                    const orderNumber = `BMH-${Date.now().toString(36).toUpperCase()}-${Math.random().toString(36).slice(2, 5).toUpperCase()}`;
+                    const address = session.shipping_details?.address ?? session.customer_details?.address;
+                    const shippingAddress = address ? { name: session.shipping_details?.name ?? session.customer_details?.name, ...address } : {};
+                    const billingAddress = session.customer_details?.address
+                        ? { name: session.customer_details.name, ...session.customer_details.address }
+                        : shippingAddress;
+
+                    await prisma.$transaction([
+                        prisma.order.create({
+                            data: {
+                                userId,
+                                orderNumber,
+                                status: 'PROCESSING',
+                                subtotal: (session.amount_subtotal ?? 0) / 100,
+                                tax: (session.total_details?.amount_tax ?? 0) / 100,
+                                shipping: (session.total_details?.amount_shipping ?? 0) / 100,
+                                total: (session.amount_total ?? 0) / 100,
+                                stripePaymentId: (session.payment_intent as string) ?? undefined,
+                                shippingAddress,
+                                billingAddress,
+                                items: { create: orderItemsData },
+                            },
+                        }),
+                        ...orderItemsData.map((item) =>
+                            prisma.product.update({
+                                where: { id: item.productId },
+                                data: { stock: { decrement: item.quantity } },
+                            })
+                        ),
+                    ]);
+                    console.log(`[Stripe Webhook] SUCCESS: Order ${orderNumber} fulfilled for user ${userId}`);
+                }
+            } else if (type === 'SUBSCRIPTION' && planId) {
                 // Fulfill subscription
                 await prisma.subscription.create({
                     data: {

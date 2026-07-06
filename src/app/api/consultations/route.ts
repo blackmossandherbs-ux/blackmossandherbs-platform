@@ -1,7 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { getServerSession } from 'next-auth'
-import { authOptions } from '@/lib/auth'
 import { sendEmail } from '@/lib/mail'
+import { prisma } from '@/lib/prisma'
 
 export const dynamic = 'force-dynamic'
 
@@ -25,11 +24,32 @@ export async function POST(req: NextRequest) {
             return NextResponse.json({ error: 'All fields are required.' }, { status: 400 })
         }
 
-        const session = await getServerSession(authOptions)
         const price = PRICES[type] || 0
         const typeName = TYPE_NAMES[type] || type
-        const requestedBy = session?.user?.email || email
         const inbox = process.env.CONTACT_INBOX || process.env.EMAIL_FROM || ''
+
+        // Persist the request so it's trackable beyond the notification email —
+        // find-or-create a lightweight account by email for guest requesters.
+        // If a real account with that email already exists, this just reuses it.
+        try {
+            const user = await prisma.user.upsert({
+                where: { email },
+                update: {},
+                create: { email, name },
+            })
+            await prisma.consultation.create({
+                data: {
+                    userId: user.id,
+                    type: typeName,
+                    date: new Date(`${date}T${time}:00`),
+                    status: 'PENDING',
+                    notes: objectives || null,
+                    price,
+                },
+            })
+        } catch (e) {
+            console.error('[Consultations API] Could not persist consultation record:', e)
+        }
 
         // Notify admin
         if (inbox) {

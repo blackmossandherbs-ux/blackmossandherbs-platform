@@ -64,7 +64,6 @@ export async function GET(req: Request) {
                 spent,
                 loyaltyPoints: user.loyaltyPoints,
                 status: spent > 500 ? 'VIP Authority' : 'Active Member',
-                lastSync: 'Sync Active' // Placeholder for last activity logic
             };
         });
 

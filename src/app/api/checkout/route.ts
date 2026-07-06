@@ -5,6 +5,8 @@
  * price tampering.
  */
 import { NextRequest, NextResponse } from 'next/server'
+import { getServerSession } from 'next-auth'
+import { authOptions } from '@/lib/auth'
 import { stripe } from '@/lib/stripe'
 import { prisma } from '@/lib/prisma'
 
@@ -22,6 +24,12 @@ export async function POST(req: NextRequest) {
             { status: 503 }
         )
     }
+
+    const session_ = await getServerSession(authOptions)
+    if (!session_?.user?.id) {
+        return NextResponse.json({ error: 'Please log in to checkout.' }, { status: 401 })
+    }
+    const userId = session_.user.id
 
     try {
         const body = await req.json()
@@ -48,6 +56,9 @@ export async function POST(req: NextRequest) {
                     product_data: {
                         name: product.name,
                         images: product.images?.length ? [product.images[0]] : undefined,
+                        // Carried through to the webhook (via line item expansion) so
+                        // the order can be reconstructed without trusting the client.
+                        metadata: { productId: product.id },
                     },
                     // Stripe expects the amount in the smallest currency unit (pence).
                     unit_amount: Math.round(Number(product.price) * 100),
@@ -68,6 +79,8 @@ export async function POST(req: NextRequest) {
             mode: 'payment',
             line_items: lineItems,
             shipping_address_collection: { allowed_countries: ['GB', 'US', 'CA', 'IE', 'FR', 'DE'] },
+            customer_email: session_.user.email ?? undefined,
+            metadata: { type: 'ORDER', userId },
             success_url: `${origin}/dashboard?checkout=success`,
             cancel_url: `${origin}/cart?checkout=cancelled`,
         })

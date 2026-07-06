@@ -11,7 +11,6 @@ interface Customer {
     spent: number;
     loyaltyPoints: number;
     status: string;
-    lastSync: string;
 }
 
 export default function CustomersPage() {
