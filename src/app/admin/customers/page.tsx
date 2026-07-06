@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { Users, Search, Mail, Phone, Calendar, ArrowUpRight, MoreVertical, Loader2 } from 'lucide-react';
 
 interface Customer {
@@ -19,11 +19,7 @@ export default function CustomersPage() {
     const [searchTerm, setSearchTerm] = useState('');
     const [vipFilter, setVipFilter] = useState(false);
 
-    useEffect(() => {
-        fetchCustomers();
-    }, [vipFilter]);
-
-    const fetchCustomers = async () => {
+    const fetchCustomers = useCallback(async () => {
         setLoading(true);
         try {
             const res = await fetch(`/api/admin/customers?vip=${vipFilter}`);
@@ -34,7 +30,11 @@ export default function CustomersPage() {
         } finally {
             setLoading(false);
         }
-    };
+    }, [vipFilter]);
+
+    useEffect(() => {
+        fetchCustomers();
+    }, [fetchCustomers]);
 
     const filteredCustomers = customers.filter(c =>
         c.name.toLowerCase().includes(searchTerm.toLowerCase()) ||

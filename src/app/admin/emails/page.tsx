@@ -65,7 +65,7 @@ export default function EmailArchive() {
                     <div className="p-12 border border-earth-800 bg-earth-900/20 rounded-[2rem] text-center">
                         <Mail size={32} className="mx-auto mb-4 text-earth-600" />
                         <p className="text-earth-400 normal-case font-medium">No emails have been sent yet.</p>
-                        <p className="text-earth-600 text-[10px] tracking-widest mt-2">Transactional, booking, and newsletter emails will appear here as they're sent.</p>
+                        <p className="text-earth-600 text-[10px] tracking-widest mt-2">Transactional, booking, and newsletter emails will appear here as they&apos;re sent.</p>
                     </div>
                 ) : (
                     <div className="space-y-4">

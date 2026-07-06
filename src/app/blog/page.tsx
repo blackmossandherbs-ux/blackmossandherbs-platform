@@ -39,7 +39,7 @@ export default async function BlogPage() {
                         THE JOURNAL
                     </h1>
                     <p className="text-earth-400 text-xl max-w-2xl mx-auto font-serif italic">
-                        "Reporting from the frontlines of biological warfare and cellular restoration."
+                        &quot;Reporting from the frontlines of biological warfare and cellular restoration.&quot;
                     </p>
                 </div>
 

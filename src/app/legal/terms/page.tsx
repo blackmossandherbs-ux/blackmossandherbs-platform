@@ -17,14 +17,14 @@ export default function TermsPage() {
 
                     <h3>1. Agreement to Terms</h3>
                     <p>
-                        These Terms of Use constitute a legally binding agreement made between you, whether personally or on behalf of an entity ("you")
-                        and Black Moss & Herbs ("we," "us" or "our"), concerning your access to and use of the blackmossandherbs.com website.
+                        These Terms of Use constitute a legally binding agreement made between you, whether personally or on behalf of an entity (&quot;you&quot;)
+                        and Black Moss & Herbs (&quot;we,&quot; &quot;us&quot; or &quot;our&quot;), concerning your access to and use of the blackmossandherbs.com website.
                     </p>
 
                     <h3>2. Intellectual Property Rights</h3>
                     <p>
                         Unless otherwise indicated, the Site is our proprietary property and all source code, databases, functionality, software, website designs,
-                        audio, video, text, photographs, and graphics on the Site (collectively, the "Content") are owned or controlled by us or licensed to us,
+                        audio, video, text, photographs, and graphics on the Site (collectively, the &quot;Content&quot;) are owned or controlled by us or licensed to us,
                         and are protected by copyright and trademark laws.
                     </p>
 

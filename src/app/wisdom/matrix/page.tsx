@@ -32,7 +32,7 @@ export default function HerbalMatrix() {
                         Molecular Herbology
                     </div>
                     <h1 className="text-6xl font-serif font-bold text-white mb-6">The Herbal Matrix</h1>
-                    <p className="text-earth-400 text-xl font-medium max-w-2xl mx-auto">Access clinical data, mineral profiles, and biological affinities for the world's most powerful organic compounds.</p>
+                    <p className="text-earth-400 text-xl font-medium max-w-2xl mx-auto">Access clinical data, mineral profiles, and biological affinities for the world&apos;s most powerful organic compounds.</p>
                 </div>
 
                 {/* Search Bar */}

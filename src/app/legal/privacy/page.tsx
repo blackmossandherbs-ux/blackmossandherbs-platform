@@ -6,7 +6,7 @@ export default function PrivacyPage() {
                 <div className="prose prose-earth max-w-none">
                     <p className="lead">Last Updated: January 2025</p>
                     <p>
-                        At Black Moss & Herbs ("we," "our," or "us"), we are committed to protecting your personal information and your right to privacy.
+                        At Black Moss & Herbs (&quot;we,&quot; &quot;our,&quot; or &quot;us&quot;), we are committed to protecting your personal information and your right to privacy.
                         This policy outlines how we collect, use, and safeguard your data.
                     </p>
 

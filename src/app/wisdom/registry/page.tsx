@@ -80,7 +80,7 @@ export default function NutritionalRegistry() {
                         Biometric Compatibility
                     </div>
                     <h1 className="text-6xl font-serif font-bold text-white mb-6">The Nutritional Registry</h1>
-                    <p className="text-earth-400 text-xl font-medium max-w-2xl mx-auto">A clinical directory of organic compounds designed to maintain the body's alkaline environment.</p>
+                    <p className="text-earth-400 text-xl font-medium max-w-2xl mx-auto">A clinical directory of organic compounds designed to maintain the body&apos;s alkaline environment.</p>
                 </div>
 
                 {/* Controls */}
@@ -151,7 +151,7 @@ export default function NutritionalRegistry() {
                     <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-primary-500/50 to-transparent" />
                     <h2 className="text-3xl font-serif font-bold text-white mb-4">Intracellular Cleansing</h2>
                     <p className="text-earth-400 leading-relaxed mb-8">
-                        The Dr. Sebi-inspired approach focuses on removing acidity and mucous from the cellular environment to allow the body's natural restorative functions to prevail.
+                        The Dr. Sebi-inspired approach focuses on removing acidity and mucous from the cellular environment to allow the body&apos;s natural restorative functions to prevail.
                     </p>
                     <button className="text-primary-400 font-black text-xs uppercase tracking-widest hover:text-white transition-colors">
                         View Full Biological Protocol
