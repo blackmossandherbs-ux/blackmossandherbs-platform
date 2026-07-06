@@ -1,0 +1,241 @@
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Playfair+Display:ital,wght@0,400;0,700;1,400;1,700&display=swap');
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --color-primary: 21 128 61;
+    /* Green-700 / Forest Green */
+    --color-secondary: 202 138 4;
+    /* Amber-600 / Gold */
+    --color-earth-950: 12 10 9;
+    /* Jet Black/Brown */
+    --color-earth-900: 28 25 23;
+    /* Deep Coffee */
+    --radius: 1rem;
+  }
+
+  * {
+    border-color: rgba(41, 37, 36, 0.4);
+    /* border-stone-800/40 equivalent */
+  }
+
+  body {
+    @apply bg-[#0c0a09] text-stone-200 font-sans overflow-x-hidden;
+    background-image:
+      radial-gradient(circle at 0% 0%, rgba(21, 128, 61, 0.08) 0%, transparent 40%),
+      radial-gradient(circle at 100% 100%, rgba(202, 138, 4, 0.08) 0%, transparent 40%);
+  }
+
+  ::selection {
+    @apply bg-green-600/30 text-green-100;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    @apply font-serif tracking-tight text-stone-50;
+  }
+}
+
+@layer components {
+  .container {
+    @apply max-w-7xl mx-auto px-6 lg:px-12;
+  }
+
+  /* Frosted Glass - apothecary style */
+  .organic-glass {
+    @apply bg-stone-900/60 backdrop-blur-2xl border border-white/5;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+  }
+
+  .premium-card {
+    @apply bg-stone-900/40 backdrop-blur-md border border-white/10 rounded-2xl transition-all duration-700 hover:border-green-600/40 hover:bg-stone-900/60 hover:-translate-y-2;
+  }
+
+  .btn-organic {
+    @apply relative overflow-hidden px-8 py-4 rounded-xl font-bold transition-all duration-500 active:scale-95 flex items-center justify-center gap-2;
+  }
+
+  .btn-organic-primary {
+    @apply btn-organic bg-green-700 text-stone-50 hover:bg-green-600;
+    box-shadow: 0 10px 20px -5px rgba(21, 128, 61, 0.4);
+  }
+
+  .btn-organic-primary:hover {
+    box-shadow: 0 20px 40px -10px rgba(21, 128, 61, 0.6);
+  }
+
+  .btn-organic-gold {
+    @apply btn-organic bg-amber-600 text-stone-950 hover:bg-amber-500;
+    box-shadow: 0 10px 20px -5px rgba(202, 138, 4, 0.4);
+  }
+
+  .btn-organic-gold:hover {
+    box-shadow: 0 20px 40px -10px rgba(202, 138, 4, 0.6);
+  }
+
+  .btn-organic-outline {
+    @apply btn-organic border border-stone-700 bg-stone-900/50 text-stone-100 backdrop-blur-sm hover:bg-stone-800 hover:border-stone-600;
+  }
+
+  .section-heading {
+    @apply text-4xl md:text-6xl font-serif font-bold mb-6 text-stone-50 leading-tight;
+  }
+
+  .sub-heading {
+    @apply text-lg md:text-xl text-stone-400 max-w-2xl font-light;
+  }
+
+  /* Premium frosted panel used across dark sections */
+  .glass-premium {
+    @apply bg-stone-900/60 backdrop-blur-2xl border border-white/10 rounded-3xl;
+    box-shadow: 0 8px 40px rgba(0, 0, 0, 0.55);
+  }
+
+  /* Light elevated card for legacy light-content pages (cart, dashboard, etc.) */
+  .card {
+    @apply bg-white border border-stone-200 rounded-2xl shadow-xl overflow-hidden;
+  }
+
+  .section-title {
+    @apply text-4xl md:text-5xl font-serif font-bold text-stone-50 mb-3 tracking-tight;
+  }
+
+  .section-subtitle {
+    @apply text-lg text-stone-400 max-w-2xl;
+  }
+
+  .badge {
+    @apply inline-flex items-center rounded-full px-3 py-1 text-xs font-bold uppercase tracking-widest;
+  }
+
+  .badge-primary {
+    @apply badge bg-primary-600 text-white;
+  }
+
+  .badge-secondary {
+    @apply badge bg-secondary-500 text-stone-950;
+  }
+
+  .btn-primary {
+    @apply inline-flex items-center justify-center px-6 py-3 rounded-xl bg-primary-600 hover:bg-primary-500 text-white font-bold transition-all;
+  }
+
+  /* Minimal long-form typography (replaces @tailwindcss/typography) */
+  .prose {
+    @apply text-stone-300 leading-relaxed;
+  }
+
+  .prose :where(h1, h2, h3, h4) {
+    @apply font-serif text-stone-50 font-bold mt-10 mb-4 leading-tight;
+  }
+
+  .prose h2 {
+    @apply text-3xl;
+  }
+
+  .prose h3 {
+    @apply text-2xl;
+  }
+
+  .prose p {
+    @apply mb-5;
+  }
+
+  .prose ul {
+    @apply list-disc pl-6 mb-5 space-y-2;
+  }
+
+  .prose ol {
+    @apply list-decimal pl-6 mb-5 space-y-2;
+  }
+
+  .prose a {
+    @apply text-secondary-400 underline underline-offset-4 hover:text-secondary-300;
+  }
+
+  .prose strong {
+    @apply text-stone-100 font-bold;
+  }
+
+  .prose .lead,
+  .prose.lead {
+    @apply text-xl text-stone-400 font-light;
+  }
+
+  .prose-invert {
+    @apply text-stone-300;
+  }
+}
+
+@layer utilities {
+  .animate-float-slow {
+    animation: float-slow 10s ease-in-out infinite;
+  }
+
+  .animate-pulse-slow {
+    animation: pulse-slow 6s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  }
+
+  @keyframes pulse-slow {
+
+    0%,
+    100% {
+      opacity: 0.35;
+    }
+
+    50% {
+      opacity: 0.7;
+    }
+  }
+
+  .bg-gradient-primary {
+    @apply bg-gradient-to-br from-primary-600 to-primary-800;
+  }
+
+  .shadow-3xl {
+    box-shadow: 0 35px 90px -20px rgba(0, 0, 0, 0.7);
+  }
+
+  @keyframes float-slow {
+
+    0%,
+    100% {
+      transform: translateY(0) rotate(0);
+    }
+
+    33% {
+      transform: translateY(-15px) rotate(1deg);
+    }
+
+    66% {
+      transform: translateY(-5px) rotate(-1deg);
+    }
+  }
+
+  .gradient-moss {
+    @apply bg-gradient-to-br from-green-800 to-stone-950;
+  }
+
+  .gold-glow {
+    box-shadow: 0 0 30px rgba(202, 138, 4, 0.2);
+  }
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+::-webkit-scrollbar-track {
+  @apply bg-stone-950;
+}
+
+::-webkit-scrollbar-thumb {
+  @apply bg-green-950 border-2 border-stone-950 rounded-full hover:bg-green-900 transition-colors;
+}
