@@ -1,6 +1,7 @@
 'use client'
 
 import Link from 'next/link'
+import Image from 'next/image'
 import { ShoppingCart, ArrowRight, Check } from 'lucide-react'
 import { useState } from 'react'
 import { useCart } from '@/context/CartContext'
@@ -52,11 +53,13 @@ export default function ProductCard({
         <div className="bg-earth-900/40 backdrop-blur-md border border-earth-800/50 rounded-[2rem] overflow-hidden hover:border-primary-500/50 transition-all duration-700 group relative">
             <Link href={`/shop/${slug}`}>
                 <div className="relative h-80 overflow-hidden bg-earth-950">
-                    <img
+                    <Image
                         src={images?.[0] || '/images/product-placeholder.svg'}
                         alt={name}
+                        fill
+                        sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                         onError={(e) => { e.currentTarget.src = '/images/product-placeholder.svg' }}
-                        className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-110 opacity-80 group-hover:opacity-100"
+                        className="object-cover transition-transform duration-1000 group-hover:scale-110 opacity-80 group-hover:opacity-100"
                     />
 
                     {/* Botanical Hover Data */}

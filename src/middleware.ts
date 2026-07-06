@@ -15,8 +15,10 @@ export default async function middleware(req: NextRequest) {
         return NextResponse.redirect(new URL(`https://blackmossandherbs.com${url.pathname}`, req.url));
     }
 
-    // Admin Authority Protection
-    if (url.pathname.startsWith("/admin") || url.pathname.startsWith("/dashboard")) {
+    // Admin Authority Protection — /admin requires the ADMIN role specifically,
+    // while /dashboard (a customer's own account area) only requires being
+    // logged in as any role.
+    if (url.pathname.startsWith("/admin")) {
         // @ts-ignore - Explicitly invoking the auth middleware for protected authorities
         return withAuth(req, {
             cookies: {
@@ -24,6 +26,18 @@ export default async function middleware(req: NextRequest) {
             },
             callbacks: {
                 authorized: ({ token }) => !!token && token.role === "ADMIN",
+            },
+        });
+    }
+
+    if (url.pathname.startsWith("/dashboard")) {
+        // @ts-ignore
+        return withAuth(req, {
+            cookies: {
+                sessionToken: { name: sessionCookieName },
+            },
+            callbacks: {
+                authorized: ({ token }) => !!token,
             },
         });
     }
