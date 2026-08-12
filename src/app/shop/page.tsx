@@ -51,6 +51,24 @@ export default async function ShopPage({
 
     const availableCategories = ['All Products', ...categories]
 
+    const collectionSchema = {
+        '@context': 'https://schema.org',
+        '@type': 'CollectionPage',
+        name: 'Shop | Black Moss & Herbs',
+        description: 'Wildcrafted sea moss, herbal blends and wellness supplements.',
+        url: 'https://blackmossandherbs.com/shop',
+        mainEntity: {
+            '@type': 'ItemList',
+            numberOfItems: products.length,
+            itemListElement: products.map((p, i) => ({
+                '@type': 'ListItem',
+                position: i + 1,
+                url: `https://blackmossandherbs.com/shop/${p.slug}`,
+                name: p.name,
+            })),
+        },
+    }
+
     const buildUrl = (params: Record<string, string | number>) => {
         const merged = {
             page: String(page),
@@ -69,6 +87,7 @@ export default async function ShopPage({
 
     return (
         <div className="py-12">
+            <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(collectionSchema) }} />
             <div className="container">
                 {/* Header */}
                 <div className="mb-10 pt-8">

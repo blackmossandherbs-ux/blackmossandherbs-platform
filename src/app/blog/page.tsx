@@ -38,8 +38,24 @@ export default async function BlogPage({
     const featuredPost = activeCategory === 'All' ? posts[0] : null
     const regularPosts = activeCategory === 'All' ? posts.slice(1) : posts
 
+    const blogSchema = {
+        '@context': 'https://schema.org',
+        '@type': 'Blog',
+        name: 'The Journal | Black Moss & Herbs',
+        description: 'Science-backed insights on herbal wellness, written by practitioners.',
+        url: 'https://blackmossandherbs.com/blog',
+        blogPost: posts.map((p) => ({
+            '@type': 'BlogPosting',
+            headline: p.title,
+            url: `https://blackmossandherbs.com/blog/${p.slug}`,
+            datePublished: (p.publishedAt || p.createdAt).toISOString(),
+            image: p.coverImage || undefined,
+        })),
+    }
+
     return (
         <div className="py-20 bg-earth-950 min-h-screen">
+            <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(blogSchema) }} />
             <div className="container">
                 {/* Header */}
                 <div className="mb-20 text-center border-b border-earth-800 pb-12">
