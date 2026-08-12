@@ -11,7 +11,12 @@
     "db:generate": "prisma generate",
     "db:push": "prisma db push",
     "db:studio": "prisma studio",
-    "db:seed": "node prisma/seed.js"
+    "db:seed": "node prisma/seed.js",
+    "app:add:ios": "cap add ios",
+    "app:add:android": "cap add android",
+    "app:sync": "cap sync",
+    "app:open:ios": "cap open ios",
+    "app:open:android": "cap open android"
   },
   "prisma": {
     "seed": "node prisma/seed.js"
@@ -19,6 +24,14 @@
   "dependencies": {
     "@anthropic-ai/sdk": "^0.104.2",
     "@auth/prisma-adapter": "^2.11.1",
+    "@capacitor/android": "^8.5.0",
+    "@capacitor/app": "^8.1.1",
+    "@capacitor/cli": "^8.5.0",
+    "@capacitor/core": "^8.5.0",
+    "@capacitor/ios": "^8.5.0",
+    "@capacitor/push-notifications": "^8.1.2",
+    "@capacitor/splash-screen": "^8.0.2",
+    "@capacitor/status-bar": "^8.0.3",
     "@hookform/resolvers": "^3.3.0",
     "@next-auth/prisma-adapter": "^1.0.5",
     "@prisma/client": "^5.20.0",
