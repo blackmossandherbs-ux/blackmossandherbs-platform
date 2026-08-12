@@ -11,6 +11,7 @@ import CookieBanner from '@/components/CookieBanner'
 import Providers from '@/components/Providers'
 import ServiceWorkerRegister from '@/components/ServiceWorkerRegister'
 import InstallPrompt from '@/components/InstallPrompt'
+import MobileTabBar from '@/components/MobileTabBar'
 
 export const viewport: Viewport = {
     themeColor: '#0e150f',
@@ -136,13 +137,14 @@ export default function RootLayout({
             <body>
                 <Providers>
                     <Header />
-                    <main className="min-h-screen">
+                    <main className="min-h-screen pb-16 md:pb-0">
                         {children}
                     </main>
                     <Footer />
                     <AIChatWidget />
                     <CookieBanner />
                     <InstallPrompt />
+                    <MobileTabBar />
                     <ServiceWorkerRegister />
                 </Providers>
             </body>

@@ -46,7 +46,7 @@ export default function InstallPrompt() {
     if (!visible) return null
 
     return (
-        <div className="fixed inset-x-3 bottom-3 z-[60] sm:left-auto sm:right-4 sm:w-80 animate-in slide-in-from-bottom-4">
+        <div className="fixed inset-x-3 bottom-20 md:bottom-4 z-[60] md:left-auto md:right-4 md:w-80 animate-in slide-in-from-bottom-4">
             <div className="bg-earth-900 border border-earth-700 rounded-2xl shadow-2xl p-4 flex items-center gap-3">
                 <img src="/icons/icon-192.png" alt="" className="w-11 h-11 rounded-xl shrink-0" />
                 <div className="flex-1 min-w-0">

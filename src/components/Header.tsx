@@ -76,13 +76,13 @@ export default function Header() {
                         >
                             {searchOpen ? <X className="w-5 h-5" /> : <Search className="w-5 h-5" />}
                         </button>
-                        <Link href="/wishlist" aria-label="Wishlist" className="p-2 text-stone-400 hover:text-amber-500 transition-colors hidden sm:inline-flex">
+                        <Link href="/wishlist" aria-label="Wishlist" className="p-2 text-stone-400 hover:text-amber-500 transition-colors hidden md:inline-flex">
                             <Heart className="w-5 h-5" />
                         </Link>
-                        <Link href="/dashboard" aria-label="Account" className="p-2 text-stone-400 hover:text-amber-500 transition-colors">
+                        <Link href="/dashboard" aria-label="Account" className="p-2 text-stone-400 hover:text-amber-500 transition-colors hidden md:inline-flex">
                             <User className="w-5 h-5" />
                         </Link>
-                        <Link href="/cart" className="relative group" aria-label={`Cart (${count} items)`}>
+                        <Link href="/cart" className="relative group hidden md:block" aria-label={`Cart (${count} items)`}>
                             <div className="p-3 bg-white/5 rounded-full border border-white/5 group-hover:border-amber-500/50 transition-all duration-500">
                                 <ShoppingCart className="w-5 h-5 text-stone-300 group-hover:text-amber-500" />
                             </div>
