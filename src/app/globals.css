@@ -239,3 +239,13 @@
 ::-webkit-scrollbar-thumb {
   @apply bg-green-950 border-2 border-stone-950 rounded-full hover:bg-green-900 transition-colors;
 }
+/* ---- App / PWA: safe-area insets for notches & home indicators ---- */
+@supports (padding: env(safe-area-inset-top)) {
+  header { padding-top: env(safe-area-inset-top); }
+  /* keep the floating chat/install controls clear of the home indicator */
+  .fixed.bottom-6 { bottom: calc(1.5rem + env(safe-area-inset-bottom)); }
+  .fixed.bottom-3 { bottom: calc(0.75rem + env(safe-area-inset-bottom)); }
+}
+/* Smooth momentum scrolling + no tap-highlight flash inside the app shell */
+html { -webkit-tap-highlight-color: transparent; }
+body { overscroll-behavior-y: none; }
