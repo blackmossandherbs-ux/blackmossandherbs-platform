@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import { getServerSession } from 'next-auth'
 import { authOptions } from '@/lib/auth'
 import { sendEmail } from '@/lib/mail'
+import { prisma } from '@/lib/prisma'
 
 export const dynamic = 'force-dynamic'
 
@@ -11,10 +12,16 @@ const PRICES: Record<string, number> = {
     intensive: 250,
 }
 
+const DURATIONS: Record<string, number> = {
+    initial: 60,
+    'follow-up': 30,
+    intensive: 90,
+}
+
 const TYPE_NAMES: Record<string, string> = {
-    initial: 'Initial Bio-Assessment (60 min)',
+    initial: 'Initial Wellness Consultation (60 min)',
     'follow-up': 'Follow-up Session (30 min)',
-    intensive: 'Intensive Protocol (90 min)',
+    intensive: 'Extended Wellness Session (90 min)',
 }
 
 export async function POST(req: NextRequest) {
@@ -35,6 +42,27 @@ export async function POST(req: NextRequest) {
         const typeName = TYPE_NAMES[type] || type
         const requestedBy = session?.user?.email || email
         const inbox = process.env.CONTACT_INBOX || process.env.EMAIL_FROM || ''
+
+        // If the visitor is signed in, record the booking so it shows in their
+        // dashboard and the admin can track it. Guests still book by request only.
+        if (session?.user?.id) {
+            try {
+                const when = new Date(`${date}T${time || '09:00'}:00`)
+                await prisma.consultation.create({
+                    data: {
+                        userId: session.user.id,
+                        type: typeName,
+                        date: isNaN(when.getTime()) ? null : when,
+                        duration: DURATIONS[type] || 60,
+                        price,
+                        status: 'PENDING',
+                        notes: objectives ? String(objectives).slice(0, 2000) : null,
+                    },
+                })
+            } catch (e) {
+                console.error('[consultations] could not persist booking:', e)
+            }
+        }
 
         // Notify admin
         if (inbox) {

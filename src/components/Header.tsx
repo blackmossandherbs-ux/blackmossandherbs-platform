@@ -3,7 +3,7 @@
 import Link from 'next/link'
 import { useState, useRef, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
-import { ShoppingCart, Menu, X, User, Search } from 'lucide-react'
+import { ShoppingCart, Menu, X, User, Search, Heart } from 'lucide-react'
 import { useCart } from '@/context/CartContext'
 
 const NAV_ITEMS = [
@@ -76,6 +76,9 @@ export default function Header() {
                         >
                             {searchOpen ? <X className="w-5 h-5" /> : <Search className="w-5 h-5" />}
                         </button>
+                        <Link href="/wishlist" aria-label="Wishlist" className="p-2 text-stone-400 hover:text-amber-500 transition-colors hidden sm:inline-flex">
+                            <Heart className="w-5 h-5" />
+                        </Link>
                         <Link href="/dashboard" aria-label="Account" className="p-2 text-stone-400 hover:text-amber-500 transition-colors">
                             <User className="w-5 h-5" />
                         </Link>
@@ -144,6 +147,13 @@ export default function Header() {
                                 Blog
                             </Link>
                             <div className="pt-2 border-t border-earth-800 mt-2">
+                                <Link
+                                    href="/wishlist"
+                                    onClick={() => setMobileMenuOpen(false)}
+                                    className="flex items-center gap-2 text-earth-300 hover:text-white px-3 py-3 text-sm font-medium rounded-xl hover:bg-earth-900/50 transition-colors"
+                                >
+                                    <Heart className="w-4 h-4" /> Wishlist
+                                </Link>
                                 <Link
                                     href="/dashboard"
                                     onClick={() => setMobileMenuOpen(false)}
