@@ -1,0 +1,339 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 77;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		021E60D32768528F7876448C /* JourneyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18FB44C804D5005FDC0FECC6 /* JourneyView.swift */; };
+		1E7B574FE5F06FA45201ADA4 /* APIService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 97F4EA01E6A677FF9AE79967 /* APIService.swift */; };
+		2BD08D20FF6626AB54F1F973 /* ProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 086A89498EF19C9BDF7BB62A /* ProfileView.swift */; };
+		59C315018DCB2B3F344DAD99 /* HomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E43FDB2B179D2246F873B456 /* HomeView.swift */; };
+		5D23F31FC04C1106376973FC /* Models.swift in Sources */ = {isa = PBXBuildFile; fileRef = A81D20AFC3E96EC11797D0F4 /* Models.swift */; };
+		65DC323E76785B696D6ECA70 /* Theme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61FD2F9ADB41F02BCDA1886D /* Theme.swift */; };
+		70994BDA8EA552A27A6BB7EF /* AppTabView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 663DE20ED5CE055A866E0843 /* AppTabView.swift */; };
+		984CA57235393FFE3AA9B44E /* WisdomView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C886F1E9E7B089959CAF576 /* WisdomView.swift */; };
+		BFDE74F0C76803843709AAD0 /* HealthBriefView.swift in Sources */ = {isa = PBXBuildFile; fileRef = ABEAC79192DA56DE8EAF58C3 /* HealthBriefView.swift */; };
+		EA17C6A96CF2525724B81E48 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0449B8C477FF45FB280A8901 /* ContentView.swift */; };
+		F26F218D23EDF5160D26BDA0 /* BlackMossHerbsApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = D97051E8E0B3B07F44C60CDF /* BlackMossHerbsApp.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		0449B8C477FF45FB280A8901 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		086A89498EF19C9BDF7BB62A /* ProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileView.swift; sourceTree = "<group>"; };
+		18FB44C804D5005FDC0FECC6 /* JourneyView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JourneyView.swift; sourceTree = "<group>"; };
+		56119CE05B543B87F319CA00 /* BlackMossHerbs.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = BlackMossHerbs.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		61FD2F9ADB41F02BCDA1886D /* Theme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Theme.swift; sourceTree = "<group>"; };
+		663DE20ED5CE055A866E0843 /* AppTabView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppTabView.swift; sourceTree = "<group>"; };
+		7C886F1E9E7B089959CAF576 /* WisdomView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WisdomView.swift; sourceTree = "<group>"; };
+		97F4EA01E6A677FF9AE79967 /* APIService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIService.swift; sourceTree = "<group>"; };
+		A81D20AFC3E96EC11797D0F4 /* Models.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Models.swift; sourceTree = "<group>"; };
+		ABEAC79192DA56DE8EAF58C3 /* HealthBriefView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HealthBriefView.swift; sourceTree = "<group>"; };
+		D97051E8E0B3B07F44C60CDF /* BlackMossHerbsApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlackMossHerbsApp.swift; sourceTree = "<group>"; };
+		E43FDB2B179D2246F873B456 /* HomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeView.swift; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXGroup section */
+		1B2C04F268CE4FF51DCA898F /* BlackMossHerbs */ = {
+			isa = PBXGroup;
+			children = (
+				97F4EA01E6A677FF9AE79967 /* APIService.swift */,
+				663DE20ED5CE055A866E0843 /* AppTabView.swift */,
+				D97051E8E0B3B07F44C60CDF /* BlackMossHerbsApp.swift */,
+				0449B8C477FF45FB280A8901 /* ContentView.swift */,
+				ABEAC79192DA56DE8EAF58C3 /* HealthBriefView.swift */,
+				E43FDB2B179D2246F873B456 /* HomeView.swift */,
+				18FB44C804D5005FDC0FECC6 /* JourneyView.swift */,
+				A81D20AFC3E96EC11797D0F4 /* Models.swift */,
+				086A89498EF19C9BDF7BB62A /* ProfileView.swift */,
+				61FD2F9ADB41F02BCDA1886D /* Theme.swift */,
+				7C886F1E9E7B089959CAF576 /* WisdomView.swift */,
+			);
+			path = BlackMossHerbs;
+			sourceTree = "<group>";
+		};
+		79BFCF0CAE20EF0F70A6DB75 /* BlackMossHerbs */ = {
+			isa = PBXGroup;
+			children = (
+				1B2C04F268CE4FF51DCA898F /* BlackMossHerbs */,
+			);
+			path = BlackMossHerbs;
+			sourceTree = "<group>";
+		};
+		CD8E3CCFDD034776454F7E20 = {
+			isa = PBXGroup;
+			children = (
+				79BFCF0CAE20EF0F70A6DB75 /* BlackMossHerbs */,
+				DD80FCC67C115DFE8355FE7B /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		DD80FCC67C115DFE8355FE7B /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				56119CE05B543B87F319CA00 /* BlackMossHerbs.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		C9D58FFC70ABE8167F9B9D21 /* BlackMossHerbs */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = DCEA02622D97774325A39647 /* Build configuration list for PBXNativeTarget "BlackMossHerbs" */;
+			buildPhases = (
+				77F58D8D0AD712A0ECEDC11F /* Sources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = BlackMossHerbs;
+			packageProductDependencies = (
+			);
+			productName = BlackMossHerbs;
+			productReference = 56119CE05B543B87F319CA00 /* BlackMossHerbs.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		C30497133A873C35CA368FD6 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = YES;
+				LastUpgradeCheck = 1430;
+				TargetAttributes = {
+					C9D58FFC70ABE8167F9B9D21 = {
+						DevelopmentTeam = "";
+					};
+				};
+			};
+			buildConfigurationList = 7A726D94CBFFF0030840182F /* Build configuration list for PBXProject "BlackMossHerbs" */;
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				Base,
+				en,
+			);
+			mainGroup = CD8E3CCFDD034776454F7E20;
+			minimizedProjectReferenceProxies = 1;
+			preferredProjectObjectVersion = 77;
+			productRefGroup = DD80FCC67C115DFE8355FE7B /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				C9D58FFC70ABE8167F9B9D21 /* BlackMossHerbs */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXSourcesBuildPhase section */
+		77F58D8D0AD712A0ECEDC11F /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				1E7B574FE5F06FA45201ADA4 /* APIService.swift in Sources */,
+				70994BDA8EA552A27A6BB7EF /* AppTabView.swift in Sources */,
+				F26F218D23EDF5160D26BDA0 /* BlackMossHerbsApp.swift in Sources */,
+				EA17C6A96CF2525724B81E48 /* ContentView.swift in Sources */,
+				BFDE74F0C76803843709AAD0 /* HealthBriefView.swift in Sources */,
+				59C315018DCB2B3F344DAD99 /* HomeView.swift in Sources */,
+				021E60D32768528F7876448C /* JourneyView.swift in Sources */,
+				5D23F31FC04C1106376973FC /* Models.swift in Sources */,
+				2BD08D20FF6626AB54F1F973 /* ProfileView.swift in Sources */,
+				65DC323E76785B696D6ECA70 /* Theme.swift in Sources */,
+				984CA57235393FFE3AA9B44E /* WisdomView.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		610913990747406BA7742F57 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				DEVELOPMENT_TEAM = "";
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UIUserInterfaceStyle = Light;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.blackmossandherbs.BlackMossHerbs;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		72F8086FF2E6A140D29F5034 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				SWIFT_VERSION = 5.0;
+			};
+			name = Release;
+		};
+		798924946206A8F9AD1A4A9D /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"$(inherited)",
+					"DEBUG=1",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.0;
+			};
+			name = Debug;
+		};
+		88CE12B0971EAAE4B5958590 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				DEVELOPMENT_TEAM = "";
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UIUserInterfaceStyle = Light;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.blackmossandherbs.BlackMossHerbs;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		7A726D94CBFFF0030840182F /* Build configuration list for PBXProject "BlackMossHerbs" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				798924946206A8F9AD1A4A9D /* Debug */,
+				72F8086FF2E6A140D29F5034 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		DCEA02622D97774325A39647 /* Build configuration list for PBXNativeTarget "BlackMossHerbs" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				610913990747406BA7742F57 /* Debug */,
+				88CE12B0971EAAE4B5958590 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = C30497133A873C35CA368FD6 /* Project object */;
+}
