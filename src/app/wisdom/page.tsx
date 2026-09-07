@@ -15,7 +15,7 @@ import { VideoService } from '@/services/VideoService'
 
 export const metadata: Metadata = {
     title: 'The Alchemist\'s Wisdom - Black Moss & Herbs',
-    description: 'Scientific and Organic Knowledge. The home of alkaline facts.',
+    description: 'Scientific and organic knowledge from every continent — not just one city or one country. The home of alkaline facts.',
 }
 
 export default async function WisdomPage() {
@@ -48,7 +48,7 @@ export default async function WisdomPage() {
                         <span className="text-green-500 italic">Wisdom.</span>
                     </h1>
                     <p className="text-xl text-stone-400 max-w-2xl mx-auto leading-relaxed font-light italic">
-                        &quot;Respecting the elders, verifying through science. We deal in organic reality.&quot;
+                        &quot;Respecting the elders, verifying through science. This is a worldwide practice, not a local trend — we deal in organic reality.&quot;
                     </p>
                 </div>
 

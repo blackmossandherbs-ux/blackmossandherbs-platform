@@ -5,11 +5,13 @@
 import { Metadata } from 'next'
 import Image from 'next/image'
 import { notFound } from 'next/navigation'
-import { Heart, Share2, Star, Check } from 'lucide-react'
+import { Heart, Share2, Check, Globe2, ShieldAlert } from 'lucide-react'
 import Button from '@/components/Button'
 import AddToCartButton from '@/components/AddToCartButton'
 import { formatPrice } from '@/lib/utils'
 import { ProductService } from '@/services/ProductService'
+import { getResearchForProduct } from '@/data/herbResearch'
+import { getGlobalDisclaimer } from '@/lib/compliance'
 
 export async function generateMetadata({ params }: { params: { slug: string } }): Promise<Metadata> {
     const product = await ProductService.getProductBySlug(params.slug)
@@ -36,6 +38,8 @@ export default async function ProductPage({ params }: { params: { slug: string }
     const discount = product.compareAtPrice
         ? Math.round(((product.compareAtPrice - product.price) / product.compareAtPrice) * 100)
         : 0
+
+    const research = getResearchForProduct(product.name, product.category)
 
     return (
         <div className="py-24 bg-earth-950 min-h-screen relative overflow-hidden">
@@ -90,18 +94,10 @@ export default async function ProductPage({ params }: { params: { slug: string }
                             {product.name}
                         </h1>
 
-                        <div className="flex items-center gap-6 mb-10">
-                            <div className="flex items-center gap-1.5">
-                                {[...Array(5)].map((_, i) => (
-                                    <Star
-                                        key={i}
-                                        size={14}
-                                        className={`${i < 5 ? 'text-secondary-400 fill-secondary-400' : 'text-earth-800'}`}
-                                    />
-                                ))}
-                            </div>
+                        <div className="flex items-center gap-2 mb-10">
+                            <Globe2 className="w-4 h-4 text-primary-400" />
                             <span className="text-earth-400 text-xs font-bold uppercase tracking-widest">
-                                Clinical Excellence Verified
+                                Sourced &amp; Studied Worldwide
                             </span>
                         </div>
 
@@ -131,6 +127,41 @@ export default async function ProductPage({ params }: { params: { slug: string }
                                 ))}
                             </div>
                         </div>
+
+                        {/* The Research */}
+                        {research && (
+                            <div className="p-8 bg-earth-900/40 backdrop-blur-xl border border-earth-800 rounded-[2rem] mb-12">
+                                <div className="flex items-center gap-2 mb-4">
+                                    <Globe2 className="w-4 h-4 text-primary-400" />
+                                    <h3 className="font-black text-[10px] uppercase text-earth-500 tracking-[0.2em]">The Research</h3>
+                                </div>
+                                <p className="text-xs text-earth-500 uppercase tracking-widest font-bold mb-3">{research.origin}</p>
+                                <p className="text-sm text-stone-300 leading-relaxed mb-4">{research.summary}</p>
+                                {research.safetyNote && (
+                                    <div className="flex gap-3 p-4 mb-4 bg-amber-950/30 border border-amber-800/40 rounded-xl">
+                                        <ShieldAlert className="w-4 h-4 text-amber-400 flex-shrink-0 mt-0.5" />
+                                        <p className="text-xs text-amber-200 leading-relaxed">{research.safetyNote}</p>
+                                    </div>
+                                )}
+                                {research.citations.length > 0 && (
+                                    <ul className="space-y-2 mb-4">
+                                        {research.citations.map((c) => (
+                                            <li key={c.url}>
+                                                <a
+                                                    href={c.url}
+                                                    target="_blank"
+                                                    rel="noopener noreferrer nofollow"
+                                                    className="text-xs text-primary-400 hover:text-primary-300 underline underline-offset-2"
+                                                >
+                                                    {c.label}
+                                                </a>
+                                            </li>
+                                        ))}
+                                    </ul>
+                                )}
+                                <p className="text-[10px] text-earth-600 leading-relaxed">{getGlobalDisclaimer()}</p>
+                            </div>
+                        )}
 
                         {/* Action Buttons */}
                         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-12">
