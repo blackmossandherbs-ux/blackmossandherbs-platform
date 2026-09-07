@@ -171,6 +171,17 @@ export default async function DashboardPage() {
                             </Link>
                         </div>
 
+                        {/* Clinical Health Brief (Intake) */}
+                        <div className="card border border-primary-900/50 bg-gradient-to-b from-earth-900/40 to-primary-950/20 p-6">
+                            <h3 className="font-serif text-xl font-bold text-white mb-2">Holistic Profile</h3>
+                            <p className="text-earth-400 text-xs mb-4 leading-relaxed">Update your clinical health brief so our herbalists can provide accurate, personalized guidance during your consultations.</p>
+                            <Link href="/dashboard/wellness">
+                                <button className="w-full bg-primary-600 hover:bg-primary-500 text-white font-black uppercase tracking-widest py-3 rounded-xl transition-all text-xs">
+                                    Update Profile
+                                </button>
+                            </Link>
+                        </div>
+
                         {/* Upcoming Consultations */}
                         <div className="card border border-earth-800 bg-earth-900/40 p-6">
                             <h3 className="font-serif text-xl font-bold text-white mb-4">Consultations</h3>
