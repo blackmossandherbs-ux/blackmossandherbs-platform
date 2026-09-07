@@ -42,12 +42,22 @@ export async function POST(req: Request) {
                 healthGoals: data.healthGoals,
                 dietType: data.dietType,
                 allergies: data.allergies,
+                primaryAilments: data.primaryAilments,
+                currentMedications: data.currentMedications,
+                digestion: data.digestion,
+                sleepHours: data.sleepHours,
+                stressLevel: data.stressLevel,
             },
             create: {
                 userId: user.id,
                 healthGoals: data.healthGoals || [],
                 dietType: data.dietType || 'Standard',
                 allergies: data.allergies || [],
+                primaryAilments: data.primaryAilments || null,
+                currentMedications: data.currentMedications || null,
+                digestion: data.digestion || 'Regular',
+                sleepHours: data.sleepHours || '6-8',
+                stressLevel: data.stressLevel || 'Moderate',
             }
         });
 

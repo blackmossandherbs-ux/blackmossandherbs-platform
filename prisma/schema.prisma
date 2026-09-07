@@ -360,10 +360,17 @@ model BiologicalProfile {
   userId          String   @unique
   user            User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   
-  // Intake Data
-  healthGoals     String[] // e.g., "Weight Loss", "Energy", "Blood Pressure"
+  // Intake Data (Clinical Health Brief)
+  healthGoals     String[] // e.g., "Gut Health", "Energy", "Immunity"
   dietType        String?  // e.g., "Alkaline", "Vegan", "Standard"
   allergies       String[]
+  
+  // Extended Clinical Intake
+  primaryAilments    String?  // Free-text: conditions like Arthritis, Cancer, PCOS
+  currentMedications String?  // Free-text: prescriptions & supplements
+  digestion          String?  // e.g., "Regular", "Sluggish", "Constipated", "Loose"
+  sleepHours         String?  // e.g., "Under 4", "4-6", "6-8", "8+"
+  stressLevel        String?  // e.g., "Low", "Moderate", "High"
   
   // Clinical / Admin Fields
   clinicalNotes   String?  // Private notes for admins/herbalists
