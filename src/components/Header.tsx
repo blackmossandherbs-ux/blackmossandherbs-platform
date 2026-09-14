@@ -24,7 +24,7 @@ export default function Header() {
     return (
         <header className="sticky top-0 z-50 py-4">
             <nav className="container">
-                <div className="organic-glass rounded-2xl px-6 lg:px-10 py-4 flex items-center justify-between">
+                <div className="organic-glass rounded-2xl px-4 sm:px-6 lg:px-10 py-4 flex items-center justify-between">
                     {/* Logo */}
                     <Link href="/" className="flex items-center space-x-3 group">
                         <div className="w-12 h-12 bg-gradient-to-br from-primary-700 to-primary-950 rounded-xl flex items-center justify-center shadow-lg group-hover:shadow-secondary-500/20 transition-all duration-500">
@@ -55,7 +55,7 @@ export default function Header() {
                     </div>
 
                     {/* Right Side Actions */}
-                    <div className="flex items-center space-x-6">
+                    <div className="flex items-center space-x-2 sm:space-x-6">
                         <button className="p-2 text-stone-400 hover:text-amber-500 transition-colors">
                             <Search className="w-5 h-5" />
                         </button>

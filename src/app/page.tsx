@@ -187,13 +187,13 @@ export default async function HomePage() {
             {/* Wisdom Archive (Latest Blogs) */}
             <section className="py-32 bg-earth-900/40 border-y border-earth-800 backdrop-blur-3xl">
                 <div className="container">
-                    <div className="flex justify-between items-end mb-24">
+                    <div className="flex flex-col md:flex-row md:justify-between md:items-end gap-6 mb-24">
                         <div>
                             <div className="text-[10px] font-black uppercase tracking-[0.4em] text-primary-400 mb-4">Education & Research</div>
-                            <h2 className="text-6xl font-serif font-bold text-white tracking-tighter">Clinical <span className="text-primary-400 italic">Wisdom.</span></h2>
+                            <h2 className="text-4xl md:text-6xl font-serif font-bold text-white tracking-tighter">Clinical <span className="text-primary-400 italic">Wisdom.</span></h2>
                         </div>
                         <Link href="/wisdom">
-                            <button className="h-14 px-8 bg-earth-800 text-white font-bold text-xs uppercase tracking-widest rounded-xl hover:bg-earth-700 transition-all">
+                            <button className="w-full md:w-auto h-14 px-8 bg-earth-800 text-white font-bold text-xs uppercase tracking-widest rounded-xl hover:bg-earth-700 transition-all">
                                 View Full Repository
                             </button>
                         </Link>
