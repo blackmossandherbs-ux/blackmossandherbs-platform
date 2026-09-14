@@ -46,16 +46,16 @@ export default function ConsultationsPage() {
     return (
         <div className="py-24 bg-stone-950 min-h-screen relative overflow-hidden">
             <div className="absolute top-0 left-0 w-full h-full pointer-events-none opacity-20">
-                <div className="absolute top-0 left-0 w-[40vw] h-[40vw] bg-green-900/10 rounded-full blur-[120px]"></div>
+                <div className="absolute top-0 left-0 w-[40vw] h-[40vw] bg-amber-900/10 rounded-full blur-[120px]"></div>
                 <div className="absolute bottom-0 right-0 w-[40vw] h-[40vw] bg-amber-900/10 rounded-full blur-[120px]"></div>
             </div>
 
             <div className="container relative z-10">
                 {/* Header */}
                 <div className="max-w-4xl mx-auto mb-24 text-center">
-                    <div className="inline-flex items-center gap-2 px-4 py-2 organic-glass rounded-full mb-8 border-green-500/20">
-                        <Video className="w-4 h-4 text-green-500" />
-                        <span className="text-[10px] font-black uppercase tracking-[0.2em] text-green-400">Biological Support</span>
+                    <div className="inline-flex items-center gap-2 px-4 py-2 organic-glass rounded-full mb-8 border-amber-500/20">
+                        <Video className="w-4 h-4 text-amber-500" />
+                        <span className="text-[10px] font-black uppercase tracking-[0.2em] text-amber-400">Biological Support</span>
                     </div>
                     <h1 className="text-5xl md:text-8xl font-serif font-bold text-stone-50 mb-8 leading-[0.9] tracking-tighter">
                         Clinical <br />
@@ -69,10 +69,10 @@ export default function ConsultationsPage() {
                 {/* Consultation Types */}
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-24">
                     {consultationTypes.map((type) => (
-                        <div key={type.id} className="organic-glass p-10 rounded-3xl border-transparent hover:border-green-500/30 transition-all duration-700 group flex flex-col">
+                        <div key={type.id} className="organic-glass p-10 rounded-3xl border-transparent hover:border-amber-500/30 transition-all duration-700 group flex flex-col">
                             <div className="flex items-center justify-between mb-10">
-                                <div className="w-16 h-16 bg-white/5 rounded-2xl flex items-center justify-center group-hover:bg-green-600 transition-all duration-700">
-                                    <Video className="w-7 h-7 text-green-500 group-hover:text-stone-950" />
+                                <div className="w-16 h-16 bg-white/5 rounded-2xl flex items-center justify-center group-hover:bg-amber-600 transition-all duration-700">
+                                    <Video className="w-7 h-7 text-amber-500 group-hover:text-stone-950" />
                                 </div>
                                 <div className="text-right">
                                     <span className="block text-2xl font-black text-white">£{type.price}</span>
@@ -91,8 +91,8 @@ export default function ConsultationsPage() {
                             <ul className="space-y-4 mb-10 flex-1">
                                 {type.features.map((feature, index) => (
                                     <li key={index} className="flex items-start gap-3 text-sm text-stone-300">
-                                        <div className="w-5 h-5 rounded-full bg-green-500/10 flex items-center justify-center flex-shrink-0 mt-0.5">
-                                            <div className="w-1.5 h-1.5 bg-green-500 rounded-full"></div>
+                                        <div className="w-5 h-5 rounded-full bg-amber-500/10 flex items-center justify-center flex-shrink-0 mt-0.5">
+                                            <div className="w-1.5 h-1.5 bg-amber-500 rounded-full"></div>
                                         </div>
                                         {feature}
                                     </li>
@@ -134,7 +134,7 @@ export default function ConsultationsPage() {
                         ].map((herbalist, index) => (
                             <div key={index} className="organic-glass p-10 text-center rounded-3xl border-stone-800/10 group hover:border-amber-500/20 transition-all duration-700">
                                 <div className="w-32 h-32 bg-stone-900 rounded-full mx-auto mb-8 flex items-center justify-center p-1 border border-stone-800 relative overflow-hidden group-hover:scale-105 transition-transform duration-700">
-                                    <div className="absolute inset-0 bg-gradient-to-tr from-green-600/20 to-amber-600/20 opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                                    <div className="absolute inset-0 bg-gradient-to-tr from-primary-700/20 to-amber-600/20 opacity-0 group-hover:opacity-100 transition-opacity"></div>
                                     <span className="text-6xl text-stone-700 relative z-10">👤</span>
                                 </div>
                                 <h3 className="font-serif text-2xl font-bold text-stone-50 mb-2">{herbalist.name}</h3>

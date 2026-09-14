@@ -27,8 +27,8 @@ export default function Header() {
                 <div className="organic-glass rounded-2xl px-6 lg:px-10 py-4 flex items-center justify-between">
                     {/* Logo */}
                     <Link href="/" className="flex items-center space-x-3 group">
-                        <div className="w-12 h-12 bg-gradient-to-br from-green-600 to-green-900 rounded-xl flex items-center justify-center shadow-lg group-hover:shadow-green-500/20 transition-all duration-500">
-                            <span className="text-white font-bold text-2xl tracking-tighter">BM</span>
+                        <div className="w-12 h-12 bg-gradient-to-br from-primary-700 to-primary-950 rounded-xl flex items-center justify-center shadow-lg group-hover:shadow-secondary-500/20 transition-all duration-500">
+                            <span className="text-secondary-400 font-bold text-2xl tracking-tighter">BM</span>
                         </div>
                         <div className="flex flex-col">
                             <span className="font-serif text-xl font-bold text-stone-50 leading-none">

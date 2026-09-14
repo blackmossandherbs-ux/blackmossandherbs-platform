@@ -57,8 +57,8 @@ export default function ConsultationBookingForm({ defaultType }: Props) {
     if (success) {
         return (
             <div className="text-center py-16">
-                <div className="w-20 h-20 bg-green-500/10 border border-green-500/30 rounded-full flex items-center justify-center mx-auto mb-8">
-                    <Check className="w-10 h-10 text-green-500" />
+                <div className="w-20 h-20 bg-amber-500/10 border border-amber-500/30 rounded-full flex items-center justify-center mx-auto mb-8">
+                    <Check className="w-10 h-10 text-amber-500" />
                 </div>
                 <h3 className="text-3xl font-serif font-bold text-stone-50 mb-4">Request Dispatched</h3>
                 <p className="text-stone-400 font-light max-w-md mx-auto leading-relaxed">
@@ -77,7 +77,7 @@ export default function ConsultationBookingForm({ defaultType }: Props) {
                         type="text"
                         value={name}
                         onChange={(e) => setName(e.target.value)}
-                        className="w-full h-16 bg-stone-900/50 border border-stone-800 rounded-2xl px-6 focus:border-green-500/50 focus:outline-none text-stone-100 transition-all"
+                        className="w-full h-16 bg-stone-900/50 border border-stone-800 rounded-2xl px-6 focus:border-amber-500/50 focus:outline-none text-stone-100 transition-all"
                         placeholder="Full Name"
                         required
                     />
@@ -88,7 +88,7 @@ export default function ConsultationBookingForm({ defaultType }: Props) {
                         type="email"
                         value={email}
                         onChange={(e) => setEmail(e.target.value)}
-                        className="w-full h-16 bg-stone-900/50 border border-stone-800 rounded-2xl px-6 focus:border-green-500/50 focus:outline-none text-stone-100 transition-all"
+                        className="w-full h-16 bg-stone-900/50 border border-stone-800 rounded-2xl px-6 focus:border-amber-500/50 focus:outline-none text-stone-100 transition-all"
                         placeholder="email@example.com"
                         required
                     />
@@ -101,7 +101,7 @@ export default function ConsultationBookingForm({ defaultType }: Props) {
                     <select
                         value={type}
                         onChange={(e) => setType(e.target.value)}
-                        className="w-full h-16 bg-stone-900/50 border border-stone-800 rounded-2xl px-6 focus:border-green-500/50 focus:outline-none text-stone-100 transition-all appearance-none"
+                        className="w-full h-16 bg-stone-900/50 border border-stone-800 rounded-2xl px-6 focus:border-amber-500/50 focus:outline-none text-stone-100 transition-all appearance-none"
                     >
                         {consultationTypes.map((t) => (
                             <option key={t.id} value={t.id}>{t.name} — £{t.price}</option>
@@ -116,7 +116,7 @@ export default function ConsultationBookingForm({ defaultType }: Props) {
                             value={date}
                             min={minDate}
                             onChange={(e) => setDate(e.target.value)}
-                            className="w-full h-16 bg-stone-900/50 border border-stone-800 rounded-2xl px-6 focus:border-green-500/50 focus:outline-none text-stone-100 transition-all"
+                            className="w-full h-16 bg-stone-900/50 border border-stone-800 rounded-2xl px-6 focus:border-amber-500/50 focus:outline-none text-stone-100 transition-all"
                             required
                         />
                     </div>
@@ -125,7 +125,7 @@ export default function ConsultationBookingForm({ defaultType }: Props) {
                         <select
                             value={time}
                             onChange={(e) => setTime(e.target.value)}
-                            className="w-full h-16 bg-stone-900/50 border border-stone-800 rounded-2xl px-6 focus:border-green-500/50 focus:outline-none text-stone-100 transition-all appearance-none"
+                            className="w-full h-16 bg-stone-900/50 border border-stone-800 rounded-2xl px-6 focus:border-amber-500/50 focus:outline-none text-stone-100 transition-all appearance-none"
                         >
                             {availableTimes.map((t) => (
                                 <option key={t} value={t}>{t}</option>
@@ -140,7 +140,7 @@ export default function ConsultationBookingForm({ defaultType }: Props) {
                 <textarea
                     value={objectives}
                     onChange={(e) => setObjectives(e.target.value)}
-                    className="w-full min-h-40 bg-stone-900/50 border border-stone-800 rounded-3xl p-6 focus:border-green-500/50 focus:outline-none text-stone-100 transition-all resize-none"
+                    className="w-full min-h-40 bg-stone-900/50 border border-stone-800 rounded-3xl p-6 focus:border-amber-500/50 focus:outline-none text-stone-100 transition-all resize-none"
                     placeholder="Describe your current biological goals and health history…"
                 />
             </div>
@@ -151,8 +151,8 @@ export default function ConsultationBookingForm({ defaultType }: Props) {
 
             <div className="organic-glass p-8 rounded-2xl border-stone-800 flex flex-col md:flex-row items-center gap-6 justify-between">
                 <div className="flex items-center gap-4">
-                    <div className="w-12 h-12 bg-green-500/10 rounded-full flex items-center justify-center">
-                        <MessageCircle className="w-6 h-6 text-green-500" />
+                    <div className="w-12 h-12 bg-amber-500/10 rounded-full flex items-center justify-center">
+                        <MessageCircle className="w-6 h-6 text-amber-500" />
                     </div>
                     <p className="text-sm text-stone-400 max-w-xs leading-relaxed">
                         Sessions are conducted via secure video link. You will receive confirmation and payment details within 24 hours.

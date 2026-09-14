@@ -33,7 +33,7 @@ export default async function WisdomPage() {
         <div className="py-24 bg-stone-950 min-h-screen relative overflow-hidden">
             {/* Background Textures */}
             <div className="absolute top-0 left-0 w-full h-full pointer-events-none opacity-20">
-                <div className="absolute top-[20%] right-[10%] w-[30vw] h-[30vw] bg-green-900/10 rounded-full blur-[100px] animate-pulse-slow"></div>
+                <div className="absolute top-[20%] right-[10%] w-[30vw] h-[30vw] bg-amber-900/10 rounded-full blur-[100px] animate-pulse-slow"></div>
                 <div className="absolute bottom-[20%] left-[10%] w-[40vw] h-[40vw] bg-amber-900/10 rounded-full blur-[120px] animate-pulse-slow"></div>
             </div>
 
@@ -45,7 +45,7 @@ export default async function WisdomPage() {
                     </div>
                     <h1 className="text-6xl md:text-8xl font-serif font-bold text-stone-50 mb-8 leading-[0.9] tracking-tighter">
                         Botanical <br />
-                        <span className="text-green-500 italic">Wisdom.</span>
+                        <span className="text-amber-500 italic">Wisdom.</span>
                     </h1>
                     <p className="text-xl text-stone-400 max-w-2xl mx-auto leading-relaxed font-light italic">
                         &quot;Respecting the elders, verifying through science. This is a worldwide practice, not a local trend — we deal in organic reality.&quot;
@@ -99,16 +99,16 @@ export default async function WisdomPage() {
                         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
                             {latestBlogs.map((post) => (
                                 <Link key={post.id} href={`/wisdom/blogs/${post.slug}`} className="group">
-                                    <article className="glass-premium p-8 rounded-[2.5rem] border-stone-800 group-hover:border-green-500/20 transition-all duration-700 h-full flex flex-col">
+                                    <article className="glass-premium p-8 rounded-[2.5rem] border-stone-800 group-hover:border-amber-500/20 transition-all duration-700 h-full flex flex-col">
                                         <div className="aspect-square rounded-2xl overflow-hidden mb-8 relative">
                                             <Image src={post.coverImage || "/images/wisdom/alkaline-diet.png"} fill sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw" className="object-cover opacity-40 group-hover:opacity-80 transition-all duration-[2s] group-hover:scale-110" alt={post.title} />
                                             <div className="absolute top-4 left-4">
-                                                <span className="px-3 py-1 bg-green-500/20 backdrop-blur-md border border-green-500/30 text-[10px] font-black text-green-400 uppercase rounded-lg">
+                                                <span className="px-3 py-1 bg-amber-500/20 backdrop-blur-md border border-amber-500/30 text-[10px] font-black text-amber-400 uppercase rounded-lg">
                                                     {post.category}
                                                 </span>
                                             </div>
                                         </div>
-                                        <h3 className="text-2xl font-serif font-bold text-stone-100 group-hover:text-green-500 transition-colors mb-6 leading-tight">{post.title}</h3>
+                                        <h3 className="text-2xl font-serif font-bold text-stone-100 group-hover:text-amber-500 transition-colors mb-6 leading-tight">{post.title}</h3>
                                         <div className="mt-auto flex items-center justify-between">
                                             <span className="text-stone-600 text-[10px] font-bold uppercase tracking-widest">{new Date(post.createdAt).toLocaleDateString()}</span>
                                             <div className="flex items-center gap-2 text-amber-500 text-[10px] font-black uppercase tracking-widest group-hover:translate-x-2 transition-transform">

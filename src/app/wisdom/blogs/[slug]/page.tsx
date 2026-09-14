@@ -48,7 +48,7 @@ export default async function WisdomBlogPostPage({ params }: Props) {
         <div className="min-h-screen bg-stone-950 pb-32 relative overflow-hidden">
             {/* Background */}
             <div className="absolute inset-0 pointer-events-none opacity-20">
-                <div className="absolute top-[10%] right-[5%] w-[30vw] h-[30vw] bg-green-900/10 rounded-full blur-[120px]" />
+                <div className="absolute top-[10%] right-[5%] w-[30vw] h-[30vw] bg-amber-900/10 rounded-full blur-[120px]" />
                 <div className="absolute bottom-[10%] left-[5%] w-[40vw] h-[40vw] bg-amber-900/10 rounded-full blur-[150px]" />
             </div>
 
@@ -60,7 +60,7 @@ export default async function WisdomBlogPostPage({ params }: Props) {
                         <div className="absolute inset-0 bg-gradient-to-t from-stone-950 via-stone-950/60 to-stone-950/20" />
                     </>
                 ) : (
-                    <div className="absolute inset-0 bg-gradient-to-br from-green-950 via-stone-950 to-amber-950" />
+                    <div className="absolute inset-0 bg-gradient-to-br from-primary-950 via-stone-950 to-amber-950" />
                 )}
 
                 <div className="container relative h-full flex flex-col justify-end pb-16 z-10">
@@ -70,7 +70,7 @@ export default async function WisdomBlogPostPage({ params }: Props) {
 
                     <div className="max-w-4xl">
                         <div className="flex flex-wrap items-center gap-3 mb-6">
-                            <span className="px-4 py-1.5 bg-green-500/20 border border-green-500/30 text-green-400 text-[10px] font-black uppercase tracking-widest rounded-full">
+                            <span className="px-4 py-1.5 bg-amber-500/20 border border-amber-500/30 text-amber-400 text-[10px] font-black uppercase tracking-widest rounded-full">
                                 {post.category}
                             </span>
                             {persona && (
@@ -112,7 +112,7 @@ export default async function WisdomBlogPostPage({ params }: Props) {
                         prose-headings:font-serif prose-headings:text-stone-100
                         prose-p:text-stone-300 prose-p:leading-relaxed
                         prose-strong:text-stone-100
-                        prose-a:text-green-400 prose-a:no-underline hover:prose-a:text-green-300
+                        prose-a:text-amber-400 prose-a:no-underline hover:prose-a:text-amber-300
                         prose-blockquote:border-amber-500/30 prose-blockquote:text-amber-400/70 prose-blockquote:italic
                         prose-li:text-stone-300">
                         <div dangerouslySetInnerHTML={{ __html: post.content }} />
@@ -121,7 +121,7 @@ export default async function WisdomBlogPostPage({ params }: Props) {
                     <div className="mt-16 pt-10 border-t border-stone-800 flex items-center justify-between">
                         {persona ? (
                             <div className="flex items-center gap-4">
-                                <div className="w-14 h-14 bg-gradient-to-br from-green-900/40 to-amber-900/40 border border-stone-700 rounded-full flex items-center justify-center text-2xl">🌿</div>
+                                <div className="w-14 h-14 bg-gradient-to-br from-primary-900/40 to-amber-900/40 border border-stone-700 rounded-full flex items-center justify-center text-2xl">🌿</div>
                                 <div>
                                     <div className="font-bold text-stone-100">{persona.name}</div>
                                     <div className="text-xs text-amber-500 font-black uppercase tracking-widest">{persona.role}</div>
@@ -149,9 +149,9 @@ export default async function WisdomBlogPostPage({ params }: Props) {
                         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                             {related.map((r) => (
                                 <Link key={r.slug} href={`/wisdom/blogs/${r.slug}`} className="group">
-                                    <div className="glass-premium p-8 rounded-[2rem] border-stone-800 group-hover:border-green-500/20 transition-all h-full">
-                                        <span className="text-[10px] font-black uppercase tracking-widest text-green-400">{r.category}</span>
-                                        <h3 className="font-serif text-lg font-bold text-stone-100 mt-3 mb-4 leading-snug group-hover:text-green-400 transition-colors line-clamp-2">
+                                    <div className="glass-premium p-8 rounded-[2rem] border-stone-800 group-hover:border-amber-500/20 transition-all h-full">
+                                        <span className="text-[10px] font-black uppercase tracking-widest text-amber-400">{r.category}</span>
+                                        <h3 className="font-serif text-lg font-bold text-stone-100 mt-3 mb-4 leading-snug group-hover:text-amber-400 transition-colors line-clamp-2">
                                             {r.title}
                                         </h3>
                                         <p className="text-stone-500 text-sm line-clamp-2 leading-relaxed">{r.excerpt}</p>
