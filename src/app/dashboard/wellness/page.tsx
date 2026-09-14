@@ -22,8 +22,10 @@ export default function HolisticProfilePage() {
         stressLevel: 'Moderate'
     });
 
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     useEffect(() => {
         fetchProfile();
+      // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     const fetchProfile = async () => {

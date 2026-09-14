@@ -1,3 +1,5 @@
+/* eslint-disable react/no-unescaped-entities */
+
 /**
  * HECTIC Intellectual Property - Copyright 2024
  * Black Moss & Herbs Platform - Home Page

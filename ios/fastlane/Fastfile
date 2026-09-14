@@ -1,0 +1,25 @@
+default_platform(:ios)
+
+platform :ios do
+  desc "Push a new beta build to TestFlight"
+  lane :beta do
+    # 1. Ensure App ID exists and certificates are created
+    cert
+    sigh(force: true)
+    
+    # 2. Increment build number
+    increment_build_number(build_number: Time.now.to_i.to_s)
+    
+    # 3. Build the app
+    build_app(
+      project: "BlackMossHerbs.xcodeproj",
+      scheme: "BlackMossHerbs",
+      export_method: "app-store"
+    )
+    
+    # 4. Upload to TestFlight
+    upload_to_testflight(
+      skip_waiting_for_build_processing: true
+    )
+  end
+end
