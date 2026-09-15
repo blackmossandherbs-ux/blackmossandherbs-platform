@@ -57,7 +57,7 @@ struct ProfileView: View {
                         }
                         .padding(.horizontal, 24)
                         
-                        Button(action: {}) {
+                        Button(action: { APIService.shared.signOut() }) {
                             Text("SIGN OUT")
                                 .font(.caption)
                                 .fontWeight(.bold)

@@ -48,7 +48,10 @@ struct HomeView: View {
                             ScrollView(.horizontal, showsIndicators: false) {
                                 HStack(spacing: 20) {
                                     ForEach(Self.products) { product in
-                                        ProductCard(product: product)
+                                        NavigationLink(destination: ProductDetailView(product: product)) {
+                                            ProductCard(product: product)
+                                        }
+                                        .buttonStyle(.plain)
                                     }
                                 }
                                 .padding(.horizontal, 24)
@@ -93,10 +96,30 @@ struct HomeView: View {
     }
 
     static let products: [Product] = [
-        Product(name: "St. Lucia Sea Moss", price: "£45.00", imageName: "SeaMoss"),
-        Product(name: "Burdock Root Tincture", price: "£28.00", imageName: "BurdockRoot"),
-        Product(name: "Irish Moss", price: "£21.99", imageName: "IrishMoss"),
-        Product(name: "Sarsaparilla Blend", price: "£24.00", imageName: "Sarsaparilla"),
+        Product(
+            name: "St. Lucia Sea Moss", price: "£45.00", imageName: "SeaMoss",
+            origin: "Atlantic coastlines — the Caribbean, Ireland, and Canada's Maritimes",
+            summary: "Chondrus crispus is a genuinely mineral-dense seaweed; a 2024 review in Marine Drugs found real antioxidant and anticoagulant compounds in it.",
+            safetyNote: "Naturally high in iodine — can suppress thyroid function with daily use. Talk to your doctor if you take thyroid medication."
+        ),
+        Product(
+            name: "Burdock Root Tincture", price: "£28.00", imageName: "BurdockRoot",
+            origin: "East Asia, historically naturalised across Europe and North America",
+            summary: "A six-week human trial gave burdock root tea to adults with knee osteoarthritis and measured a significant drop in inflammatory markers versus baseline.",
+            safetyNote: nil
+        ),
+        Product(
+            name: "Irish Moss", price: "£21.99", imageName: "IrishMoss",
+            origin: "North Atlantic coastlines",
+            summary: "The same species as our Sea Moss (Chondrus crispus) — this is simply a different regional harvest and preparation, so the same research and safety profile applies.",
+            safetyNote: "Naturally high in iodine — see Sea Moss for the full safety note."
+        ),
+        Product(
+            name: "Sarsaparilla Blend", price: "£24.00", imageName: "Sarsaparilla",
+            origin: "Central and South America; long-standing use in traditional herbal practice",
+            summary: "Sarsaparilla is part of long-standing traditional herbal practice. We haven't attached a specific clinical citation to it yet — we'd rather say that plainly than overstate the evidence.",
+            safetyNote: nil
+        ),
     ]
 }
 
@@ -105,6 +128,88 @@ struct Product: Identifiable {
     let name: String
     let price: String
     let imageName: String
+    let origin: String
+    let summary: String
+    let safetyNote: String?
+}
+
+struct ProductDetailView: View {
+    let product: Product
+
+    var body: some View {
+        ScrollView(.vertical, showsIndicators: false) {
+            VStack(alignment: .leading, spacing: 20) {
+                Image(product.imageName)
+                    .resizable()
+                    .aspectRatio(contentMode: .fill)
+                    .frame(height: 320)
+                    .frame(maxWidth: .infinity)
+                    .clipShape(RoundedRectangle(cornerRadius: 24))
+
+                VStack(alignment: .leading, spacing: 8) {
+                    Text(product.name)
+                        .font(.system(size: 28, weight: .bold, design: .serif))
+                        .foregroundColor(Theme.text)
+                    Text(product.price)
+                        .font(.title3)
+                        .foregroundColor(Theme.secondary)
+                }
+
+                VStack(alignment: .leading, spacing: 6) {
+                    Text("ORIGIN")
+                        .font(.caption2)
+                        .fontWeight(.bold)
+                        .tracking(2)
+                        .foregroundColor(Theme.textMuted)
+                    Text(product.origin)
+                        .font(.subheadline)
+                        .foregroundColor(Theme.text)
+                }
+
+                VStack(alignment: .leading, spacing: 6) {
+                    Text("WHAT THE RESEARCH SAYS")
+                        .font(.caption2)
+                        .fontWeight(.bold)
+                        .tracking(2)
+                        .foregroundColor(Theme.textMuted)
+                    Text(product.summary)
+                        .font(.body)
+                        .foregroundColor(Theme.text)
+                }
+
+                if let safetyNote = product.safetyNote {
+                    VStack(alignment: .leading, spacing: 6) {
+                        Text("⚠ SAFETY NOTE")
+                            .font(.caption2)
+                            .fontWeight(.bold)
+                            .tracking(2)
+                            .foregroundColor(Theme.secondary)
+                        Text(safetyNote)
+                            .font(.subheadline)
+                            .foregroundColor(Theme.textMuted)
+                    }
+                    .padding(16)
+                    .background(Theme.surface)
+                    .cornerRadius(16)
+                }
+
+                Button(action: {}) {
+                    Text("ADD TO CART")
+                        .font(.system(size: 14, weight: .bold))
+                        .tracking(2)
+                        .foregroundColor(Theme.background)
+                        .frame(maxWidth: .infinity)
+                        .padding(.vertical, 18)
+                        .background(Theme.secondary)
+                        .clipShape(Capsule())
+                }
+                .padding(.top, 12)
+            }
+            .padding(24)
+            .padding(.bottom, 60)
+        }
+        .background(Theme.background.ignoresSafeArea())
+    }
 }
 
 struct ProductCard: View {

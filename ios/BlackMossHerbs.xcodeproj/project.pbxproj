@@ -14,6 +14,7 @@
 		59C315018DCB2B3F344DAD99 /* HomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E43FDB2B179D2246F873B456 /* HomeView.swift */; };
 		5D23F31FC04C1106376973FC /* Models.swift in Sources */ = {isa = PBXBuildFile; fileRef = A81D20AFC3E96EC11797D0F4 /* Models.swift */; };
 		65DC323E76785B696D6ECA70 /* Theme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61FD2F9ADB41F02BCDA1886D /* Theme.swift */; };
+		6C29EA7166DF8F0365CD8841 /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = D23BD1D13D08556AE98ECD39 /* PrivacyInfo.xcprivacy */; };
 		70994BDA8EA552A27A6BB7EF /* AppTabView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 663DE20ED5CE055A866E0843 /* AppTabView.swift */; };
 		984CA57235393FFE3AA9B44E /* WisdomView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C886F1E9E7B089959CAF576 /* WisdomView.swift */; };
 		BFDE74F0C76803843709AAD0 /* HealthBriefView.swift in Sources */ = {isa = PBXBuildFile; fileRef = ABEAC79192DA56DE8EAF58C3 /* HealthBriefView.swift */; };
@@ -33,6 +34,7 @@
 		97F4EA01E6A677FF9AE79967 /* APIService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIService.swift; sourceTree = "<group>"; };
 		A81D20AFC3E96EC11797D0F4 /* Models.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Models.swift; sourceTree = "<group>"; };
 		ABEAC79192DA56DE8EAF58C3 /* HealthBriefView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HealthBriefView.swift; sourceTree = "<group>"; };
+		D23BD1D13D08556AE98ECD39 /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; path = PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
 		D97051E8E0B3B07F44C60CDF /* BlackMossHerbsApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlackMossHerbsApp.swift; sourceTree = "<group>"; };
 		E43FDB2B179D2246F873B456 /* HomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -50,6 +52,7 @@
 				E43FDB2B179D2246F873B456 /* HomeView.swift */,
 				18FB44C804D5005FDC0FECC6 /* JourneyView.swift */,
 				A81D20AFC3E96EC11797D0F4 /* Models.swift */,
+				D23BD1D13D08556AE98ECD39 /* PrivacyInfo.xcprivacy */,
 				086A89498EF19C9BDF7BB62A /* ProfileView.swift */,
 				61FD2F9ADB41F02BCDA1886D /* Theme.swift */,
 				7C886F1E9E7B089959CAF576 /* WisdomView.swift */,
@@ -112,7 +115,8 @@
 				LastUpgradeCheck = 1430;
 				TargetAttributes = {
 					C9D58FFC70ABE8167F9B9D21 = {
-						DevelopmentTeam = "";
+						DevelopmentTeam = CC9Q9BH5NT;
+						ProvisioningStyle = Automatic;
 					};
 				};
 			};
@@ -141,6 +145,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				480AD6C2687C1762A7B77A1B /* Assets.xcassets in Resources */,
+				6C29EA7166DF8F0365CD8841 /* PrivacyInfo.xcprivacy in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -173,11 +178,14 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = "";
+				DEVELOPMENT_TEAM = CC9Q9BH5NT;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_ITSAppUsesNonExemptEncryption = NO;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
 				INFOPLIST_KEY_UIUserInterfaceStyle = Dark;
 				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -187,7 +195,7 @@
 				MARKETING_VERSION = 1.0.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.blackmossandherbs.BlackMossHerbs;
 				SDKROOT = iphoneos;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Debug;
 		};
@@ -313,11 +321,14 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = "";
+				DEVELOPMENT_TEAM = CC9Q9BH5NT;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_ITSAppUsesNonExemptEncryption = NO;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
 				INFOPLIST_KEY_UIUserInterfaceStyle = Dark;
 				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -327,7 +338,7 @@
 				MARKETING_VERSION = 1.0.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.blackmossandherbs.BlackMossHerbs;
 				SDKROOT = iphoneos;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Release;
 		};

@@ -17,18 +17,18 @@ struct HealthBriefView: View {
                         
                         // Header
                         VStack(alignment: .leading, spacing: 12) {
-                            Text("THE MASTER's INTAKE")
+                            Text("YOUR WELLNESS PROFILE")
                                 .font(.caption)
                                 .fontWeight(.bold)
                                 .tracking(4)
                                 .foregroundColor(Theme.secondary)
-                            
-                            Text("Factual\nDiagnosis.")
+
+                            Text("Tell Us\nThe Truth.")
                                 .font(.system(size: 48, weight: .bold, design: .serif))
                                 .foregroundColor(Theme.text)
                                 .lineLimit(2)
-                            
-                            Text("To reach the Alchemist and his medical team, you must provide absolute truth.")
+
+                            Text("Our herbalist team uses your answers to recommend a protocol — not to diagnose. Always see a doctor for medical concerns.")
                                 .font(.subheadline)
                                 .foregroundColor(Theme.textMuted)
                                 .padding(.top, 4)

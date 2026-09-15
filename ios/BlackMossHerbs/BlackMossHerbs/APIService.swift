@@ -2,11 +2,14 @@ import Foundation
 
 class APIService {
     static let shared = APIService()
-    // In Simulator, localhost maps to Mac's localhost
-    let baseURL = "http://localhost:3000/api" 
+    let baseURL = "https://www.blackmossandherbs.com/api"
     
     var token: String? {
         UserDefaults.standard.string(forKey: "authToken")
+    }
+
+    func signOut() {
+        UserDefaults.standard.removeObject(forKey: "authToken")
     }
     
     func getProfile() async throws -> BiologicalProfile? {

@@ -1,3 +1,3 @@
 app_identifier("com.blackmossandherbs.BlackMossHerbs")
 apple_id("") # Fastlane will prompt the user if empty
-team_id("")  # Fastlane will fetch this automatically
+team_id("CC9Q9BH5NT")
