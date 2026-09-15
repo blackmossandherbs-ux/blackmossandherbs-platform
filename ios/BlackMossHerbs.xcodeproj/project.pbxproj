@@ -10,6 +10,7 @@
 		021E60D32768528F7876448C /* JourneyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18FB44C804D5005FDC0FECC6 /* JourneyView.swift */; };
 		1E7B574FE5F06FA45201ADA4 /* APIService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 97F4EA01E6A677FF9AE79967 /* APIService.swift */; };
 		2BD08D20FF6626AB54F1F973 /* ProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 086A89498EF19C9BDF7BB62A /* ProfileView.swift */; };
+		480AD6C2687C1762A7B77A1B /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 273E5166CA5B02406DABAB9A /* Assets.xcassets */; };
 		59C315018DCB2B3F344DAD99 /* HomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E43FDB2B179D2246F873B456 /* HomeView.swift */; };
 		5D23F31FC04C1106376973FC /* Models.swift in Sources */ = {isa = PBXBuildFile; fileRef = A81D20AFC3E96EC11797D0F4 /* Models.swift */; };
 		65DC323E76785B696D6ECA70 /* Theme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61FD2F9ADB41F02BCDA1886D /* Theme.swift */; };
@@ -24,6 +25,7 @@
 		0449B8C477FF45FB280A8901 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		086A89498EF19C9BDF7BB62A /* ProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileView.swift; sourceTree = "<group>"; };
 		18FB44C804D5005FDC0FECC6 /* JourneyView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JourneyView.swift; sourceTree = "<group>"; };
+		273E5166CA5B02406DABAB9A /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		56119CE05B543B87F319CA00 /* BlackMossHerbs.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = BlackMossHerbs.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		61FD2F9ADB41F02BCDA1886D /* Theme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Theme.swift; sourceTree = "<group>"; };
 		663DE20ED5CE055A866E0843 /* AppTabView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppTabView.swift; sourceTree = "<group>"; };
@@ -41,6 +43,7 @@
 			children = (
 				97F4EA01E6A677FF9AE79967 /* APIService.swift */,
 				663DE20ED5CE055A866E0843 /* AppTabView.swift */,
+				273E5166CA5B02406DABAB9A /* Assets.xcassets */,
 				D97051E8E0B3B07F44C60CDF /* BlackMossHerbsApp.swift */,
 				0449B8C477FF45FB280A8901 /* ContentView.swift */,
 				ABEAC79192DA56DE8EAF58C3 /* HealthBriefView.swift */,
@@ -86,6 +89,7 @@
 			buildConfigurationList = DCEA02622D97774325A39647 /* Build configuration list for PBXNativeTarget "BlackMossHerbs" */;
 			buildPhases = (
 				77F58D8D0AD712A0ECEDC11F /* Sources */,
+				1E62E149A4AB04673AE83948 /* Resources */,
 			);
 			buildRules = (
 			);
@@ -131,6 +135,17 @@
 		};
 /* End PBXProject section */
 
+/* Begin PBXResourcesBuildPhase section */
+		1E62E149A4AB04673AE83948 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				480AD6C2687C1762A7B77A1B /* Assets.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
 /* Begin PBXSourcesBuildPhase section */
 		77F58D8D0AD712A0ECEDC11F /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
@@ -158,16 +173,18 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = "";
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
-				INFOPLIST_KEY_UIUserInterfaceStyle = Light;
+				INFOPLIST_KEY_UIUserInterfaceStyle = Dark;
 				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
+				MARKETING_VERSION = 1.0.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.blackmossandherbs.BlackMossHerbs;
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -296,16 +313,18 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = "";
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
-				INFOPLIST_KEY_UIUserInterfaceStyle = Light;
+				INFOPLIST_KEY_UIUserInterfaceStyle = Dark;
 				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
+				MARKETING_VERSION = 1.0.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.blackmossandherbs.BlackMossHerbs;
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";

@@ -118,7 +118,7 @@ struct HealthBriefView: View {
                         .padding(.horizontal, 24)
                         .padding(.top, 20)
                         
-                        Text("Your data will be analysed by our ensemble of 30 AI diagnostic models before reaching the Alchemist's human medical board.")
+                        Text("Your answers go directly to our herbalist team, who use them to build your personal profile and recommend a protocol.")
                             .font(.caption2)
                             .multilineTextAlignment(.center)
                             .foregroundColor(Theme.textMuted)

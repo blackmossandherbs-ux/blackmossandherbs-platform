@@ -36,3 +36,13 @@ next-env.d.ts
 # Prisma
 prisma/migrations
 .gstack/
+
+# iOS / Xcode
+ios/build/
+ios/DerivedData/
+ios/*.xcuserstate
+ios/**/xcuserdata/
+ios/**/*.xcworkspace/xcuserdata/
+*.ipa
+*.dSYM.zip
+*.dSYM

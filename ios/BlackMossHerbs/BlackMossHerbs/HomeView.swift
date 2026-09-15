@@ -5,127 +5,133 @@ struct HomeView: View {
         NavigationStack {
             ZStack {
                 Theme.background.ignoresSafeArea()
-                
+
                 ScrollView(.vertical, showsIndicators: false) {
-                    VStack(spacing: 40) {
-                        
-                        // Premium Hero
-                        ZStack(alignment: .bottomLeading) {
-                            Image(systemName: "photo.fill")
-                                .resizable()
-                                .scaledToFill()
-                                .frame(height: 500)
-                                .frame(maxWidth: .infinity)
-                                .clipped()
-                                .overlay(
-                                    LinearGradient(
-                                        gradient: Gradient(colors: [Color.black.opacity(0.1), Theme.background]),
-                                        startPoint: .center,
-                                        endPoint: .bottom
-                                    )
-                                )
-                                .overlay(
-                                    Theme.primary.opacity(0.3) // Subtle earthy tint
-                                )
-                            
-                            VStack(alignment: .leading, spacing: 12) {
-                                Text("WILD CRAFTED")
-                                    .font(.caption)
-                                    .fontWeight(.bold)
-                                    .tracking(6)
-                                    .foregroundColor(Theme.secondary)
-                                
-                                Text("Biological\nGold.")
-                                    .font(.system(size: 56, weight: .bold, design: .serif))
-                                    .foregroundColor(Theme.text)
-                                    .lineLimit(2)
-                            }
-                            .padding(24)
+                    VStack(alignment: .leading, spacing: 40) {
+
+                        VStack(alignment: .leading, spacing: 8) {
+                            Text("WILD CRAFTED")
+                                .font(.caption)
+                                .fontWeight(.bold)
+                                .tracking(4)
+                                .foregroundColor(Theme.secondary)
+
+                            Text("Biological\nGold.")
+                                .font(.system(size: 48, weight: .bold, design: .serif))
+                                .foregroundColor(Theme.text)
+                                .lineLimit(2)
+                                .minimumScaleFactor(0.6)
+
+                            Text("Wildcrafted sea moss and clinical herbalism, sourced globally.")
+                                .font(.subheadline)
+                                .foregroundColor(Theme.textMuted)
+                                .padding(.top, 4)
                         }
-                        
+                        .padding(.horizontal, 24)
+                        .padding(.top, 40)
+
                         // Featured Collection (Horizontal Scroll)
                         VStack(alignment: .leading, spacing: 20) {
                             HStack {
                                 Text("THE APOTHECARY")
-                                    .font(.system(size: 14, weight: .bold, design: .serif))
+                                    .font(.caption)
+                                    .fontWeight(.bold)
                                     .tracking(4)
-                                    .foregroundColor(Theme.text)
+                                    .foregroundColor(Theme.textMuted)
                                 Spacer()
                                 Text("View All")
                                     .font(.caption)
-                                    .foregroundColor(Theme.textMuted)
+                                    .foregroundColor(Theme.secondary)
                             }
                             .padding(.horizontal, 24)
-                            
+
                             ScrollView(.horizontal, showsIndicators: false) {
                                 HStack(spacing: 20) {
-                                    ForEach(0..<4) { _ in
-                                        ProductCard()
+                                    ForEach(Self.products) { product in
+                                        ProductCard(product: product)
                                     }
                                 }
                                 .padding(.horizontal, 24)
                             }
                         }
-                        
+
                         // Premium CTA for Consultation
-                        VStack(spacing: 20) {
+                        VStack(alignment: .leading, spacing: 16) {
                             Text("1-ON-1 HOLISTIC CONSULTATION")
                                 .font(.caption)
                                 .fontWeight(.bold)
                                 .tracking(4)
                                 .foregroundColor(Theme.secondary)
-                            
+
                             Text("Let our AI synthesize your profile for the Herbalist.")
-                                .font(.system(size: 24, weight: .medium, design: .serif))
-                                .multilineTextAlignment(.center)
+                                .font(.system(size: 22, weight: .medium, design: .serif))
                                 .foregroundColor(Theme.text)
-                                .padding(.horizontal, 40)
-                            
+                                .fixedSize(horizontal: false, vertical: true)
+
                             Button(action: {}) {
                                 Text("BEGIN ASSESSMENT")
                                     .font(.system(size: 14, weight: .bold))
                                     .tracking(2)
                                     .foregroundColor(Theme.background)
                                     .frame(maxWidth: .infinity)
-                                    .padding(.vertical, 20)
+                                    .padding(.vertical, 18)
                                     .background(Theme.secondary)
                                     .clipShape(Capsule())
                             }
-                            .padding(.horizontal, 40)
-                            .padding(.top, 16)
+                            .padding(.top, 8)
                         }
-                        .padding(.vertical, 60)
-                        
+                        .padding(24)
+                        .background(Theme.surface)
+                        .cornerRadius(24)
+                        .padding(.horizontal, 24)
+
                     }
-                    .padding(.bottom, 100) // Tab bar clearance
+                    .padding(.bottom, 120) // Tab bar clearance
                 }
-                .edgesIgnoringSafeArea(.top)
             }
         }
     }
+
+    static let products: [Product] = [
+        Product(name: "St. Lucia Sea Moss", price: "£45.00", imageName: "SeaMoss"),
+        Product(name: "Burdock Root Tincture", price: "£28.00", imageName: "BurdockRoot"),
+        Product(name: "Irish Moss", price: "£21.99", imageName: "IrishMoss"),
+        Product(name: "Sarsaparilla Blend", price: "£24.00", imageName: "Sarsaparilla"),
+    ]
+}
+
+struct Product: Identifiable {
+    let id = UUID()
+    let name: String
+    let price: String
+    let imageName: String
 }
 
 struct ProductCard: View {
+    let product: Product
+
     var body: some View {
         VStack(alignment: .leading, spacing: 16) {
-            ZStack {
-                RoundedRectangle(cornerRadius: 24)
-                    .fill(Theme.surface)
-                    .frame(width: 260, height: 320)
-                
-                Image(systemName: "leaf")
-                    .font(.system(size: 60))
-                    .foregroundColor(Theme.primary.opacity(0.8))
-            }
-            
+            Image(product.imageName)
+                .resizable()
+                .aspectRatio(contentMode: .fill)
+                .frame(width: 220, height: 260)
+                .clipShape(RoundedRectangle(cornerRadius: 24))
+                .overlay(
+                    RoundedRectangle(cornerRadius: 24)
+                        .stroke(Theme.secondary.opacity(0.2), lineWidth: 1)
+                )
+
             VStack(alignment: .leading, spacing: 4) {
-                Text("St. Lucia Sea Moss")
-                    .font(.system(size: 18, weight: .semibold, design: .serif))
+                Text(product.name)
+                    .font(.system(size: 16, weight: .semibold, design: .serif))
                     .foregroundColor(Theme.text)
-                Text("£45.00")
+                    .lineLimit(1)
+                Text(product.price)
                     .font(.subheadline)
                     .foregroundColor(Theme.secondary)
             }
+            .frame(width: 220, alignment: .leading)
         }
     }
 }
