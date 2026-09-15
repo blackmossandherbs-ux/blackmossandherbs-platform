@@ -1,4 +1,5 @@
 import SwiftUI
+import UIKit
 
 struct HomeView: View {
     @ObservedObject private var cart = CartManager.shared
@@ -261,6 +262,7 @@ struct ProductDetailView: View {
                 }
 
                 Button(action: {
+                    UIImpactFeedbackGenerator(style: .medium).impactOccurred()
                     cart.add(product)
                     withAnimation { justAdded = true }
                     DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
