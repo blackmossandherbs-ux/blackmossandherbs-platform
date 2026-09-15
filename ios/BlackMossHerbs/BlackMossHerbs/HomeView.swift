@@ -57,19 +57,19 @@ struct HomeView: View {
 
                         // Premium CTA for Consultation
                         VStack(alignment: .leading, spacing: 16) {
-                            Text("1-ON-1 HOLISTIC CONSULTATION")
+                            Text("FREE 15-MINUTE CONSULTATION")
                                 .font(.caption)
                                 .fontWeight(.bold)
                                 .tracking(4)
                                 .foregroundColor(Theme.secondary)
 
-                            Text("Let our AI synthesize your profile for the Herbalist.")
+                            Text("Talk to a real herbalist, not an AI. Every new member gets 15 minutes, free.")
                                 .font(.system(size: 22, weight: .medium, design: .serif))
                                 .foregroundColor(Theme.text)
                                 .fixedSize(horizontal: false, vertical: true)
 
                             Button(action: {}) {
-                                Text("BEGIN ASSESSMENT")
+                                Text("BOOK YOUR FREE SLOT")
                                     .font(.system(size: 14, weight: .bold))
                                     .tracking(2)
                                     .foregroundColor(Theme.background)
