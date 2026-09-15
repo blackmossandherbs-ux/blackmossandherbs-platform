@@ -30,24 +30,17 @@ struct JourneyView: View {
                                 .fontWeight(.bold)
                                 .tracking(4)
                                 .foregroundColor(Theme.textMuted)
-                            
-                            VStack(alignment: .leading, spacing: 16) {
+
+                            VStack(alignment: .leading, spacing: 12) {
                                 HStack {
                                     Image(systemName: "waveform.path.ecg")
-                                        .foregroundColor(Theme.secondary)
-                                    Text("Phase 1: Deep Detox")
+                                        .foregroundColor(Theme.textMuted)
+                                    Text("No active protocol yet")
                                         .font(.headline)
                                         .foregroundColor(Theme.text)
-                                    Spacer()
-                                    Text("Day 4/14")
-                                        .font(.caption)
-                                        .foregroundColor(Theme.secondary)
                                 }
-                                
-                                ProgressView(value: 4, total: 14)
-                                    .tint(Theme.secondary)
-                                
-                                Text("Focusing on lymphatic drainage and gut motility.")
+
+                                Text("Complete your wellness profile or book a free consultation to get a personalized protocol from our herbalist team.")
                                     .font(.subheadline)
                                     .foregroundColor(Theme.textMuted)
                             }
@@ -56,7 +49,7 @@ struct JourneyView: View {
                             .cornerRadius(16)
                         }
                         .padding(.horizontal, 24)
-                        
+
                         // Consultations
                         VStack(alignment: .leading, spacing: 16) {
                             Text("CONSULTATIONS")
@@ -64,26 +57,17 @@ struct JourneyView: View {
                                 .fontWeight(.bold)
                                 .tracking(4)
                                 .foregroundColor(Theme.textMuted)
-                            
-                            VStack(alignment: .leading, spacing: 16) {
-                                HStack(alignment: .top) {
-                                    VStack(alignment: .leading, spacing: 4) {
-                                        Text("AI Synthesis Review")
-                                            .font(.headline)
-                                            .foregroundColor(Theme.text)
-                                        Text("Oct 12 • 2:00 PM EST")
-                                            .font(.subheadline)
-                                            .foregroundColor(Theme.secondary)
-                                    }
-                                    Spacer()
-                                    Image(systemName: "video.fill")
-                                        .foregroundColor(Theme.background)
-                                        .padding(10)
-                                        .background(Theme.secondary)
-                                        .clipShape(Circle())
+
+                            VStack(alignment: .leading, spacing: 12) {
+                                HStack {
+                                    Image(systemName: "video")
+                                        .foregroundColor(Theme.textMuted)
+                                    Text("No consultations booked")
+                                        .font(.headline)
+                                        .foregroundColor(Theme.text)
                                 }
-                                
-                                Text("Your AI generated report is ready for the herbalist.")
+
+                                Text("Every new member gets a free 15-minute consultation — book yours from the Apothecary tab.")
                                     .font(.caption)
                                     .foregroundColor(Theme.textMuted)
                             }

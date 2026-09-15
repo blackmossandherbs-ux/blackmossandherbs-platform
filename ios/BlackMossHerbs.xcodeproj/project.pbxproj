@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		021E60D32768528F7876448C /* JourneyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18FB44C804D5005FDC0FECC6 /* JourneyView.swift */; };
+		0816320B986657F930BADEA0 /* CartManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58EF98A9D28BEBD768AC30A2 /* CartManager.swift */; };
 		1E7B574FE5F06FA45201ADA4 /* APIService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 97F4EA01E6A677FF9AE79967 /* APIService.swift */; };
 		2BD08D20FF6626AB54F1F973 /* ProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 086A89498EF19C9BDF7BB62A /* ProfileView.swift */; };
 		480AD6C2687C1762A7B77A1B /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 273E5166CA5B02406DABAB9A /* Assets.xcassets */; };
@@ -19,6 +20,7 @@
 		984CA57235393FFE3AA9B44E /* WisdomView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C886F1E9E7B089959CAF576 /* WisdomView.swift */; };
 		BFDE74F0C76803843709AAD0 /* HealthBriefView.swift in Sources */ = {isa = PBXBuildFile; fileRef = ABEAC79192DA56DE8EAF58C3 /* HealthBriefView.swift */; };
 		EA17C6A96CF2525724B81E48 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0449B8C477FF45FB280A8901 /* ContentView.swift */; };
+		F15C5A82A209B8E4A7A21EC3 /* CartView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D14B7E1126067C08513F85C0 /* CartView.swift */; };
 		F26F218D23EDF5160D26BDA0 /* BlackMossHerbsApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = D97051E8E0B3B07F44C60CDF /* BlackMossHerbsApp.swift */; };
 /* End PBXBuildFile section */
 
@@ -28,12 +30,14 @@
 		18FB44C804D5005FDC0FECC6 /* JourneyView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JourneyView.swift; sourceTree = "<group>"; };
 		273E5166CA5B02406DABAB9A /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		56119CE05B543B87F319CA00 /* BlackMossHerbs.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = BlackMossHerbs.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		58EF98A9D28BEBD768AC30A2 /* CartManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CartManager.swift; sourceTree = "<group>"; };
 		61FD2F9ADB41F02BCDA1886D /* Theme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Theme.swift; sourceTree = "<group>"; };
 		663DE20ED5CE055A866E0843 /* AppTabView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppTabView.swift; sourceTree = "<group>"; };
 		7C886F1E9E7B089959CAF576 /* WisdomView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WisdomView.swift; sourceTree = "<group>"; };
 		97F4EA01E6A677FF9AE79967 /* APIService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIService.swift; sourceTree = "<group>"; };
 		A81D20AFC3E96EC11797D0F4 /* Models.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Models.swift; sourceTree = "<group>"; };
 		ABEAC79192DA56DE8EAF58C3 /* HealthBriefView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HealthBriefView.swift; sourceTree = "<group>"; };
+		D14B7E1126067C08513F85C0 /* CartView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CartView.swift; sourceTree = "<group>"; };
 		D23BD1D13D08556AE98ECD39 /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; path = PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
 		D97051E8E0B3B07F44C60CDF /* BlackMossHerbsApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlackMossHerbsApp.swift; sourceTree = "<group>"; };
 		E43FDB2B179D2246F873B456 /* HomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeView.swift; sourceTree = "<group>"; };
@@ -47,6 +51,8 @@
 				663DE20ED5CE055A866E0843 /* AppTabView.swift */,
 				273E5166CA5B02406DABAB9A /* Assets.xcassets */,
 				D97051E8E0B3B07F44C60CDF /* BlackMossHerbsApp.swift */,
+				58EF98A9D28BEBD768AC30A2 /* CartManager.swift */,
+				D14B7E1126067C08513F85C0 /* CartView.swift */,
 				0449B8C477FF45FB280A8901 /* ContentView.swift */,
 				ABEAC79192DA56DE8EAF58C3 /* HealthBriefView.swift */,
 				E43FDB2B179D2246F873B456 /* HomeView.swift */,
@@ -159,6 +165,8 @@
 				1E7B574FE5F06FA45201ADA4 /* APIService.swift in Sources */,
 				70994BDA8EA552A27A6BB7EF /* AppTabView.swift in Sources */,
 				F26F218D23EDF5160D26BDA0 /* BlackMossHerbsApp.swift in Sources */,
+				0816320B986657F930BADEA0 /* CartManager.swift in Sources */,
+				F15C5A82A209B8E4A7A21EC3 /* CartView.swift in Sources */,
 				EA17C6A96CF2525724B81E48 /* ContentView.swift in Sources */,
 				BFDE74F0C76803843709AAD0 /* HealthBriefView.swift in Sources */,
 				59C315018DCB2B3F344DAD99 /* HomeView.swift in Sources */,

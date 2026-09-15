@@ -1,6 +1,9 @@
 import SwiftUI
 
 struct HomeView: View {
+    @ObservedObject private var cart = CartManager.shared
+    @State private var showBookingAlert = false
+
     var body: some View {
         NavigationStack {
             ZStack {
@@ -71,7 +74,7 @@ struct HomeView: View {
                                 .foregroundColor(Theme.text)
                                 .fixedSize(horizontal: false, vertical: true)
 
-                            Button(action: {}) {
+                            Button(action: { showBookingAlert = true }) {
                                 Text("BOOK YOUR FREE SLOT")
                                     .font(.system(size: 14, weight: .bold))
                                     .tracking(2)
@@ -82,6 +85,11 @@ struct HomeView: View {
                                     .clipShape(Capsule())
                             }
                             .padding(.top, 8)
+                            .alert("Booking isn't live in this test build yet", isPresented: $showBookingAlert) {
+                                Button("OK", role: .cancel) {}
+                            } message: {
+                                Text("This is coming in the next update — for now, reach out directly to schedule your free consultation.")
+                            }
                         }
                         .padding(24)
                         .background(Theme.surface)
@@ -90,6 +98,25 @@ struct HomeView: View {
 
                     }
                     .padding(.bottom, 120) // Tab bar clearance
+                }
+            }
+            .toolbar {
+                ToolbarItem(placement: .topBarTrailing) {
+                    NavigationLink(destination: CartView()) {
+                        ZStack(alignment: .topTrailing) {
+                            Image(systemName: "bag")
+                                .foregroundColor(Theme.secondary)
+                            if cart.count > 0 {
+                                Text("\(cart.count)")
+                                    .font(.system(size: 10, weight: .bold))
+                                    .foregroundColor(Theme.background)
+                                    .padding(4)
+                                    .background(Theme.secondary)
+                                    .clipShape(Circle())
+                                    .offset(x: 10, y: -10)
+                            }
+                        }
+                    }
                 }
             }
         }
@@ -135,6 +162,8 @@ struct Product: Identifiable {
 
 struct ProductDetailView: View {
     let product: Product
+    @ObservedObject private var cart = CartManager.shared
+    @State private var justAdded = false
 
     var body: some View {
         ScrollView(.vertical, showsIndicators: false) {
@@ -193,8 +222,14 @@ struct ProductDetailView: View {
                     .cornerRadius(16)
                 }
 
-                Button(action: {}) {
-                    Text("ADD TO CART")
+                Button(action: {
+                    cart.add(product)
+                    withAnimation { justAdded = true }
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
+                        withAnimation { justAdded = false }
+                    }
+                }) {
+                    Text(justAdded ? "ADDED ✓" : "ADD TO CART")
                         .font(.system(size: 14, weight: .bold))
                         .tracking(2)
                         .foregroundColor(Theme.background)

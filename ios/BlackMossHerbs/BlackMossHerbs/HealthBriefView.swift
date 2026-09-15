@@ -6,6 +6,7 @@ struct HealthBriefView: View {
     @State private var dietaryCommitment = 5.0
     @State private var primaryAilments = ""
     @State private var isSaving = false
+    @State private var showSubmitAlert = false
     
     var body: some View {
         NavigationStack {
@@ -102,12 +103,12 @@ struct HealthBriefView: View {
                         .padding(.horizontal, 24)
                         
                         // Submit
-                        Button(action: {}) {
+                        Button(action: { showSubmitAlert = true }) {
                             HStack {
-                                Text("SUBMIT TO THE NETWORK")
+                                Text("SUBMIT YOUR PROFILE")
                                     .font(.system(size: 14, weight: .bold))
                                     .tracking(2)
-                                Image(systemName: "cpu")
+                                Image(systemName: "arrow.up.circle")
                             }
                             .foregroundColor(Theme.background)
                             .frame(maxWidth: .infinity)
@@ -117,6 +118,11 @@ struct HealthBriefView: View {
                         }
                         .padding(.horizontal, 24)
                         .padding(.top, 20)
+                        .alert("Saving isn't live in this test build yet", isPresented: $showSubmitAlert) {
+                            Button("OK", role: .cancel) {}
+                        } message: {
+                            Text("Your answers aren't being sent anywhere yet — this connects to your profile in the next update.")
+                        }
                         
                         Text("Your answers go directly to our herbalist team, who use them to build your personal profile and recommend a protocol.")
                             .font(.caption2)
