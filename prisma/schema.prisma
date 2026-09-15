@@ -21,6 +21,9 @@ model User {
   emailVerified DateTime?
   image         String?
   password      String?
+  phone         String?
+  dateOfBirth   DateTime?
+  socialLinks   Json?
   role          UserRole  @default(CUSTOMER)
   createdAt     DateTime  @default(now())
   updatedAt     DateTime  @updatedAt
@@ -375,6 +378,10 @@ model BiologicalProfile {
   // Clinical / Admin Fields
   clinicalNotes   String?  // Private notes for admins/herbalists
   activeCondition String?  // e.g., "Anemia" (Admin controlled)
+
+  // Patient-provided note from their own doctor (distinct from admin clinicalNotes)
+  doctorNote      String?
+  doctorNoteAt    DateTime?
   
   createdAt       DateTime @default(now())
   updatedAt       DateTime @updatedAt

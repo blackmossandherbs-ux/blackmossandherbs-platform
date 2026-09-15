@@ -5,8 +5,7 @@
  * price tampering.
  */
 import { NextRequest, NextResponse } from 'next/server'
-import { getServerSession } from 'next-auth'
-import { authOptions } from '@/lib/auth'
+import { getAuthSession } from '@/lib/mobile-auth'
 import { stripe } from '@/lib/stripe'
 import { prisma } from '@/lib/prisma'
 
@@ -25,7 +24,7 @@ export async function POST(req: NextRequest) {
         )
     }
 
-    const session_ = await getServerSession(authOptions)
+    const session_ = await getAuthSession(req)
     if (!session_?.user?.id) {
         return NextResponse.json({ error: 'Please log in to checkout.' }, { status: 401 })
     }

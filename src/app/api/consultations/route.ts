@@ -23,7 +23,11 @@ export async function POST(req: NextRequest) {
     }
 
     try {
-        const { name, email, type, date, time, objectives } = await req.json()
+        const {
+            name, email, phone, dateOfBirth, type, date, time, objectives,
+            healthGoals, dietType, allergies, primaryAilments, currentMedications,
+            digestion, sleepHours, stressLevel,
+        } = await req.json()
 
         if (!name || !email || !type || !date || !time) {
             return NextResponse.json({ error: 'All fields are required.' }, { status: 400 })
@@ -36,11 +40,22 @@ export async function POST(req: NextRequest) {
         // Persist the request so it's trackable beyond the notification email —
         // find-or-create a lightweight account by email for guest requesters.
         // If a real account with that email already exists, this just reuses it.
+        // The intake is comprehensive on purpose: it doubles as the biological
+        // profile, so if the same person later creates a real account with this
+        // email (see /api/auth/mobile-register), their history is already there.
         try {
             const user = await prisma.user.upsert({
                 where: { email },
-                update: {},
-                create: { email, name },
+                update: {
+                    ...(phone && { phone }),
+                    ...(dateOfBirth && { dateOfBirth: new Date(dateOfBirth) }),
+                },
+                create: {
+                    email,
+                    name,
+                    ...(phone && { phone }),
+                    ...(dateOfBirth && { dateOfBirth: new Date(dateOfBirth) }),
+                },
             })
             await prisma.consultation.create({
                 data: {
@@ -52,6 +67,34 @@ export async function POST(req: NextRequest) {
                     price,
                 },
             })
+
+            const hasIntake = healthGoals || dietType || allergies || primaryAilments || currentMedications || digestion || sleepHours || stressLevel
+            if (hasIntake) {
+                await prisma.biologicalProfile.upsert({
+                    where: { userId: user.id },
+                    update: {
+                        ...(healthGoals && { healthGoals }),
+                        ...(dietType && { dietType }),
+                        ...(allergies && { allergies }),
+                        ...(primaryAilments && { primaryAilments }),
+                        ...(currentMedications && { currentMedications }),
+                        ...(digestion && { digestion }),
+                        ...(sleepHours && { sleepHours }),
+                        ...(stressLevel && { stressLevel }),
+                    },
+                    create: {
+                        userId: user.id,
+                        healthGoals: healthGoals || [],
+                        dietType: dietType || 'Standard',
+                        allergies: allergies || [],
+                        primaryAilments: primaryAilments || null,
+                        currentMedications: currentMedications || null,
+                        digestion: digestion || 'Regular',
+                        sleepHours: sleepHours || '6-8',
+                        stressLevel: stressLevel || 'Moderate',
+                    },
+                })
+            }
         } catch (e) {
             console.error('[Consultations API] Could not persist consultation record:', e)
         }
