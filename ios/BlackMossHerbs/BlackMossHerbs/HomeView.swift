@@ -42,9 +42,11 @@ struct HomeView: View {
                                     .tracking(4)
                                     .foregroundColor(Theme.textMuted)
                                 Spacer()
-                                Text("View All")
-                                    .font(.caption)
-                                    .foregroundColor(Theme.secondary)
+                                NavigationLink(destination: AllProductsView()) {
+                                    Text("View All")
+                                        .font(.caption)
+                                        .foregroundColor(Theme.secondary)
+                                }
                             }
                             .padding(.horizontal, 24)
 
@@ -158,6 +160,42 @@ struct Product: Identifiable {
     let origin: String
     let summary: String
     let safetyNote: String?
+}
+
+struct AllProductsView: View {
+    private let columns = [GridItem(.flexible(), spacing: 20), GridItem(.flexible(), spacing: 20)]
+
+    var body: some View {
+        ScrollView(.vertical, showsIndicators: false) {
+            LazyVGrid(columns: columns, spacing: 24) {
+                ForEach(HomeView.products) { product in
+                    NavigationLink(destination: ProductDetailView(product: product)) {
+                        VStack(alignment: .leading, spacing: 12) {
+                            Image(product.imageName)
+                                .resizable()
+                                .aspectRatio(contentMode: .fill)
+                                .frame(height: 180)
+                                .frame(maxWidth: .infinity)
+                                .clipShape(RoundedRectangle(cornerRadius: 20))
+
+                            Text(product.name)
+                                .font(.system(size: 14, weight: .semibold, design: .serif))
+                                .foregroundColor(Theme.text)
+                                .lineLimit(2)
+                            Text(product.price)
+                                .font(.caption)
+                                .foregroundColor(Theme.secondary)
+                        }
+                    }
+                    .buttonStyle(.plain)
+                }
+            }
+            .padding(24)
+            .padding(.bottom, 60)
+        }
+        .background(Theme.background.ignoresSafeArea())
+        .navigationTitle("The Apothecary")
+    }
 }
 
 struct ProductDetailView: View {
